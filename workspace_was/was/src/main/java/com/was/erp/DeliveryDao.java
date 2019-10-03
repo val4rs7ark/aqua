@@ -32,7 +32,7 @@ public class DeliveryDao {
 		logger.info("DeliveryDao////////////deliveryInsert_List호출성공");
 		pMap.put("msg","");
 		try {sqlSessionTemplate.selectOne("deliveryInsert_List",pMap);
-		logger.info(pMap.get("msg").toString());
+		logger.info("배송 insert_msg : "+pMap.get("msg").toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -169,14 +169,48 @@ public class DeliveryDao {
 		return tot;
 	}
 
-	public void deli_delete(String r_rowid[]) {
-		logger.info("DeliveryDao////////////deli_delete호출성공");
+	public List<Map<String,Object>> deli_delete_insert(String[] r_rowid) {
+		logger.info("DeliveryDao////////////deli_delete_insert호출성공");
 		List<Integer> list = new ArrayList<>();
+		List<Map<String,Object>> r_list = new ArrayList<>();
 		for(int i=0;i<r_rowid.length;i++) {
 			list.add(Integer.parseInt(r_rowid[i]));
 		}
 		try {
-			sqlSessionTemplate.delete("deli_delete",list);
+			r_list = sqlSessionTemplate.selectList("deli_delete_select",list);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return r_list;
+	}
+
+	public void deli_delete(List<Integer> c_rowid) {
+		logger.info("DeliveryDao////////////deli_delete_insert호출성공");
+		try {
+			sqlSessionTemplate.delete("deli_delete",c_rowid);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+/*
+=============================================================================
+========================전체수정처리 보류=========================================
+	public void delivery_cancle_top(List<Integer> c_rowid) {
+		logger.info("DeliveryDao////////////delivery_cancle_top호출성공");
+		try {
+			sqlSessionTemplate.update("delivery_cancle_top",c_rowid);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+=============================================================================
+=============================================================================	
+*/
+
+	public void delivery_cancle_pix(Map<String, Object> pMap) {
+		logger.info("DeliveryDao////////////delivery_cancle_pix호출성공");
+		try {
+			sqlSessionTemplate.update("delivery_cancle_pix",pMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

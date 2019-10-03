@@ -1,7 +1,6 @@
 package com.was.erp;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -50,10 +49,5 @@ public class WasDao {
 		logger.info("wasDao.dumyIndex에 들어왔다!");
 		result = sqlSessionTemplate.selectOne("dumyIndex", empno);
 	return result;
-	}
-	public List<Map<String, Object>> wasEmpStatus(String empno) {
-		List<Map<String, Object>> empStatus = null;
-		empStatus = sqlSessionTemplate.selectList("wasEmpStatus", empno);
-		return empStatus;
 	}
 }

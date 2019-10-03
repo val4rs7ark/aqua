@@ -1,4 +1,7 @@
 <style type="text/css">
+  input:focus { 
+  outline: none; 
+  } 
   .bi_table_insert{
   }
   .base_table_div{

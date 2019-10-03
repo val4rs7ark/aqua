@@ -115,9 +115,29 @@ public class DeliveryLogic {
 		return tot;
 	}
 
-	public void deli_delete(String r_rowid[]) {
-		logger.info("DeliveryLogic////////////deli_delete호출성공");
-		deliveryDao.deli_delete(r_rowid);
+	public List<Map<String,Object>> deli_delete_insert(String[] r_rowid) {
+		logger.info("DeliveryLogic////////////deli_delete_insert호출성공");
+		List<Map<String,Object>> r_list =deliveryDao.deli_delete_insert(r_rowid);
+		return r_list;
 	}
 
+	public void deli_delete(List<Integer> c_rowid) {
+		logger.info("DeliveryLogic////////////deli_delete호출성공");
+		deliveryDao.deli_delete(c_rowid);
+	}
+/*
+============================================================================
+=======================전체수정처리 보류=========================================
+	public void delivery_cancle_top(List<Integer> c_rowid) {
+		logger.info("DeliveryLogic////////////delivery_cancle_top호출성공");
+		deliveryDao.delivery_cancle_top(c_rowid);
+	}
+=============================================================================
+=============================================================================	
+*/
+
+	public void delivery_cancle_pix(Map<String, Object> pMap) {
+		logger.info("DeliveryLogic////////////delivery_cancle_pix호출성공");
+		deliveryDao.delivery_cancle_pix(pMap);
+	}
 }

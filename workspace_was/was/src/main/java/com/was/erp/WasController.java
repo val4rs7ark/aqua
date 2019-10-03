@@ -1,6 +1,5 @@
 package com.was.erp;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,12 +40,7 @@ public class WasController {
 		return "";
 	}
 //////////////SessionAttributes가 처음 실행 되었을 때 아직 request로 받기 전이라 null방지///////////	
-	@PostMapping("wasEmpStatus.was")
-	public String wasEmpStatus(@RequestParam String empno,Model model) {
-		logger.info("wasEmpStatus 호출 성공");
-		List empStatusList = wasLogic.wasEmpStatus(empno);
-		return "";//191002수정중
-	}
+	
 	@PostMapping("wasLogin.was")
 	public String wasLogin(@RequestParam Map<String,Object> pMap,Model model,HttpServletRequest req) {
 		logger.info("wasLogin 호출 성공");

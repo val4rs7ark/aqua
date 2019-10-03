@@ -1,6 +1,5 @@
 package com.was.erp;
 
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -20,6 +19,12 @@ public class WasLogic {
 		Encryption et = new Encryption();
 		logger.info("wasLogin:::::::::::::::::::"+pMap.get("firstLogin"));
 		logger.info("건들이기 전 sid :"+pMap.get("session_no"));
+		if(pMap.get("firstLogin")!=null) {
+			pMap.put("login_gubun","first");
+		}
+		else {
+			pMap.put("login_gubun","no_first");
+		}
 		wasDao.wasLogin(pMap);
 		String emp_name = pMap.get("msg").toString();
 		if(!"존재하지 않는 사원코드입니다..".equals(emp_name)&&!"비밀번호를 다시 확인하세요".equals(emp_name))  {
@@ -49,10 +54,5 @@ public class WasLogic {
 			}
 		}
 		pMap.put("emp_name", emp_name);
-	}
-
-	public List wasEmpStatus(String empno) {
-		List<Map<String,Object>> empStatus = wasDao.wasEmpStatus(empno);
-		return empStatus;
 	}
 }

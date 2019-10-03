@@ -6,15 +6,13 @@
 		<result jdbcType="VARCHAR" javaType="java.lang.String" property="mem_id"/>
 	</resultMap> -->
 	<select id="invenList" parameterType="map" resultType="map">
-    select order_no,order_gubun,order_count,order_startdate,order_indate,order_unitprice,order_enddate        
-           ,ivg.ivgroup_code ivgroup_code,ivg.ivgroup_name ivgroup_name,ivg.ivgroup_gubun ivgroup_gubun
-           ,ivg.ivgroup_size ivgroup_size,order_unitprice*order_count totalprice,orde.empno
-           ,emp.emp_name emp_name,delivery_state  
-      from order_deli orde,invengroup ivg,emp
-     where orde.ivgroup_code=ivg.ivgroup_code
-       and orde.empno = emp.empno
-       and order_gubun in('구매','사용')
-  order by order_no desc    
+	select INVEN_NO,INVEN_COUNT,USE_DATE,INVEN_REGDATE,BUY_UNITPRICE,BUY_DATE        
+           ,iv.IVGROUP_CODE IVGROUP_CODE,IVG.IVGROUP_NAME IVGROUP_NAME,IVG.IVGROUP_BUNRYU IVGROUP_BUNRYU
+           ,IVG.IVGROUP_SIZE IVGROUP_SIZE,iv.DEPT_CODE DEPT_CODE,BUY_TOTALPRICE,iv.EMPNO
+           ,emp.emp_name emp_name,INVEN_GUBUN,inven_status  
+	  from inventory iv,invengroup ivg,emp
+	  where iv.ivgroup_code=ivg.ivgroup_code
+	    and iv.empno = emp.empno           
 	</select>
 <!-- 	<insert id="invenAdd" parameterType="map">
 	insert into inventory(inven_no,inven_count,use_date,inven_regdate,buy_unitprice,buy_date,ivgroup_code,dept_code,buy_totalprice,empno,inven_gubun,inven_status)
@@ -23,33 +21,28 @@
 		'i001','d001_1',#{buy_totalprice},'a1234','구매','승인대기')
 	</insert> -->
 	<insert id="invenAdd" parameterType="map">
-	insert into order_deli(inven_no,inven_count,use_date,inven_regdate,buy_unitprice,buy_date,ivgroup_code,dept_code,buy_totalprice,empno,inven_gubun,inven_status)
+	insert into inventory(inven_no,inven_count,use_date,inven_regdate,buy_unitprice,buy_date,ivgroup_code,dept_code,buy_totalprice,empno,inven_gubun,inven_status)
 	values (#{inven_no},#{inven_count},#{use_date},to_char(sysdate,'yyyy-mm-dd'),#{buy_unitprice},#{buy_date},'i001','d001_1',#{buy_totalprice},'a1234','구매','승인대기')
 	</insert>
 	<insert id="invenAdd2" parameterType="map" statementType="CALLABLE">
-	{call proc_invenadd(#{order_count,mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
-	  				   ,#{order_enddate,mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
-	  				   ,#{order_unitprice,mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
-	  				   ,#{order_startdate,mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
-	  				   ,#{ivgroup_code,mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
-	  				   ,#{order_gubun,mode=IN, jdbcType=VARCHAR, javaType=java.lang.String})} 
+	{call proc_invenadd(#{inven_count,mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
+	  				  ,#{use_date,mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+	  				  ,#{buy_unitprice,mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
+	  				  ,#{buy_date,mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+	  				  ,#{buy_totalprice,mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer})} 
 	</insert>
 	<select id="getInven_no" parameterType="map" resultType="int">
-	select nvl(max(order_no),0)+1 from order_deli
-	where order_gubun in('구매','사용')
+	select nvl(max(inven_no),0)+1 from inventory
 	</select>
 	<select id="getInvenTotal" parameterType="map" resultType="int">
-	select count(order_no) from order_deli	
-	where order_gubun in('구매','사용')
+	select count(inven_no) from inventory	
 	</select>
 	<select id="getInvenGroupTotal" parameterType="map" resultType="int">
 	select count(ivgroup_code) from invengroup
-	where ivgroup_gubun = '자산'
 	</select>
 	<select id="invengroupList" parameterType="map" resultType="map">
-	select ivgroup_code,ivgroup_name,ivgroup_size,ivgroup_gubun 
+	select IVGROUP_CODE,IVGROUP_NAME,IVGROUP_SIZE,IVGROUP_BUNRYU 
 	  from invengroup
-	 where ivgroup_gubun = '자산'
 	</select>
 	
 <!-- 	<insert id="invenAdd" parameterType="map"> =====>#{use_date,jdbcType=VARCHAR},to_char(#{buy_date,jdbcType=VARCHAR},'yyyy.mm.dd')

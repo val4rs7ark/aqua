@@ -29,22 +29,10 @@
 	}	
 	function f_empAdd(){
     	$("#f_empAdd").submit();
-	}
-	function f_empStatus(){
-		$("#f_empStatus").submit();
-	}
+	}	
 </script>
 </head>
 <body>
-	  <form id="f_empStatus" action="/erp/wasEmpStatus.was" method="post">
-	  <%
-	  	if(s_emp_no!=null){
-	  %>
-					<input type="hidden" value=<%= s_emp_no %> name="empno">
-	  <%
-	  	}
-	  %>
-	  </form>
 	  <form id="f_ProductList" action="/erp/productList.was" method="get">
 	  </form>
 	  <form id="f_empAdd" action="/erp/empListSignUp.was" method="get">
@@ -101,7 +89,7 @@
             <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major3" style="width:300px;text-align: center;font-size: large;">인사관리</button>
                <div id="major3" class="collapse">
                   <a href="javascript:f_empAdd()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">사원등록/조회</a>
-                  <a href="javascript:f_empStatus()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">출퇴근</a>
+                  <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">출퇴근</a>
                   <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">휴가</a>
                </div>
             </div>

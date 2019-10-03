@@ -8,7 +8,17 @@
  	List<Map<String,Object>> deliveryInsert_ListS = (List<Map<String,Object>>)r_Map.get("deliveryInsert_ListS");
  	List<Map<String,Object>> deliveryInsert_ListF = (List<Map<String,Object>>)r_Map.get("deliveryInsert_ListF");
  	List<Map<String,Object>> f_list = (List<Map<String,Object>>)r_Map.get("f_list");
-	if(deliveryInsert_ListS!=null){
+	Map<String,Object> pl_Map = (Map<String,Object>)request.getAttribute("pl_Map");
+ 	int tot = (int)request.getAttribute("tot");
+ 	String fail_msg = null;
+ 	if(request.getAttribute("fail_msg")!=null){
+		fail_msg = request.getAttribute("fail_msg").toString();
+	}
+ 	String insert_msg = null;
+ 	if(request.getAttribute("insert_msg")!=null){
+		insert_msg = request.getAttribute("insert_msg").toString();
+	}
+ 	if(deliveryInsert_ListS!=null){
 		size=deliveryInsert_ListS.size();
 	}
 	//////////페이지 네비게이션 추가분////////////
@@ -16,6 +26,11 @@
 	int nowPage = 0;
 	if(request.getParameter("nowPage")!=null){
 		nowPage = Integer.parseInt(request.getParameter("nowPage"));
+	}
+	//////////////////작성자 ////////////
+	String s_order_writer = null;
+	if(session.getAttribute("s_emp_no")!=null){
+		s_order_writer = session.getAttribute("s_emp_no").toString();
 	}
 %>
 <!DOCTYPE html>
@@ -30,31 +45,24 @@
 <title>Insert title here</title>
 	<%@ include file="/common/bs_css.jsp" %>
 <script type="text/javascript">
-	function bs_search(){
-		alert("조회버튼 양호");
+	function bs_ins_search(){
 		$("#f_bs_search").attr("method","post");
-		$("#f_bs_search").attr("action","");
+		$("#f_bs_search").attr("action","deliveryInsert_ListF");
 		$("#f_bs_search").submit();
 	}
-	function bs_delete(){
-		alert("삭제버튼 양호");
-	}
 	function bs_insert(){
-		alert("입력버튼 양호");
 		$("#f_deli_insert").attr("method","post");
 		$("#f_deli_insert").attr("action","/erp/deliveryInsert_List");
 		$("#f_deli_insert").submit();
 	}
 	function bs_update_insert(){
-		alert("수정입력버튼 양호");
-		$("#f_deli_insert").attr("method","post");
-		$("#f_deli_insert").attr("action","/erp/delivery_Update_Insert");
-		$("#f_deli_insert").submit();
+			$("#f_deli_update").attr("method","post");
+			$("#f_deli_update").attr("action","/erp/delivery_Update_Insert");
+			$("#f_deli_update").submit();
 	}
-	function bs_update(){
-		var deli_no = $("#deli_no").val();
+	function back(deli_no){
 		$.ajax({
-			url:"/erp/delivery_selectInfo?deli_no="+deli_no+"&insert_gubun=3"
+			url:"/erp/delivery_selectInfo?deli_no="+deli_no
 			,method:"get"
 			,success:function(data){
 				$("#trance_table").html(data);
@@ -64,8 +72,47 @@
 			}
 		});
 	}
-	function bs_cancle(){
+	function bs_update(r_delivery_state){
+		var deli_no = $("#deli_no").val();
+		if("1"==r_delivery_state){
+			$.ajax({
+				url:"/erp/delivery_selectInfo?deli_no="+deli_no+"&insert_gubun=3"
+				,method:"get"
+				,success:function(data){
+					$("#trance_table").html(data);
+				}
+				,error:function(e){
+					alert(e.responseText);
+				}
+			});
+		}else{
+			alert("배송이 시작되었으므로 수정이 불가합니다. 배송부에 문의 하세요");
+		}
+	}
+	function bs_cancle(){ //뒤로 가기
 		location.href="/erp/deliveryInsert_ListF";
+	}
+	function cancle_pix(){ //취소 완료
+			$("#f_cancle_pix").attr("method","post");
+			$("#f_cancle_pix").attr("action","/erp/delivery_cancle_pix");
+			$("#f_cancle_pix").submit();
+	}
+	function insert_cancle(r_delivery_state){
+		var deli_no = $("#deli_no").val();
+		if("1"==r_delivery_state){
+			$.ajax({
+				url:"/erp/delivery_selectInfo?deli_no="+deli_no+"&insert_gubun=2"
+				,method:"get"
+				,success:function(data){
+					$("#trance_table").html(data);
+				}
+				,error:function(e){
+					alert(e.responseText);
+				}
+			});
+		}else{
+			alert("배송이 시작되었으므로 취소가 불가합니다. 배송부에 문의 하세요");
+		}
 	}
 	function select_comp(imsi_num){
 		var cus_code = $("#cus_code_"+imsi_num).val();
@@ -94,6 +141,41 @@
 			});
 		}
 		$("#comp_name .close").click();//선택후 자동 모달창 끄기
+	}
+
+	function bs_delete(){
+		var chk = document.getElementsByName("chk"); 
+		var len = chk.length;    //체크박스의 전체 개수
+		var checkRow = '';      //체크된 체크박스의 value를 담기위한 변수
+		var checkCnt = 0;        //체크된 체크박스의 개수
+		var checkLast = '';      //체크된 체크박스 중 마지막 체크박스의 인덱스를 담기위한 변수
+		var rowid = '';             //체크된 체크박스의 모든 value 값을 담는다
+		var cnt = 0;                 
+
+		for(var i=0; i<len; i++){
+			if(chk[i].checked == true){
+				checkCnt++;        //체크된 체크박스의 개수
+				checkLast = i;     //체크된 체크박스의 인덱스
+			}
+		} 
+		
+		for(var i=0; i<len; i++){
+			if(chk[i].checked == true){  //체크가 되어있는 값 구분
+				checkRow = chk[i].value;
+				if(checkCnt == 1){                            //체크된 체크박스의 개수가 한 개 일때,
+					rowid += checkRow;        //'value'의 형태 (뒤에 ,(콤마)가 붙지않게)
+				}else{                                            //체크된 체크박스의 개수가 여러 개 일때,
+					if(i == checkLast){                     //체크된 체크박스 중 마지막 체크박스일 때,
+						rowid += checkRow;  //'value'의 형태 (뒤에 ,(콤마)가 붙지않게)
+					}else{
+						rowid += checkRow+",";	 //'value',의 형태 (뒤에 ,(콤마)가 붙게)         			
+					}
+				}
+				cnt++;
+				checkRow = '';    //checkRow초기화.
+			}
+		}
+		location.href="/erp/delivery_delete_insert.was?rowid="+rowid;
 	}
 </script>
 </head>
@@ -147,15 +229,16 @@
     <thead>
       <tr>
 <!--<th style="width:10%">-->
-        <th style="width: 250px;border-top-width: 10px;border-top-color: white;">
+        <th style="width: 322.5px;border-top-width: 10px;border-top-color: white;">
         	<button type="button" onclick="javascript:bs_delete()" class="btn btn-dark" style="width:54.5px">삭제</button>
 		</th>
+        
         <th style="border-top-width: 10px; border-top-color: white;">
 	        <div class="dropdown" style="width: 130px;">
 				<select class="btn btn-dark dropdown_bs" style="color:white; width:120px; height:35.75px; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px;">
 					<option value="">선택</option>
-					<option value="week">업체</option>
-					<option value="week">담당자</option>
+					<option value="comp_name">업체</option>
+					<option value="bs_writer">작성자</option>
 				</select>
 			</div>
         </th>  
@@ -172,7 +255,7 @@
 			<input type="date" class="form-control" name="after_date">
 		</th>
 		<th style="border-top-width: 10px;border-top-color: white;">
-			<button onclick="javascript:bs_search()" class="btn btn-dark" style="float: right; width:54.5px"">조회</button>
+			<button onclick="javascript:bs_ins_search()" class="btn btn-dark" style="float: right; width:54.5px"">조회</button>
 		</th>
       </tr>
     </thead>
@@ -181,7 +264,20 @@
   <div class="container">
 	  <div class="row" style="margin-top:15px">
 	  	<div class="col-sm-4">
-			<h5>배송목록</h5>
+			<h5 style="display:inline;">배송목록</h5>
+			<%
+				if(fail_msg!=null){ 
+			%>
+				<div style="display:inline;">
+					<input type="text" value="&nbsp;&nbsp;&nbsp;&nbsp;<%=fail_msg %>" style="border:none; font-size: smaller; width: 170px; color:red;" readonly>
+				</div>
+			<%
+				}
+			%>
+			<!-- 오와열 코드 -->
+			<div style="display:inline;">
+				<input type="text" style="border:none; width:1px; height:32px;" readonly>
+			</div>
 	  		<table class="table table-striped" style="border-top-style: solid; border-bottom-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 2px;margin-bottom: 0px;" > 
 	  			<thead style="text-align: center;">
 	  				<tr style="width:10%">
@@ -189,7 +285,7 @@
 	  						<div><input type="checkbox" id="checkall"></div>
 	  					</th>
 	  					<th style="width:35%;">업체</th>
-	  					<th style="width:25%;">담당자</th>
+	  					<th style="width:25%;">작성자</th>
 	  					<th style="width:30%;">등록일</th>
 	  				</tr>
 	  			</thead>
@@ -205,10 +301,10 @@
 			String cus_name[] = sMap.get("CUS_NAME").toString().split("\\(");
 %>
 			  			<tr id="<%=sMap.get("ORDER_NO")%>">
-		  					<td style="padding-top: 5px; padding-bottom: 5px;"><div><input type="checkbox" name="chk"></div></td>
+		  					<td style="padding-top: 5px; padding-bottom: 5px;"><div><input type="checkbox" name="chk" value="<%=sMap.get("ORDER_NO")%>"><input type="hidden" name="r_delivery_state" value="<%=sMap.get("DELIVERY_STATE")%>"></div></td>
 						<%--<td><input type="hidden" id="deli_no_<%=sMap.get("DELI_NO")%>" name="deli_no_<%=sMap.get("DELI_NO")%>" value="<%=sMap.get("DELI_NO")%>"></td>--%>		  					
 							<td class="bs_table_when" style="padding-top: 5px; padding-bottom: 5px;"><%=cus_name[0]%></td>
-		  					<td class="bs_table_when" style="padding-top: 5px; padding-bottom: 5px;"><%=sMap.get("CUS_MAN") %></td>
+		  					<td class="bs_table_when" style="padding-top: 5px; padding-bottom: 5px;"><%=sMap.get("EMP_NAME") %></td>
 		  					<td class="bs_table_when" style="padding-top: 5px; padding-bottom: 5px;">
 		  						<%
 		  							deli_date = sMap.get("ORDER_INDATE").toString();
@@ -232,7 +328,21 @@
 	  		<button type="button" onclick="javascript:bs_cancle()" class="btn btn-dark btn pull-right" style="width:54.5px; margin-bottom:3px; margin-left:10px; padding-top: 2px; padding-bottom: 2px;">취소</button>
 	  		<button type="button" onclick="javascript:bs_insert()" class="btn btn-dark btn pull-right" style="width:54.5px; padding-top: 2px; padding-bottom: 2px;">등록</button>
 	  		<input id="table_gubun" type="hidden" value="1">
+	  		<%
+				if(insert_msg!=null){ 
+			%>
+				<div style="display:inline;">
+					<input type="text" value="&nbsp;&nbsp;&nbsp;&nbsp;<%=insert_msg %>" style="border:none; font-size: smaller; width: 170px; color:red;" readonly>
+				</div>
+			<%
+				}
+			%>
+	  		<!-- 오와열 코드 -->
+	  		<div style="display:inline;">
+				<input type="text" style="border:none; width:1px; height:32px;" readonly>
+			</div>
 	  		<form id="f_deli_insert">
+	  			<input type="hidden" name="order_writer_no" value="<%=s_order_writer%>">
 		  		<table id="trance_table_search_comp" class="table" style="border-top-style: solid;  border-bottom-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 2px;margin-bottom: 0px;"> 
 		  			<tbody style="text-align: left;">
 		  				<tr>
@@ -322,7 +432,6 @@
 								</div>
 							</td>
 		  					<td style="padding-top: 7px; padding-bottom: 7px;"  colspan="2">
-		  						<zealot class="btn btn-secondary btn_firstrow btn_tableRow" data-toggle="modal" data-target="#iven_insert" style="cursor:pointer; height:26px; width:90px;" data-backdrop="static">품목등록</zealot>
 		  					</td>
 		  				</tr>
 		  				<tr>
@@ -344,8 +453,8 @@
 		  				</tr>
 		  				<tr>
 		  					<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px; ">비고</td>
-		  					<td colspan="5" style="height:165px;pxpadding-top: 7px; padding-bottom: 7px;">
-		  						<textarea name="deli_memo" style="height:95%; width:95%;"></textarea>
+		  					<td colspan="5" style="height:165px;pxpadding-top: 7px; padding-bottom: 7px;" >
+		  						<textarea name="deli_memo" style="height:95%; width:95%;" placeholder="&nbsp;&nbsp;내용을 입력하세요." ></textarea>
 		  					</td>
 		  				</tr>
 		  			</tbody>
@@ -357,9 +466,28 @@
   </div>
 	<div class="container" style="margin-left: 0px;">
 		<ul class="pagination" id="bs_pagenation" style="justify-content: center;">
-			<%
-				String pagePath = "/erp/deliveryInsert_ListF";
-				PageBar pb = new PageBar(numPerPage,size,nowPage,pagePath);
+			<%		
+				String keyward = null; 
+				String befor_date_ud = null; 
+				String after_date_ud = null; 
+				String cb_situation = null; 
+				if(pl_Map.get("keyword")!=null){
+					keyward = pl_Map.get("keyword").toString();
+				}
+				if(pl_Map.get("befor_date_ud")!=null){
+					befor_date_ud = pl_Map.get("befor_date_ud").toString();
+				}
+				if(pl_Map.get("after_date_ud")!=null){
+					after_date_ud = pl_Map.get("after_date_ud").toString();
+				}
+				if(pl_Map.get("after_date_ud")!=null){
+					after_date_ud = pl_Map.get("after_date_ud").toString();
+				}
+				if(pl_Map.get("cb_situation")!=null){
+					cb_situation = pl_Map.get("cb_situation").toString();
+				}
+				String pagePath = "/erp/deliveryInsert_ListF?keyward="+keyward+"&befor_date="+befor_date_ud+"&after_date="+after_date_ud+"&cb_situation="+cb_situation;
+				PageBar pb = new PageBar(numPerPage,tot,nowPage,pagePath);
 				String pagination = null;
 				pagination = pb.getPageBar();
 				out.print(pagination);
@@ -480,7 +608,6 @@
 <!-- ============================================================================================================================================= -->
 <!-- ===============================================================품목등록창================================================================= -->
 <!-- ============================================================================================================================================= -->
-
 
 </body>
 </html>

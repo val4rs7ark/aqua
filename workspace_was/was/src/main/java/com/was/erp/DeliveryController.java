@@ -32,14 +32,14 @@ public class DeliveryController {
 		Map<String,Object> pl_Map = new HashMap<>();
 //==================================조건검색 필요 요소==================================================
 		if(pMap.get("before_date")!=null) {
-			if(pMap.get("before_date").toString().length()>5) {
+			if(pMap.get("before_date").toString().length()>9) {
 				String befor_date_ud = pMap.get("before_date").toString();
 				pMap.put("befor_date_ud",befor_date_ud);
 				pl_Map.put("befor_date_ud",befor_date_ud);
 			}
 		}
 		if(pMap.get("after_date")!=null) {
-			if(pMap.get("after_date").toString().length()>5) {
+			if(pMap.get("after_date").toString().length()>9) {
 				String after_date_ud = pMap.get("after_date").toString();
 				pMap.put("after_date_ud",after_date_ud);
 				pl_Map.put("after_date_ud",after_date_ud);
@@ -51,11 +51,12 @@ public class DeliveryController {
 		if(pMap.get("keyword")!=null) {
 			pl_Map.put("keyword",pMap.get("keyword"));
 		}
+		if(pMap.get("cb_search")!=null) {
+			pl_Map.put("cb_search",pMap.get("cb_search"));
+		}
 		
 		pl_Map.put("cb_situation",pMap.get("cb_situation"));
-		if(pl_Map.get("cb_situation")!=null) {
-		logger.info("이거확인할꺼:"+pl_Map.get("cb_situation").toString());
-		}
+		
 //===================================================================================================
 		int tot = this.get_total(pMap);
 		List<Map<String,Object>> deliveryList = deliveryLogic.deliveryList(pMap,tot);
@@ -148,17 +149,6 @@ public class DeliveryController {
 		return "delivery/result_save";
 	}
 	
-	@RequestMapping(value="/delivery_delete.was", method=RequestMethod.GET)
-	public String deli_delete(@RequestParam Map<String,Object> pMap) {
-		logger.info("Controller //////////////// deli_cancle 호출성공");
-		String rowid = null;
-		if(pMap.get("rowid").toString()!=null) {
-			rowid= pMap.get("rowid").toString();
-			String r_rowid[] = rowid.split(",");
-			deliveryLogic.deli_delete(r_rowid); 
-		}
-		return "redirect:delivery_List";
-	}
 	
 	
 /***********************************************************************************************************
@@ -167,15 +157,60 @@ public class DeliveryController {
  ***********************************************************************************************************/
 	//배송 insert 초기화면
 	@RequestMapping("/deliveryInsert_ListF")
-	public String deliveryInsert_ListF(Model model) {
+	public String deliveryInsert_ListF(@RequestParam Map<String,Object> pMap, Model model) {
 		logger.info("controller////////////deliveryInsert_ListF호출성공");
 		Map<String,Object> r_Map = null;
-		r_Map = deliveryLogic.deliveryInsert_ListS();
+		Map<String,Object> pl_Map = new HashMap<>(); //조건검색 유지 Map
+////////////////////////삭제 실패시///////////////////////////////////////////
+		if(pMap.get("fm")!=null) { 
+			model.addAttribute("fail_msg", "배송중인 내역이 있습니다.");
+		}
+///////////////////////////////////////////////////////////////////////////
+////////////////////////등록 입력후 메세지//////////////////////////////////////
+		String insert_msg = null;
+		if(pMap.get("insert_msg")!=null) { 
+			insert_msg = pMap.get("insert_msg").toString();
+			model.addAttribute("insert_msg", insert_msg);
+		}
+///////////////////////////////////////////////////////////////////////////
+		
+
+//==================================조건검색 필요 요소==================================================
+		if(pMap.get("before_date")!=null) {
+			if(pMap.get("before_date").toString().length()>9) {
+				String befor_date_ud = pMap.get("before_date").toString();
+				pMap.put("befor_date_ud",befor_date_ud);
+				pl_Map.put("befor_date_ud",befor_date_ud);
+			}
+		}
+		if(pMap.get("after_date")!=null) {
+			if(pMap.get("after_date").toString().length()>9) {
+				String after_date_ud = pMap.get("after_date").toString();
+				pMap.put("after_date_ud",after_date_ud);
+				pl_Map.put("after_date_ud",after_date_ud);
+			}
+		}
+		if("".equals(pMap.get("cb_situation"))) { //진행상황 콤보박스에서 선택을 택하면 널이 입력됨
+			pMap.put("cb_situation","null");
+		}
+		if(pMap.get("keyword")!=null) {
+			pl_Map.put("keyword",pMap.get("keyword"));
+		}
+		if(pMap.get("cb_search")!=null) {
+			pl_Map.put("cb_search",pMap.get("cb_search"));
+		}
+		
+		pl_Map.put("cb_situation",pMap.get("cb_situation"));
+		
+//===================================================================================================
+		int tot = this.get_total(pMap);
+		r_Map = deliveryLogic.deliveryInsert_ListS(); //r_Map에는 리스트가 3개 담겨있음
 		model.addAttribute("r_Map", r_Map);
+		model.addAttribute("pl_Map",pl_Map); //조건검색을 유지하기 위해 Map에 담아서 뷰로 보낸다.
 		return "delivery/baesong_insert";
 	}
 	@RequestMapping("/deliveryInsert_List")
-	public String deliveryInsert_List(@RequestParam Map<String,Object> pMap) {
+	public String deliveryInsert_List(@RequestParam Map<String,Object> pMap, Model mod) {
 		logger.info("controller////////////deliveryInsert_List호출성공");
 		String cus_manhp = pMap.get("cus_manhp_a").toString()+"-"+pMap.get("cus_manhp_b").toString()+"-"+pMap.get("cus_manhp_c").toString();
 		String deli_when = pMap.get("deli_when_date").toString()+"/"+pMap.get("deli_when_time").toString();
@@ -183,7 +218,8 @@ public class DeliveryController {
 		pMap.put("deli_when",deli_when);
 		pMap.put("cus_manhp",cus_manhp);
 		deliveryLogic.deliveryInsert_List(pMap);
-		return "redirect:deliveryInsert_ListF";
+		mod.addAttribute("insert_msg", pMap.get("msg").toString());
+		return "forward:deliveryInsert_ListF";
 	}
 	@RequestMapping("/delivery_Update_Insert")
 	public String delivery_Update_Insert(@RequestParam Map<String,Object> pMap) {
@@ -208,6 +244,14 @@ public class DeliveryController {
 		logger.info("이동하는곳 result_select_comp");
 		return "delivery/result_select_comp";
 	}
+	//등록 취소 완료 버튼 누른후 화면///////////////////////////////////////////////////////////////////////
+	@RequestMapping("/delivery_cancle_pix")
+	public String delivery_cancle_pix(@RequestParam Map<String,Object> pMap) {
+		logger.info("controller////////////delivery_cancle_pix 호출성공");
+		pMap.put("deli_no",Integer.parseInt(pMap.get("deli_no").toString()));
+		deliveryLogic.delivery_cancle_pix(pMap);
+		return "redirect:deliveryInsert_ListF";
+	}
 	@RequestMapping("/delivery_selectInfo")
 	public String delivery_selectInfo(@RequestParam Map<String,Object> pMap, Model mod) {
 		logger.info("controller////////////delivery_selectInfo 호출성공");
@@ -224,4 +268,70 @@ public class DeliveryController {
 		mod.addAttribute("delivery_selectInfo", r_Map);
 		return "delivery/delivery_selectInfo";
 	}
+	@RequestMapping(value="/delivery_trance.was", method=RequestMethod.GET)
+	public String delivery_trance(@RequestParam Map<String,Object> pMap) {
+		logger.info("Controller //////////////// delivery_trance 호출성공");
+		return "redirect:delivery_List";
+	}
+	@RequestMapping(value="/delivery_delete_insert.was", method=RequestMethod.GET)
+	public String deli_delete_insert(@RequestParam Map<String,Object> pMap) {
+		logger.info("Controller //////////////// delivery_delete_insert 호출성공");
+		String rowid = null;
+		if(pMap.get("rowid").toString()!=null) {
+			rowid= pMap.get("rowid").toString();
+			String r_rowid[] = rowid.split(",");
+			List<Integer> c_rowid = new ArrayList<>();
+			List<Map<String,Object>> r_list = deliveryLogic.deli_delete_insert(r_rowid); 
+			for(int j=0;j<r_list.size();j++) {
+				Map<String,Object> r_Map = r_list.get(j);
+				if(r_Map.get("DELIVERY_STATE")!=null) {
+					if("1".equals(r_Map.get("DELIVERY_STATE").toString())){ //삭제할 로우들중에 상태가 배송전인것들이 있으면 if문 실행
+						
+						c_rowid.add(Integer.parseInt(r_Map.get("ORDER_NO").toString()));//삭제할 것들 list에 담아기 시작 시작
+						
+					}else {
+						String fail_msg = "z16k9"; //무의미 전달
+						return "redirect:deliveryInsert_ListF?fm="+fail_msg; // 실패시무의미수 전달
+					}
+				}
+			}//for문이 끝남 삭제할 것이 배열에 다 담김
+			//삭제 시작
+			deliveryLogic.deli_delete(c_rowid);
+		}
+		return "redirect:deliveryInsert_ListF";
+	}
+
+/*
+=============================================================================
+========================전체수정처리 보류=========================================
+	@RequestMapping(value="/delivery_cancle_top.was", method=RequestMethod.GET)
+	public String delivery_cancle_top(@RequestParam Map<String,Object> pMap) {
+		logger.info("Controller //////////////// delivery_cancle_top 호출성공");
+		String rowid = null;
+		if(pMap.get("rowid").toString()!=null) {
+			rowid= pMap.get("rowid").toString();
+			String r_rowid[] = rowid.split(",");
+			List<Integer> c_rowid = new ArrayList<>();
+			List<Map<String,Object>> r_list = deliveryLogic.deli_delete_insert(r_rowid); 
+			for(int j=0;j<r_list.size();j++) {
+				Map<String,Object> r_Map = r_list.get(j);
+				if(r_Map.get("DELIVERY_STATE")!=null) {
+					if("1".equals(r_Map.get("DELIVERY_STATE").toString())){ //삭제할 로우들중에 상태가 배송전인것들이 있으면 if문 실행
+						
+						c_rowid.add(Integer.parseInt(r_Map.get("ORDER_NO").toString()));//삭제할 것들 list에 담아기 시작 시작
+						
+					}else {
+						String fail_msg = "z16k9"; //무의미 전달
+						return "redirect:deliveryInsert_ListF?fm="+fail_msg; // 실패시무의미수 전달
+					}
+				}
+			}//for문이 끝남 삭제할 것이 배열에 다 담김
+			//삭제 시작
+			deliveryLogic.delivery_cancle_top(c_rowid);
+		}
+		return "redirect:deliveryInsert_ListF";
+	}
+=============================================================================
+=============================================================================	
+*/
 }

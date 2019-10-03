@@ -96,7 +96,6 @@
 			</div>
 		</td>
 		<td style="padding-top: 7px; padding-bottom: 7px;"  colspan="2">
-			<zealot class="btn btn-secondary btn_firstrow btn_tableRow" data-toggle="modal" data-target="#iven_insert" style="cursor:pointer; height:26px; width:90px;">품목등록</zealot>
 		</td>
 	</tr>
 	<tr>
@@ -119,7 +118,7 @@
 	<tr>
 		<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">비고</td>
 		<td colspan="5" style="height:165px;pxpadding-top: 7px; padding-bottom: 7px;">
-			<textarea name="deli_memo" style="height:95%; width:95%;"></textarea>
+			<textarea name="deli_memo" style="height:95%; width:95%;"placeholder="&nbsp;&nbsp;내용을 입력하세요." ></textarea>
 		</td>
 	</tr>
 </tbody>

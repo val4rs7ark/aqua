@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mybatis.mapper.deliveryMapper">
-
+<!-- 배송조회 상세 내역 -->
     <select id="delivery" parameterType="map" resultType="map">
      		select order_no, order_gubun, cus_name, business_no, cus_ceoname,order_indate, 
      			   cus_hp, cus_busikind, cus_addr, cus_man, cus_manhp, ivgroup_code,
                    delivery_date,order_count, order_memo, delivery_state, 
-                   delivery_info, order_startdate,order_enddate, ivgroup_name
-            from(select rownum rno,ordr.order_gubun order_gubun, ordr.order_no, cus.cus_name, cus.business_no, cus.cus_ceoname, cus.cus_hp, cus.cus_busikind, cus.cus_addr, ordr.cus_man, ordr.cus_manhp, inven.ivgroup_code,inven.ivgroup_name, ordr.order_count, ordr.order_memo, ordr.delivery_state,ordr.order_indate, ordr.delivery_info, ordr.order_startdate, ordr.delivery_date, ordr.order_enddate
-                   from customer cus, order_deli ordr , INVENGROUP inven
-                  where cus.cus_code = ordr.cus_code and ordr.ivgroup_code = inven.ivgroup_code
+                   delivery_info, order_startdate,order_enddate, ivgroup_name, emp_name, emp_hp, team_name
+            from(select rownum rno,ordr.order_gubun order_gubun, ordr.order_no, cus.cus_name, 
+            			cus.business_no, cus.cus_ceoname, cus.cus_hp, cus.cus_busikind, cus.cus_addr, 
+            			ordr.cus_man, ordr.cus_manhp, inven.ivgroup_code,inven.ivgroup_name, ordr.order_count, 
+            			ordr.order_memo, ordr.delivery_state,ordr.order_indate, ordr.delivery_info, 
+            			ordr.order_startdate, ordr.delivery_date, ordr.order_enddate, em.emp_name emp_name, em.emp_hp emp_hp,
+            			em.team_name team_name
+                   from customer cus, order_deli ordr , INVENGROUP inven, emp em
+                  where cus.cus_code = ordr.cus_code and ordr.ivgroup_code = inven.ivgroup_code and em.empno = ordr.order_writer
 				 	and order_gubun = '생산'
 				 <!-- 물품검색 -->
 				 <if test="cb_search!=null and cb_search.equals('fish_code')">
@@ -26,6 +31,10 @@
 				 <!-- 담당자검색 -->
 				 <if test="cb_search!=null and cb_search.equals('comp_man')">
 				 		and ordr.cus_man like '%'||#{keyword}||'%'
+				 </if>
+				 <!-- 작성자검색 -->
+				 <if test="cb_search!=null and cb_search.equals('emp_name')">
+				 		and em.emp_name like '%'||#{keyword}||'%'
 				 </if>
 				 <!-- 진행상황 검색 -->
 				 <if test="cb_situation!=null and !cb_situation.equals('null')">
@@ -104,10 +113,13 @@
     <select id="deliveryInsert_ListF" parameterType="map" resultType="map">
 		select cus_name, cus_addr,cus_hp,cus_code from customer
 	</select>
+	<!-- 임마가 배송등록페이지의 내역목록 -->
     <select id="deliveryInsert_ListS" parameterType="map" resultType="map">
-		select cus.cus_name cus_name, deli.cus_man cus_man, deli.order_indate order_indate, deli.order_no order_no 
-		  from order_deli deli, customer cus
+		select deli.delivery_state delivery_state, cus.cus_name cus_name, deli.cus_man cus_man, 
+			   deli.order_indate order_indate, deli.order_no order_no, em.emp_name emp_name
+		  from order_deli deli, customer cus, emp em
 		 where deli.cus_code=cus.cus_code
+		   and deli.order_writer = em.empno
 		   and deli.order_gubun = '생산'
 		 order by deli.order_indate desc
 	</select>
@@ -119,13 +131,19 @@
 		select ivgroup_code, ivgroup_name from invengroup
 		 where ivgroup_gubun = '생산'
 	</select>
+	<!-- 임마는 배송등록에서 배송내역 클릭했을때 가져오는 값 -->
     <select id="delivery_selectInfo" parameterType="map" resultType="map">
-    	select cus.cus_name cus_name, cus.business_no business_no, cus.cus_ceoname cus_ceoname, cus.cus_hp cus_hp, cus.cus_busikind cus_busikind, cus.cus_zipcode cus_zipcode, cus.cus_addr cus_addr, cus.cus_code cus_code
-    		   ,deli.cus_man cus_man, deli.cus_manhp cus_manhp, fish.ivgroup_name ivgroup_name, fish.ivgroup_code ivgroup_code, deli.order_count order_count, deli.delivery_date delivery_date, deli.order_memo order_memo, deli.order_indate order_indate
-    	  from customer cus, order_deli deli, invengroup fish
+    	select deli.delivery_state delivery_state, cus.cus_name cus_name, cus.business_no business_no, 
+    		   cus.cus_ceoname cus_ceoname, cus.cus_hp cus_hp, cus.cus_busikind cus_busikind, 
+    		   cus.cus_zipcode cus_zipcode, cus.cus_addr cus_addr, cus.cus_code cus_code,
+    		   deli.cus_man cus_man, deli.cus_manhp cus_manhp, fish.ivgroup_name ivgroup_name, 
+    		   fish.ivgroup_code ivgroup_code, deli.order_count order_count, deli.delivery_date delivery_date, 
+    		   deli.order_memo order_memo, deli.order_indate order_indate
+    	  from customer cus, order_deli deli, invengroup fish, emp em
     	 where deli.order_no = #{deli_no}
 		   and deli.cus_code = cus.cus_code
     	   and deli.ivgroup_code = fish.ivgroup_code
+    	   and em.empno = deli.order_writer
 	</select>
 	<select id="deliveryInsert_List" parameterType="map" statementType="CALLABLE">
 		{ CALL proc_delivery_insert(
@@ -136,6 +154,7 @@
                 ,#{cus_manhp, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
                 ,#{cus_man, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
                 ,#{deli_when, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{order_writer_no, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}                
                 ,#{msg, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
                 )
         }
@@ -148,13 +167,47 @@
 				 #{item}
 		</foreach>
 	</delete>
+	<update id="delivery_cancle_pix" parameterType="list">
+		update order_deli
+		   set delivery_state = 44,
+		   	   order_memo = #{deli_memo},
+		   	   order_indate = to_char(sysdate,'yyyy-mm-dd/hh24:mi')
+		 where order_no = #{deli_no}
+	</update>
+	
+	
+	<!--========================================================================= 
+	========================전체수정처리 보류=========================================
+	<update id="delivery_cancle_top" parameterType="list">
+		update order_deli 
+		   set delivery_state = '44'
+		 where order_no in
+		<foreach item="item" index="index" collection="list"
+				 open="(" separator="," close=")">
+				 #{item}
+		</foreach>
+	</update> 
+	=============================================================================
+	===========================================================================-->
+	
+	
+	<select id="deli_delete_select" parameterType="list" resultType="map">
+		select delivery_state, order_no from order_deli 
+		 where order_no in
+		<foreach item="item" index="index" collection="list"
+				 open="(" separator="," close=")">
+				 #{item}
+		</foreach>
+	</select>
 <!-- ================================================================================================================================================================================================================================= -->
 	<!-- 전체조회 및 조건조회 총 레코드수 구하기 -->
 	<select id="delivery_getTotal" parameterType="map" resultType="int">
 		select count(deli.order_no) order_no
-		  from customer cus, order_deli deli , invengroup fish
-		 where cus.cus_code = deli.cus_code and deli.ivgroup_code = fish.ivgroup_code
-		 and order_gubun = '생산'
+		  from customer cus, order_deli deli , invengroup fish, emp em
+		 where cus.cus_code = deli.cus_code 
+		   and deli.ivgroup_code = fish.ivgroup_code 
+		   and deli.order_writer = em.empno
+		   and order_gubun = '생산'
         <!-- 물품검색 -->
 		 <if test="cb_search!=null and cb_search.equals('fish_code')">
 		 		and fish.ivgroup_name like '%'||#{keyword}||'%'
@@ -170,6 +223,10 @@
 		 <!-- 담당자검색 -->
 		 <if test="cb_search!=null and cb_search.equals('comp_man')">
 		 		and cus.cus_man like '%'||#{keyword}||'%'
+		 </if>
+		 <!-- 작성자검색 -->
+		 <if test="cb_search!=null and cb_search.equals('emp_name')">
+		 		and em.emp_name like '%'||#{keyword}||'%'
 		 </if>
 		 <!-- 진행상황 검색 -->
 		 <if test="cb_situation!=null and !cb_situation.equals('null')">
