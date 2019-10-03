@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.mapper.ProductMapper">
+    <select id="productList" parameterType="map" resultType="map">
+    	select p.pd_no,p.pd_weight,p.pd_regdate,p.ship_code,f.fish_name,p.pd_indate,p.pd_outdate
+ 		  from product p,fishtype f
+         where p.fish_code = f.fish_code
+         order by pd_no asc
+    </select>
+    <insert id="productInsert" parameterType="map">
+    	INSERT INTO product(pd_no
+    					   ,pd_weight,pd_regdate
+    					   ,ship_code,fish_code
+    					   ,pd_indate,pd_outdate) 
+             		 VALUES(nvl((select (MAX (pd_no) + 1) pd_no from product),1)
+             		 	   ,#{pd_weight},#{pd_regdate}
+             		 	   ,#{ship_code},#{fish_code}
+             		 	   ,#{pd_indate},#{pd_outdate}) 
+    </insert>
+      <select id="productDetail" parameterType="map" resultType="map">
+    	select p.pd_no,p.pd_weight,p.pd_regdate,p.ship_code,f.fish_name,p.pd_indate,p.pd_outdate
+ 		  from product p,fishtype f
+         where p.fish_code = f.fish_code
+         order by pd_no asc
+    </select>
+</mapper> 

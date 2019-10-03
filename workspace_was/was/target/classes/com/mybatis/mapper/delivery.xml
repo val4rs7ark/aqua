@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.mapper.deliveryMapper">
+
+    <select id="delivery" parameterType="map" resultType="map">
+     		select order_no, order_gubun, cus_name, business_no, cus_ceoname,order_indate, 
+     			   cus_hp, cus_busikind, cus_addr, cus_man, cus_manhp, ivgroup_code,
+                   delivery_date,order_count, order_memo, delivery_state, 
+                   delivery_info, order_startdate,order_enddate, ivgroup_name
+            from(select rownum rno,ordr.order_gubun order_gubun, ordr.order_no, cus.cus_name, cus.business_no, cus.cus_ceoname, cus.cus_hp, cus.cus_busikind, cus.cus_addr, ordr.cus_man, ordr.cus_manhp, inven.ivgroup_code,inven.ivgroup_name, ordr.order_count, ordr.order_memo, ordr.delivery_state,ordr.order_indate, ordr.delivery_info, ordr.order_startdate, ordr.delivery_date, ordr.order_enddate
+                   from customer cus, order_deli ordr , INVENGROUP inven
+                  where cus.cus_code = ordr.cus_code and ordr.ivgroup_code = inven.ivgroup_code
+				 	and order_gubun = '생산'
+				 <!-- 물품검색 -->
+				 <if test="cb_search!=null and cb_search.equals('fish_code')">
+				 		and inven.ivgroup_name like '%'||#{keyword}||'%'
+				 </if>
+				 <!-- 거래처검색 -->
+				 <if test="cb_search!=null and cb_search.equals('comp_name')">
+				 		and cus.cus_name like '%'||#{keyword}||'%'
+				 </if>
+				 <!-- 주소검색 -->
+				 <if test="cb_search!=null and cb_search.equals('comp_addr')">
+				 		and cus.cus_addr like '%'||#{keyword}||'%'
+				 </if>
+				 <!-- 담당자검색 -->
+				 <if test="cb_search!=null and cb_search.equals('comp_man')">
+				 		and ordr.cus_man like '%'||#{keyword}||'%'
+				 </if>
+				 <!-- 진행상황 검색 -->
+				 <if test="cb_situation!=null and !cb_situation.equals('null')">
+				 		and ordr.delivery_state = #{cb_situation}
+				 </if>
+				 <!-- 날짜검색 -->
+				 <if test="befor_date_ud!=null and after_date_ud!=null">
+				 		and ordr.delivery_date between #{before_date} and #{after_date}
+				 </if>
+				 <if test="befor_date_ud!=null and after_date_ud==null">
+				 		and ordr.delivery_date between #{before_date} and (select max(ordr.delivery_date) from emp)
+				 </if>
+				 <if test="befor_date_ud==null and after_date_ud!=null">
+				 		and ordr.delivery_date between (select min(ordr.delivery_date) from emp) and #{after_date}
+				 </if>
+				  order by ordr.delivery_date desc ) a
+				  where 1=1
+		 <if test="start>0 and end>0">
+  		   		and rno between #{start} and #{end} 
+		 </if>
+	</select>
+    <select id="deli_afterTime" parameterType="map" statementType="CALLABLE">
+		{ CALL proc_deli_complete(
+                 #{deli_no, mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
+                ,#{r_end_date, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
+                )
+        }
+	</select>
+    <select id="deli_save" parameterType="map" statementType="CALLABLE">
+		{ CALL proc_delivery_save(
+                 #{deli_no, mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
+                ,#{team_name, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+                ,#{deli_man, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+                ,#{msg, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{r_deli_start, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
+                )
+        }
+	</select>
+    <select id="select_start" parameterType="map" resultType="java.lang.String">
+		select order_startdate from order_deli
+		where order_no = #{deli_no}
+	</select>
+	<update id="commit_state" parameterType="map">
+		update order_deli
+		   set delivery_state = 3
+		 where order_no = #{deli_no}
+	</update>
+	<update id="update_state" parameterType="map">
+		update order_deli
+		   set delivery_state = 1,
+		   	   delivery_info = '-',
+		   	   order_startdate = '-'
+		 where order_no = #{deli_no}
+		 
+	</update>
+	<update id="cancle_state" parameterType="map">
+		update order_deli
+		   set delivery_state = 2,
+		   	   order_enddate = '-'
+		 where order_no = #{deli_no}
+	</update>
+    <select id="delivery_Update" parameterType="map" statementType="CALLABLE">
+		{ CALL proc_delivery_Update(
+                #{cus_code, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+                ,#{fish_code, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+                ,#{deli_weight, mode=IN, jdbcType=NUMERIC,  javaType=java.lang.Integer}
+                ,#{deli_memo, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{cus_manhp, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{cus_man, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{deli_when, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{deli_no, mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
+                )
+        }
+	</select>
+	<!-- deliveryInsert_ListF는 업체검색창에  -->
+    <select id="deliveryInsert_ListF" parameterType="map" resultType="map">
+		select cus_name, cus_addr,cus_hp,cus_code from customer
+	</select>
+    <select id="deliveryInsert_ListS" parameterType="map" resultType="map">
+		select cus.cus_name cus_name, deli.cus_man cus_man, deli.order_indate order_indate, deli.order_no order_no 
+		  from order_deli deli, customer cus
+		 where deli.cus_code=cus.cus_code
+		   and deli.order_gubun = '생산'
+		 order by deli.order_indate desc
+	</select>
+    <select id="delivery_selectcomp" parameterType="map" resultType="map">
+		select cus_name, business_no, cus_ceoname, cus_hp, cus_busikind, cus_zipcode, cus_addr, cus_code from customer
+		 where cus_code = #{cus_code}
+	</select>
+    <select id="delivery_selectfish" parameterType="map" resultType="map">
+		select ivgroup_code, ivgroup_name from invengroup
+		 where ivgroup_gubun = '생산'
+	</select>
+    <select id="delivery_selectInfo" parameterType="map" resultType="map">
+    	select cus.cus_name cus_name, cus.business_no business_no, cus.cus_ceoname cus_ceoname, cus.cus_hp cus_hp, cus.cus_busikind cus_busikind, cus.cus_zipcode cus_zipcode, cus.cus_addr cus_addr, cus.cus_code cus_code
+    		   ,deli.cus_man cus_man, deli.cus_manhp cus_manhp, fish.ivgroup_name ivgroup_name, fish.ivgroup_code ivgroup_code, deli.order_count order_count, deli.delivery_date delivery_date, deli.order_memo order_memo, deli.order_indate order_indate
+    	  from customer cus, order_deli deli, invengroup fish
+    	 where deli.order_no = #{deli_no}
+		   and deli.cus_code = cus.cus_code
+    	   and deli.ivgroup_code = fish.ivgroup_code
+	</select>
+	<select id="deliveryInsert_List" parameterType="map" statementType="CALLABLE">
+		{ CALL proc_delivery_insert(
+                 #{cus_code, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+                ,#{fish_code, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+                ,#{deli_weight, mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
+                ,#{deli_memo, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{cus_manhp, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{cus_man, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{deli_when, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{msg, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
+                )
+        }
+	</select>
+	<delete id="deli_delete" parameterType="list">
+		delete from order_deli 
+		 where order_no in
+		<foreach item="item" index="index" collection="list"
+				 open="(" separator="," close=")">
+				 #{item}
+		</foreach>
+	</delete>
+<!-- ================================================================================================================================================================================================================================= -->
+	<!-- 전체조회 및 조건조회 총 레코드수 구하기 -->
+	<select id="delivery_getTotal" parameterType="map" resultType="int">
+		select count(deli.order_no) order_no
+		  from customer cus, order_deli deli , invengroup fish
+		 where cus.cus_code = deli.cus_code and deli.ivgroup_code = fish.ivgroup_code
+		 and order_gubun = '생산'
+        <!-- 물품검색 -->
+		 <if test="cb_search!=null and cb_search.equals('fish_code')">
+		 		and fish.ivgroup_name like '%'||#{keyword}||'%'
+		 </if>
+		 <!-- 거래처검색 -->
+		 <if test="cb_search!=null and cb_search.equals('comp_name')">
+		 		and cus.cus_name like '%'||#{keyword}||'%'
+		 </if>
+		 <!-- 주소검색 -->
+		 <if test="cb_search!=null and cb_search.equals('comp_addr')">
+		 		and cus.cus_addr like '%'||#{keyword}||'%'
+		 </if>
+		 <!-- 담당자검색 -->
+		 <if test="cb_search!=null and cb_search.equals('comp_man')">
+		 		and cus.cus_man like '%'||#{keyword}||'%'
+		 </if>
+		 <!-- 진행상황 검색 -->
+		 <if test="cb_situation!=null and !cb_situation.equals('null')">
+		 		and deli.delivery_state = #{cb_situation}
+		 </if>
+		 <!-- 날짜검색 -->
+		 <if test="befor_date_ud!=null and after_date_ud!=null">
+		 		and deli.delivery_date between #{before_date} and #{after_date}
+		 </if>
+		 <if test="befor_date_ud!=null and after_date_ud==null">
+		 		and deli.delivery_date between #{before_date} and (select max(deli.delivery_date) from emp)
+		 </if>
+		 <if test="befor_date_ud==null and after_date_ud!=null">
+		 		and deli.delivery_date between (select min(deli.delivery_date) from emp) and #{after_date}
+		 </if>
+		 
+	</select>
+</mapper> 

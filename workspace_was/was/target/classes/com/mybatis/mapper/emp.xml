@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.mapper.EmpMapper">
+    <insert id="empSignUp" parameterType="map" statementType="CALLABLE">
+    	{ CALL proc_signup(
+    				#{emp_name, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{resident_no, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{emp_hp, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{emp_addr, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{emp_indate, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{emp_outdate, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{dept_code, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{team_name, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{emp_level, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{sal_account, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{emp_engname, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{emp_mili , mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{emp_bank, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{emp_zipcode, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{emp_position, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{msg, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String}
+    	)}
+    </insert> 
+    <select id="empListSignUp" parameterType="map" resultType="map">
+    	select a.empno, b.dept_name, a.emp_name, a.emp_hp 
+          from emp a, dept b
+		 where a.dept_code = b.dept_code
+    </select>
+    <delete id="empDel" parameterType="String">
+    	delete from emp where empno=#{tg_del}
+    </delete>
+    <select id="empSelect" parameterType="map" resultType="map">
+    	select emp_name,resident_no,emp_hp
+			  ,emp_addr,emp_indate,emp_outdate
+			  ,dept_code,emp_level,emp_engname
+			  ,emp_mili,emp_bank,emp_zipcode
+			  ,emp_position,sal_account,team_name,empno
+		from emp
+		where empno = #{empno}
+    </select>
+     <select id="getTotal" parameterType="map" resultType="int">
+     	select count(empno) 
+     	  from emp
+     </select>
+     <update id="empUPD" parameterType="map">
+     	update emp
+ 		   set emp_hp = #{emp_hp, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+ 		      ,emp_addr = #{emp_addr, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+ 		      ,emp_indate = #{emp_indate, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+ 		      ,emp_outdate = #{emp_outdate, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+ 		      ,dept_code = #{dept_code, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+ 		      ,team_name = #{team_name, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+ 		      ,emp_level = #{emp_level, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+ 		      ,sal_account = #{sal_account, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+ 		      ,emp_engname = #{emp_engname, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+ 		      ,emp_mili = #{emp_mili, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+ 		      ,emp_bank = #{emp_bank, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+ 		      ,emp_zipcode = #{emp_zipcode, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+ 		      ,team_name = #{team_name, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+ 		      ,emp_position = #{emp_position, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+		 where empno = #{empno, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+     </update>
+</mapper> 
