@@ -30,12 +30,18 @@ public class ErpServlet extends HttpServlet{
 		if(req.getParameter("gap")!=null) {
 		String gap = req.getParameter("gap").toString();
 		logger.info("gap:::::::::::::::::"+gap);
+		Object[] keys = pMap.keySet().toArray();
+		for(Object key : keys) {
+		logger.info("requestParams :::::: key :"+key.toString()+", value :"+pMap.get(key.toString()));
+		}
 		////////////////////////////////////////
 		HashMapBinder hmb = new HashMapBinder(req,gap);
 		hmb.selectBind(pMap);
 		}
 		//////FirstLogin(세션아이디 업데이트)처리 구분인자////
-		pMap.put("session_no", req.getSession().getId());
+		if(req.getParameter("firstLogin")!=null) {
+			pMap.put("session_no", req.getSession().getId());
+		}
 		///////////////////////////////////////////
 		ActionServlet aServlet = ControllerMapping.mapping(mapping,pMap);
 		Model model = aServlet.execute();

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, java.util.Map" %>    
+<%@ page import="java.util.List, java.util.Map" %>
+<%@ page import="java.util.Calendar, java.text.DecimalFormat" %>    
     <!-- 190920 -->
 <%
 //////////////////세션에서 꺼내기 전에 처음에 보여줄 변수 선언/////
@@ -55,16 +56,28 @@
 </head>
 <body>
 	  <form id="f_empStatus" action="/erp/wasEmpStatus.was" method="post">
+	  <%DecimalFormat df = new DecimalFormat("00");
+		Calendar currCal = Calendar.getInstance();
+		String empStatus_year = df.format(currCal.get(Calendar.YEAR));
+		String empStatus_month = df.format(currCal.get(Calendar.MONTH)+1); 
+	   %>
 	  <%
 	  	if(s_emp_no!=null){
+	  		
 	  %>
 			<input type="hidden" value=<%= s_emp_no %> name="empno">
 			<input type="hidden" value="1" name="gap">
+			<input type="hidden" value="1" name="calendar_bungi">
+			<input type="hidden" value=<%= empStatus_year %> name="empStatus_year">
+			<input type="hidden" value=<%= empStatus_month %> name="empStatus_month">
 	  <%
 	  	}else if(empno!=null){
 	  %>
 	  		<input type="hidden" value=<%= empno %> name="empno">
 	  		<input type="hidden" value="1" name="gap">
+	  		<input type="hidden" value="1" name="calendar_bungi">
+			<input type="hidden" value=<%= empStatus_year %> name="empStatus_year">
+			<input type="hidden" value=<%= empStatus_month %> name="empStatus_month">
 	  <%
 	  	}
 	  %>
@@ -77,12 +90,14 @@
 	  <%
 	  	if(s_emp_no!=null && s_emp_pw!=null){
 	  %>
+	  				<input type="hidden" value="0" name="firstLogin">
 					<input type="hidden" value=<%= s_emp_no %> name="empno">
 					<input type="hidden" value=<%= s_emp_pw %> name="emp_pw">
 					<input type="hidden" value="1" name="gap">
 	  <%
 	  	}else if(empno!=null && emp_pw!=null) {
 	  %>
+	  				<input type="hidden" value="0" name="firstLogin">
 	  				<input type="hidden" value=<%= empno %> name="empno">
 					<input type="hidden" value=<%= emp_pw %> name="emp_pw">
 					<input type="hidden" value="1" name="gap">	
