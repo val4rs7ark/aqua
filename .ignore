@@ -1,4 +1,5 @@
 *.iml
+pom.properties
 local.properties
 
 ######################
