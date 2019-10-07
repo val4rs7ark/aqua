@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@page import="java.util.HashMap,java.util.Map,java.util.List"%>
 <!--========================콤보 박스 체크 관련 로직 시작=============================================-->
-
 <script type="text/javascript">
 
 </script>
@@ -16,6 +15,7 @@
 			Integer.parseInt(request.getAttribute("getInvenGroupTotal").toString());
 	int size = invengroupList.size();
 	out.print("size:"+size);
+	String gubun = request.getAttribute("gubun").toString();
 %>
 
 <!--========================모달로직 (메인 - 신규 등록 -품목검색) 관련 로직 끝===========================-->
@@ -70,7 +70,8 @@
 			}
 %>              
               	 <tr>
-              		<td><input type="checkbox"></td>
+              		<td><input type="checkbox" name="user_CheckBox"
+              				   onclick="onlyOneCheck(this)"></td>
               		<td><%=pMap.get("IVGROUP_GUBUN")%></td>
               		<td><%=pMap.get("IVGROUP_CODE")%></td>
               		<td><%=pMap.get("IVGROUP_NAME")%></td>
@@ -78,18 +79,21 @@
               	 </tr>     
 <%
 	}
-}		
-%>              	          	             	             	             	 
+%>             	          	             	             	             	 
               </tbody>
          </table> 
       </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark">적용</button>
+  
+        <button type="button" class="btn btn-dark" onClick="javascript:selectBtn('<%=gubun%>')" data-dismiss="modal">적용</button>
         <button type="button" class="btn btn-dark" data-dismiss="modal">취소</button>
+<%
+}
+%>		
+         
       </div>
-
     </div>
   </div>
 <!-- ===================================모달창 (메인 - 신규 등록 -품목검색) 끝===================================== -->
