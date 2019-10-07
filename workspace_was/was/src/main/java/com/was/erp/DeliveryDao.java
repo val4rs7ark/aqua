@@ -44,9 +44,9 @@ public class DeliveryDao {
 		return deliveryInsert_ListF;
 	}
 
-	public List<Map<String, Object>> deliveryInsert_ListS() {
+	public List<Map<String, Object>> deliveryInsert_ListS(Map<String,Object> pMap) {
 		logger.info("DeliveryDao////////////deliveryInsert_ListS호출성공");
-		List<Map<String, Object>> deliveryInsert_ListS = sqlSessionTemplate.selectList("deliveryInsert_ListS");
+		List<Map<String, Object>> deliveryInsert_ListS = sqlSessionTemplate.selectList("deliveryInsert_ListS",pMap);
 		return deliveryInsert_ListS;
 	}
 
@@ -163,6 +163,16 @@ public class DeliveryDao {
 		int tot = 0;
 		try {
 			tot = sqlSessionTemplate.selectOne("delivery_getTotal",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return tot;
+	}
+	public int get_total_ins(Map<String, Object> pMap) {
+		logger.info("DeliveryDao////////////get_total_ins호출성공");
+		int tot = 0;
+		try {
+			tot = sqlSessionTemplate.selectOne("get_total_ins",pMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

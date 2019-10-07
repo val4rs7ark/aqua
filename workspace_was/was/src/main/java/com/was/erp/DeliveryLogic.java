@@ -41,23 +41,44 @@ public class DeliveryLogic {
 		List<Map<String, Object>> deliveryList = deliveryDao.deliveryList(pMap);
 		return deliveryList;
 	}
+	public Map<String,Object> deliveryInsert_ListS(Map<String,Object> pMap, int tot) {
+		logger.info("DeliveryLogic////////////deliveryInsert_ListS호출성공");
+		int nowPage = 1;//현재 페이지
+		if(pMap.get("nowPage")!=null) {
+			nowPage = Integer.parseInt(pMap.get("nowPage").toString())+1;
+		}
+		int pagePer_Num = 18;//한페이지에 뿌려질 로우수
+		int start = 0;
+		int end = 0;
+		if(nowPage>0) {
+			start = ((nowPage-1)*pagePer_Num)+1;
+			end = nowPage * pagePer_Num;
+			pMap.put("start",start);
+			if(end > tot) {
+				pMap.put("end",tot);
+			}else {
+				pMap.put("end",end);
+			}
+		}
+		logger.info("tot :"+tot);
+		logger.info("nowPage :"+nowPage);
+		logger.info("start :"+start);
+		logger.info("end :"+end);
+		List<Map<String, Object>> deliveryInsert_ListF = deliveryDao.deliveryInsert_ListF();//업체목록
+		List<Map<String, Object>> deliveryInsert_ListS = deliveryDao.deliveryInsert_ListS(pMap);//내역목록
+		List<Map<String, Object>> f_list = deliveryDao.delivery_selectfish();
+		Map<String, Object> r_Map = new HashMap<>();
+		r_Map.put("deliveryInsert_ListF", deliveryInsert_ListF);
+		r_Map.put("deliveryInsert_ListS", deliveryInsert_ListS);
+		r_Map.put("f_list", f_list);
+		return r_Map;
+	}
 
 	public void deliveryInsert_List(Map<String, Object> pMap) {
 		logger.info("DeliveryLogic////////////deliveryInsert_List호출성공");
 		deliveryDao.deliveryInsert_List(pMap);
 	}
 
-	public Map<String,Object> deliveryInsert_ListS() {
-		logger.info("DeliveryLogic////////////deliveryInsert_ListS호출성공");
-		 List<Map<String, Object>> deliveryInsert_ListF = deliveryDao.deliveryInsert_ListF();
-		 List<Map<String, Object>> deliveryInsert_ListS = deliveryDao.deliveryInsert_ListS();
-		 List<Map<String, Object>> f_list = deliveryDao.delivery_selectfish();
-			Map<String, Object> r_Map = new HashMap<>();
-			r_Map.put("deliveryInsert_ListF", deliveryInsert_ListF);
-			r_Map.put("deliveryInsert_ListS", deliveryInsert_ListS);
-			r_Map.put("f_list", f_list);
-		 return r_Map;
-	}
 	public Map<String,Object> deli_save(Map<String, Object> pMap) {
 		logger.info("DeliveryLogic////////////deli_save호출성공");
 		//Map<String,Object> result_Map = null;
@@ -112,6 +133,12 @@ public class DeliveryLogic {
 	public int get_total(Map<String,Object> pMap) {
 		logger.info("DeliveryLogic////////////get_total호출성공");
 		int tot = deliveryDao.get_total(pMap);
+		return tot;
+	}
+
+	public int get_total_ins(Map<String, Object> pMap) {
+		logger.info("DeliveryLogic////////////get_total호출성공");
+		int tot = deliveryDao.get_total_ins(pMap);
 		return tot;
 	}
 

@@ -4,6 +4,7 @@
   } 
   .bi_table_insert{
   }
+  
   .base_table_div{
    width:100%; 
    height: 870px; 
@@ -22,6 +23,11 @@
   	padding-top: 8px;
     padding-bottom: 16px;
     width:20%;
+  }
+  .bs_table_when_ins{
+  	font-size: 12px;
+  	padding-top: 8px;
+    padding-bottom: 16px;
   }
   .bs_checkbox{
  	width: 15px;

@@ -4,8 +4,12 @@
 <%@ page import="com.util.PageBar" %>
 <%
 	int size = 0;
+	int size_s = 0;
  	Map<String,Object> r_Map = (Map<String,Object>)request.getAttribute("r_Map");
  	List<Map<String,Object>> deliveryInsert_ListS = (List<Map<String,Object>>)r_Map.get("deliveryInsert_ListS");
+ 	if(deliveryInsert_ListS!=null){
+ 		size_s = deliveryInsert_ListS.size();
+ 	}
  	List<Map<String,Object>> deliveryInsert_ListF = (List<Map<String,Object>>)r_Map.get("deliveryInsert_ListF");
  	List<Map<String,Object>> f_list = (List<Map<String,Object>>)r_Map.get("f_list");
 	Map<String,Object> pl_Map = (Map<String,Object>)request.getAttribute("pl_Map");
@@ -214,7 +218,7 @@
   </div>
 <div style="width:80%" >
 <div class="container" style="margin-left: 0px;">
-<div class="base_table_div" style="height: 900px; ">
+<div class="base_table_div" style="width: 1350px;height: 900px; ">
 
 <!--================================상단바===========================================-->
 	<div class="card bg-dark text-white" style="height:50px; margin-top:70px">
@@ -235,7 +239,7 @@
         
         <th style="border-top-width: 10px; border-top-color: white;">
 	        <div class="dropdown" style="width: 130px;">
-				<select class="btn btn-dark dropdown_bs" style="color:white; width:120px; height:35.75px; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px;">
+				<select class="btn btn-dark dropdown_bs" name="cb_search" style="color:white; width:120px; height:35.75px; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px;">
 					<option value="">선택</option>
 					<option value="comp_name">업체</option>
 					<option value="bs_writer">작성자</option>
@@ -243,7 +247,7 @@
 			</div>
         </th>  
         <th style="border-top-width: 10px;border-top-color: white;">
-			 <input type="text" class="form-control" name="bs_comp_name" placeholder=" 내용을 입력하세요."  size="27" style="height: 35.75px;width:100%;min-width:140px; font-size: 13px;">
+			 <input type="text" class="form-control" name="keyword" placeholder=" 내용을 입력하세요."  size="27" style="height: 35.75px;width:100%;min-width:140px; font-size: 13px;">
         </th>
         <th style="border-top-width: 10px;border-top-color: white;">
 			<input type="date" class="form-control" name="before_date">
@@ -255,15 +259,15 @@
 			<input type="date" class="form-control" name="after_date">
 		</th>
 		<th style="border-top-width: 10px;border-top-color: white;">
-			<button onclick="javascript:bs_ins_search()" class="btn btn-dark" style="float: right; width:54.5px"">조회</button>
+			<button onclick="javascript:bs_ins_search()" class="btn btn-dark" style="float: right; width:54.5px">조회</button>
 		</th>
       </tr>
     </thead>
   </table>
 </form><!-- ============================================================================form============================================= -->
-  <div class="container">
-	  <div class="row" style="margin-top:15px">
-	  	<div class="col-sm-4">
+  <div class="container" style="margin-left: 0px; margin-right: 0px;">
+	  <div class="row" style="margin-top:15px; width:1340px;">
+	  	<div style="width:40%;">
 			<h5 style="display:inline;">배송목록</h5>
 			<%
 				if(fail_msg!=null){ 
@@ -280,13 +284,14 @@
 			</div>
 	  		<table class="table table-striped" style="border-top-style: solid; border-bottom-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 2px;margin-bottom: 0px;" > 
 	  			<thead style="text-align: center;">
-	  				<tr style="width:10%">
-	  					<th style="width:10%;">
-	  						<div><input type="checkbox" id="checkall"></div>
-	  					</th>
-	  					<th style="width:35%;">업체</th>
-	  					<th style="width:25%;">작성자</th>
-	  					<th style="width:30%;">등록일</th>
+	  				<tr >
+	  					<td>
+	  						<div style="float:left"><input type="checkbox" id="checkall"></div>
+	  					</td>
+	  					<th>업체</th>
+	  					<th>작성자</th>
+	  					<th>등록일</th>
+	  					<th>상태</th>
 	  				</tr>
 	  			</thead>
 	  			<tbody id="bs_list">
@@ -295,23 +300,45 @@
 	if(deliveryInsert_ListS!=null){
 		Map<String,Object> sMap = new HashMap<>();
 		String deli_date = null;
-		for(int i=numPerPage*nowPage+0;i<numPerPage*nowPage+18;i++){
-			if(i==deliveryInsert_ListS.size()) break;
+		for(int i=0;i<size_s;i++){
+			if(i==size_s) break;
 			sMap = deliveryInsert_ListS.get(i);
 			String cus_name[] = sMap.get("CUS_NAME").toString().split("\\(");
 %>
 			  			<tr id="<%=sMap.get("ORDER_NO")%>">
 		  					<td style="padding-top: 5px; padding-bottom: 5px;"><div><input type="checkbox" name="chk" value="<%=sMap.get("ORDER_NO")%>"><input type="hidden" name="r_delivery_state" value="<%=sMap.get("DELIVERY_STATE")%>"></div></td>
 						<%--<td><input type="hidden" id="deli_no_<%=sMap.get("DELI_NO")%>" name="deli_no_<%=sMap.get("DELI_NO")%>" value="<%=sMap.get("DELI_NO")%>"></td>--%>		  					
-							<td class="bs_table_when" style="padding-top: 5px; padding-bottom: 5px;"><%=cus_name[0]%></td>
-		  					<td class="bs_table_when" style="padding-top: 5px; padding-bottom: 5px;"><%=sMap.get("EMP_NAME") %></td>
-		  					<td class="bs_table_when" style="padding-top: 5px; padding-bottom: 5px;">
+							<td class="bs_table_when_ins" style="padding-top: 5px; padding-bottom: 5px;"><%=sMap.get("CUS_NAME")%></td>
+		  					<td class="bs_table_when_ins" style="text-align: center; padding-top: 5px; padding-bottom: 5px;"><%=sMap.get("EMP_NAME")%></td>
+		  					<td class="bs_table_when_ins" style="text-align: center;padding-top: 5px; padding-bottom: 5px;"><%=deli_date = sMap.get("ORDER_INDATE").toString()%></td>
 		  						<%
-		  							deli_date = sMap.get("ORDER_INDATE").toString();
-		  							deli_date = deli_date.substring(0, 10);
-		  						%>
-		  						<%=deli_date %>
-		  					</td>
+									if("1".equals(sMap.get("DELIVERY_STATE").toString())){
+								%>
+		  					<td class="bs_table_when_ins" style="text-align: center; padding-top: 5px; padding-bottom: 5px;">준비중</td>
+								<%
+									}
+								%>
+								<%
+									if("2".equals(sMap.get("DELIVERY_STATE").toString())){
+								%>
+		  					<td class="bs_table_when_ins" style="text-align: center; padding-top: 5px; padding-bottom: 5px;">배송중</td>
+								<%
+									}
+								%>
+								<%
+									if("3".equals(sMap.get("DELIVERY_STATE").toString())){
+								%>
+		  					<td class="bs_table_when_ins" style="text-align: center; padding-top: 5px; padding-bottom: 5px;">완료</td>
+								<%
+									}
+								%>
+								<%
+									if("44".equals(sMap.get("DELIVERY_STATE").toString())){
+								%>
+		  					<td class="bs_table_when_ins" style="text-align: center; padding-top: 5px; padding-bottom: 5px; color: red;">취소</td>
+								<%
+									}
+								%>
 		  				</tr> 
 <%
 		}
@@ -323,7 +350,12 @@
 	  			</tbody>
 	  		</table>
 	  	</div>
-	  	<div id="trance_table" class="col-sm-8">
+	  	
+	  	<div style="width:3%;">
+			
+	  	</div>
+	  	
+	  	<div id="trance_table" style="width:57%">
 	  		<h5 style="display:inline;">배송등록</h5>
 	  		<button type="button" onclick="javascript:bs_cancle()" class="btn btn-dark btn pull-right" style="width:54.5px; margin-bottom:3px; margin-left:10px; padding-top: 2px; padding-bottom: 2px;">취소</button>
 	  		<button type="button" onclick="javascript:bs_insert()" class="btn btn-dark btn pull-right" style="width:54.5px; padding-top: 2px; padding-bottom: 2px;">등록</button>
@@ -467,26 +499,27 @@
 	<div class="container" style="margin-left: 0px;">
 		<ul class="pagination" id="bs_pagenation" style="justify-content: center;">
 			<%		
-				String keyward = null; 
-				String befor_date_ud = null; 
-				String after_date_ud = null; 
+				String keyword = null; 
+				String before_date = null; 
+				String after_date = null; 
 				String cb_situation = null; 
+				String cb_search = null; 
 				if(pl_Map.get("keyword")!=null){
-					keyward = pl_Map.get("keyword").toString();
+					keyword = pl_Map.get("keyword").toString();
 				}
-				if(pl_Map.get("befor_date_ud")!=null){
-					befor_date_ud = pl_Map.get("befor_date_ud").toString();
-				}
-				if(pl_Map.get("after_date_ud")!=null){
-					after_date_ud = pl_Map.get("after_date_ud").toString();
+				if(pl_Map.get("before_date_ud")!=null){
+					before_date = pl_Map.get("before_date_ud").toString();
 				}
 				if(pl_Map.get("after_date_ud")!=null){
-					after_date_ud = pl_Map.get("after_date_ud").toString();
+					after_date = pl_Map.get("after_date_ud").toString();
 				}
 				if(pl_Map.get("cb_situation")!=null){
 					cb_situation = pl_Map.get("cb_situation").toString();
 				}
-				String pagePath = "/erp/deliveryInsert_ListF?keyward="+keyward+"&befor_date="+befor_date_ud+"&after_date="+after_date_ud+"&cb_situation="+cb_situation;
+				if(pl_Map.get("cb_search")!=null){
+					cb_search = pl_Map.get("cb_search").toString();
+				}
+				String pagePath = "/erp/deliveryInsert_ListF?keyword="+keyword+"&before_date="+before_date+"&after_date="+after_date+"&cb_situation="+cb_situation+"&cb_search="+cb_search;
 				PageBar pb = new PageBar(numPerPage,tot,nowPage,pagePath);
 				String pagination = null;
 				pagination = pb.getPageBar();

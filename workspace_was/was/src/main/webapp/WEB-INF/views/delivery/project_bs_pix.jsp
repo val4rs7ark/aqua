@@ -120,7 +120,7 @@
 
 <div style="width:80%" >
 <div class="container" style="margin-left: 0px;">
-<div class="base_table_div">
+<div class="base_table_div" style="width: 1350px;">
 <!--================================상단바===========================================-->
 	<div class="card bg-dark text-white" style="height:50px; margin-top:70px">
     	<div class="card-body">배송처 조회</div>
@@ -323,17 +323,18 @@
 	        	<%=pMap.get("CUS_ADDR")%>&nbsp;/&nbsp;<%=pMap.get("CUS_NAME")%>
 	        </td>
 	        <td class="bs_table_when" style="width:30%;border-bottom: hidden; padding-bottom: 5px; background-color: mistyrose;" data-toggle="modal" data-target="#bs_info_<%=i%> " data-backdrop="static" >
-	        	취소일자&nbsp;:&nbsp;<%=pMap.get("ORDER_INDATE")%>
+	        	완료기한&nbsp;:&nbsp;<%=pMap.get("DELIVERY_DATE") %>
 	        </td>
 	      </tr>
 	      <tr id="bs_table_update_<%=i%>"> 
-			<td style="width:345px; padding-top: 6px; padding-bottom: 9px; padding-left: 12px; padding-right: 6px; font-size: 13px; background-color: mistyrose;" colspan="2"  data-toggle="modal" data-target="#bs_info_<%=i%>"  data-backdrop="static" >
-			     	배송내역이 취소되었습니다. 
+			<td style="width:345px; padding-top: 6px; padding-bottom: 6px; padding-left: 12px; padding-right: 6px; font-size: 13px; background-color: mistyrose;" colspan="2"  data-toggle="modal" data-target="#bs_info_<%=i%>"  data-backdrop="static" >
+			     	※ 배송내역이 취소되었습니다. 
 			</td>
 			<td style="width:91px; padding-top: 6px; padding-bottom: 9px; padding-left: 3px; padding-right: 6px; background-color: mistyrose; "data-target="#bs_info_<%=i%> "  data-backdrop="static" colspan="2">
 			</td>
-			<td class="bs_table_when" style="width:30%; text-align: right; background-color: mistyrose;">
-			</td>
+			<td class="bs_table_when" style="width:30%; background-color: mistyrose;" data-toggle="modal" data-target="#bs_info_<%=i%> " data-backdrop="static" >
+	        	 취소일자&nbsp;:&nbsp;<%=pMap.get("ORDER_INDATE")%>
+	        </td>
 		  </tr>
 	<%	
 				}
@@ -348,26 +349,27 @@
 <div class="container" style="margin-left: 0px;">
   <ul class="pagination" style="justify-content: center;">
 	<%		
-			String keyward = null; 
-			String befor_date_ud = null; 
-			String after_date_ud = null; 
+			String keyword = null; 
+			String before_date = null; 
+			String after_date = null; 
 			String cb_situation = null; 
+			String cb_search = null; 
 			if(pl_Map.get("keyword")!=null){
-				keyward = pl_Map.get("keyword").toString();
+				keyword = pl_Map.get("keyword").toString();
 			}
-			if(pl_Map.get("befor_date_ud")!=null){
-				befor_date_ud = pl_Map.get("befor_date_ud").toString();
-			}
-			if(pl_Map.get("after_date_ud")!=null){
-				after_date_ud = pl_Map.get("after_date_ud").toString();
+			if(pl_Map.get("before_date_ud")!=null){
+				before_date = pl_Map.get("before_date_ud").toString();
 			}
 			if(pl_Map.get("after_date_ud")!=null){
-				after_date_ud = pl_Map.get("after_date_ud").toString();
+				after_date = pl_Map.get("after_date_ud").toString();
 			}
 			if(pl_Map.get("cb_situation")!=null){
 				cb_situation = pl_Map.get("cb_situation").toString();
 			}
-			String pagePath = "/erp/delivery_List?keyward="+keyward+"&befor_date="+befor_date_ud+"&after_date="+after_date_ud+"&cb_situation="+cb_situation;
+			if(pl_Map.get("cb_search")!=null){
+				cb_search = pl_Map.get("cb_search").toString();
+			}
+			String pagePath = "/erp/delivery_List?keyword="+keyword+"&before_date="+before_date+"&after_date="+after_date+"&cb_situation="+cb_situation+"&cb_search="+cb_search;
 			PageBar pb = new PageBar(numPerPage,tot,nowPage,pagePath);
 			String pagination = null;
 			pagination = pb.getPageBar();

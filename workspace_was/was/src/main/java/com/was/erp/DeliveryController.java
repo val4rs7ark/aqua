@@ -25,34 +25,59 @@ public class DeliveryController {
 		int tot = deliveryLogic.get_total(pMap);
 		return tot;
 	}
+	public int get_total_ins(Map<String,Object> pMap) {
+		int tot = deliveryLogic.get_total_ins(pMap);
+		return tot;
+	}
 	
 	@RequestMapping(value="/delivery_List")
 	public String deliveryList(@RequestParam Map<String,Object> pMap, Model model) {
 		logger.info("controller////////////deliveryList호출성공");
 		Map<String,Object> pl_Map = new HashMap<>();
 //==================================조건검색 필요 요소==================================================
+		//화면단에서 받아오는 조건값은 before_date, after_date
+		//컨트롤러 및 로직에서 변경되서 화면으로 보내는 조건값은 before_date_ud, after_date_ud
+		String before_date_ud = null;
+		String after_date_ud = null;
+		pMap.put("before_date_ud",null);
+		pMap.put("after_date_ud",null);
 		if(pMap.get("before_date")!=null) {
-			if(pMap.get("before_date").toString().length()>9) {
-				String befor_date_ud = pMap.get("before_date").toString();
-				pMap.put("befor_date_ud",befor_date_ud);
-				pl_Map.put("befor_date_ud",befor_date_ud);
+			if(pMap.get("before_date").toString().length()<11 && pMap.get("before_date").toString().length()>8) {
+				before_date_ud = pMap.get("before_date").toString()+"/00:00";
+				pMap.put("before_date_ud",before_date_ud);
+				pl_Map.put("before_date_ud",before_date_ud);
+				logger.info("before_date_ud :"+before_date_ud);
+			}else if(pMap.get("before_date").toString().length()>11) {
+				before_date_ud = pMap.get("before_date").toString();
+				pMap.put("before_date_ud",before_date_ud);
+				pl_Map.put("before_date_ud",before_date_ud);
+				logger.info("before_date_ud :"+before_date_ud);
 			}
 		}
 		if(pMap.get("after_date")!=null) {
-			if(pMap.get("after_date").toString().length()>9) {
-				String after_date_ud = pMap.get("after_date").toString();
+			if(pMap.get("after_date").toString().length()<11 && pMap.get("after_date").toString().length()>8) {
+				after_date_ud = pMap.get("after_date").toString()+"/23:59";
 				pMap.put("after_date_ud",after_date_ud);
 				pl_Map.put("after_date_ud",after_date_ud);
+				logger.info("after_date_ud :"+after_date_ud);
+			}else if(pMap.get("after_date").toString().length()>9) {
+				after_date_ud = pMap.get("after_date").toString();
+				pMap.put("after_date_ud",after_date_ud);
+				pl_Map.put("after_date_ud",after_date_ud);
+				logger.info("after_date_ud :"+after_date_ud);
 			}
 		}
 		if("".equals(pMap.get("cb_situation"))) { //진행상황 콤보박스에서 선택을 택하면 널이 입력됨
 			pMap.put("cb_situation","null");
+			logger.info(pMap.get("cb_situation").toString());
 		}
 		if(pMap.get("keyword")!=null) {
 			pl_Map.put("keyword",pMap.get("keyword"));
+			logger.info(pMap.get("keyword").toString());
 		}
 		if(pMap.get("cb_search")!=null) {
 			pl_Map.put("cb_search",pMap.get("cb_search"));
+			logger.info(pMap.get("cb_search").toString());
 		}
 		
 		pl_Map.put("cb_situation",pMap.get("cb_situation"));
@@ -128,7 +153,8 @@ public class DeliveryController {
 		String id_update= (String)pMap.get("id_update");
 		String deli_no= (String)pMap.get("deli_no");
 		String msg = "update_null";
-		deliveryLogic.update_state(pMap); // =================  delivery테이블의 state를 변경하는 코드
+		pMap.put("deli_no",Integer.parseInt((pMap.get("deli_no").toString())));
+		deliveryLogic.update_state(pMap); // =================  delivery테이블의 state를 2->1로 변경하는 코드
 		mod.addAttribute("deli_no",deli_no);
 		mod.addAttribute("id_update",id_update);
 		mod.addAttribute("msg",msg);
@@ -176,18 +202,32 @@ public class DeliveryController {
 		
 
 //==================================조건검색 필요 요소==================================================
+		String before_date_ud = null;
+		String after_date_ud = null;
 		if(pMap.get("before_date")!=null) {
-			if(pMap.get("before_date").toString().length()>9) {
-				String befor_date_ud = pMap.get("before_date").toString();
-				pMap.put("befor_date_ud",befor_date_ud);
-				pl_Map.put("befor_date_ud",befor_date_ud);
+			if(pMap.get("before_date").toString().length()<11 && pMap.get("before_date").toString().length()>8) {
+				before_date_ud = pMap.get("before_date").toString()+"/00:00";
+				pMap.put("before_date_ud",before_date_ud);
+				pl_Map.put("before_date_ud",before_date_ud);
+				logger.info("before_date_ud :"+before_date_ud);
+			}else if(pMap.get("before_date").toString().length()>11) {
+				before_date_ud = pMap.get("before_date").toString();
+				pMap.put("before_date_ud",before_date_ud);
+				pl_Map.put("before_date_ud",before_date_ud);
+				logger.info("before_date_ud :"+before_date_ud);
 			}
 		}
 		if(pMap.get("after_date")!=null) {
-			if(pMap.get("after_date").toString().length()>9) {
-				String after_date_ud = pMap.get("after_date").toString();
+			if(pMap.get("after_date").toString().length()<11 && pMap.get("after_date").toString().length()>8) {
+				after_date_ud = pMap.get("after_date").toString()+"/23:59";
 				pMap.put("after_date_ud",after_date_ud);
 				pl_Map.put("after_date_ud",after_date_ud);
+				logger.info("after_date_ud :"+after_date_ud);
+			}else if(pMap.get("after_date").toString().length()>9) {
+				after_date_ud = pMap.get("after_date").toString();
+				pMap.put("after_date_ud",after_date_ud);
+				pl_Map.put("after_date_ud",after_date_ud);
+				logger.info("after_date_ud :"+after_date_ud);
 			}
 		}
 		if("".equals(pMap.get("cb_situation"))) { //진행상황 콤보박스에서 선택을 택하면 널이 입력됨
@@ -203,12 +243,18 @@ public class DeliveryController {
 		pl_Map.put("cb_situation",pMap.get("cb_situation"));
 		
 //===================================================================================================
-		int tot = this.get_total(pMap);
-		r_Map = deliveryLogic.deliveryInsert_ListS(); //r_Map에는 리스트가 3개 담겨있음
+		int tot = this.get_total_ins(pMap);
+		logger.info("tot:"+tot);
+		if(pMap.get("keyword")!=null) {
+			logger.info(pMap.get("keyword").toString());
+		}
+		r_Map = deliveryLogic.deliveryInsert_ListS(pMap,tot); //r_Map에는 리스트가 3개 담겨있음
+		model.addAttribute("tot", tot);
 		model.addAttribute("r_Map", r_Map);
 		model.addAttribute("pl_Map",pl_Map); //조건검색을 유지하기 위해 Map에 담아서 뷰로 보낸다.
 		return "delivery/baesong_insert";
 	}
+
 	@RequestMapping("/deliveryInsert_List")
 	public String deliveryInsert_List(@RequestParam Map<String,Object> pMap, Model mod) {
 		logger.info("controller////////////deliveryInsert_List호출성공");
