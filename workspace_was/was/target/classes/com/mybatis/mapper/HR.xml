@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.mapper.HRMapper">
+	<select id="HRSalery_insert" parameterType="map" resultType="map">
+		select empno,emp_name,resident_no,emp_hp,emp_indate,dept_name||'-'||team_name emp_sosoc,emp_bank||'은행' emp_back,sal_account from emp em, dept dt
+		 where em.dept_code = dt.dept_code
+	</select>
+</mapper> 
