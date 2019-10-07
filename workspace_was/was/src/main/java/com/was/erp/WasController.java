@@ -1,5 +1,6 @@
 package com.was.erp;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,6 +64,43 @@ public class WasController {
 			   ////////////////////////////세션에담기////////////////////////////////////
 			path ="login/main";
 		}
-		return path;//190918 이메소드는 아직 수정 중 입니다.
-	}	
+		return path;//190918 이메소드는 아직 수정 중 입니다.	
+	}
+	@PostMapping("wasEmpStatus.was")
+	public String wasEmpStatus(@RequestParam Map<String,Object> pMap,Model model) {
+		String path = null;
+		List<Map<String,Object>> rList = wasLogic.wasEmpStatus(pMap);
+		if(rList.get((rList.size()-1)).get("calendar_bungi")!=null) {
+			model.addAttribute("wasEmpStatus",rList);
+			path ="calendar/empStatus";
+		}else {
+			model.addAttribute("wasEmpStatusA",rList);
+			path ="calendar/calendarAjax";
+		}
+		return path;
+	}
+	@PostMapping("wasEmpStatusNoteList.was")
+	public String wasEmpStatusNoteList(@RequestParam Map<String,Object> pMap,Model model) {
+		String path = null;
+		List<Map<String,Object>> rList = wasLogic.wasEmpStatusNoteList(pMap);
+		model.addAttribute("wasEmpStatusA",rList);
+		path ="calendar/calendarAjax";
+		return path;
+	}
+	@PostMapping("wasEmpStatusNoteDetail")
+	public String wasEmpStatusNoteDetail(@RequestParam Map<String,Object> pMap,Model model) {
+		String path = null;
+		List<Map<String,Object>> rList = wasLogic.wasEmpStatusNoteDetail(pMap);
+		model.addAttribute("noteAjax",rList);
+		path ="calendar/noteAjax";
+		return path;
+	}
+	@GetMapping("wasEmpStatusNoteInsert")
+	public String wasEmpStatusNoteInsert(@RequestParam Map<String,Object> pMap,Model model) {
+		String path = null;
+		List<Map<String,Object>> rList = wasLogic.wasEmpStatusNoteInsert(pMap);
+		model.addAttribute("noteInsertGson",rList);
+		path="calendar/insertAjax";
+		return path;
+	}
 }

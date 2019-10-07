@@ -21,13 +21,45 @@ public class WasController implements ActionServlet{
 	public Model execute() {
 		Model model = new Model();
 		logger.info("mapping --"+mapping);
-		if("wasEmpStatus".equals(mapping)) {
+		if("wasEmpStatusNoteInsert".equals(mapping)) {
+			logger.info("컨트롤러에서 분기 정해짐.");
+			List<Map<String,Object>> rList = wasLogic.wasEmpStatusNoteInsert(pMap);
+			model.setAddAttribute(rList);
+			model.setListName("noteInsertGson");
+			model.setViewName("insertAjax");
+			model.setViewPath("WEB-INF/views/was/calendar");
+			model.setViewExtension("jsp");
+		}
+		else if("wasEmpStatusNoteDetail".equals(mapping)) {
+			List<Map<String,Object>> rList = wasLogic.wasEmpStatusNoteDetail(pMap);
+			model.setAddAttribute(rList);
+			model.setListName("noteAjax");
+			model.setViewName("noteAjax");
+			model.setViewPath("WEB-INF/views/was/calendar");
+			model.setViewExtension("jsp");
+		}
+		else if("wasEmpStatusNoteList".equals(mapping)) {
+			List<Map<String,Object>> rList = wasLogic.wasEmpStatusNoteList(pMap);
+			model.setAddAttribute(rList);
+			model.setListName("wasEmpStatusA");
+			model.setViewName("calendarAjax");
+			model.setViewPath("WEB-INF/views/was/calendar");
+			model.setViewExtension("jsp");
+		}
+		else if("wasEmpStatus".equals(mapping)) {
 			List<Map<String,Object>> rList = wasLogic.wasEmpStatus(pMap);
 			model.setAddAttribute(rList);
-			model.setListName("wasEmpStatus");
-			model.setViewName("empStatus");
-			model.setViewPath("WEB-INF/views/was");
-			model.setViewExtension("jsp");
+			if(rList.get((rList.size()-1)).get("calendar_bungi")!=null) {
+				model.setListName("wasEmpStatus");
+				model.setViewName("empStatus");
+				model.setViewPath("WEB-INF/views/was/calendar");
+				model.setViewExtension("jsp");
+			}else {
+				model.setListName("wasEmpStatusA");
+				model.setViewName("calendarAjax");
+				model.setViewPath("WEB-INF/views/was/calendar");
+				model.setViewExtension("jsp");
+			}
 		}
 		else if("wasLogin".equals(mapping)) {
 			List<Map<String,Object>> rList = wasLogic.wasLogin(pMap);

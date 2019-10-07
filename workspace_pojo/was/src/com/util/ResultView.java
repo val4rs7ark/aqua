@@ -61,7 +61,7 @@ public class ResultView {
 	////////////////////////////응답화면 method/////////////////////////
 	public RequestDispatcher resultView() {
 		RequestDispatcher view = null;
-		if("wasEmpStatus".equals(mapping)) {
+		if("wasEmpStatusNoteInsert".equals(mapping)) {
 			view = req.getRequestDispatcher(model.getFullView());
 			try {
 				view.forward(req, res);
@@ -71,6 +71,26 @@ public class ResultView {
 				e.printStackTrace();
 			}
 		}
+		else if("wasEmpStatusNoteDetail".equals(mapping)) {
+			view = req.getRequestDispatcher(model.getFullView());
+			try {
+				view.forward(req, res);
+			} catch (ServletException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else if("wasEmpStatus".equals(mapping)) {
+				view = req.getRequestDispatcher(model.getFullView());
+				try {
+					view.forward(req, res);
+				} catch (ServletException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		else if("wasLogin".equals(mapping)) {
 			view = req.getRequestDispatcher(model.getFullView());
 			try {
