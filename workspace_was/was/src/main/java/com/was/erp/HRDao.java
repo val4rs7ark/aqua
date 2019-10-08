@@ -27,4 +27,39 @@ public class HRDao {
 		return r_list;
 	}
 
+	public String HRSalery_insert_commit(Map<String, Object> pMap) {
+		logger.info("HRSalery_insert_commit//////////////////Dao");
+		int result = 0;
+		String msg = null;
+		try {
+			result = sqlSessionTemplate.insert("HRSalery_insert_commit",pMap);
+			logger.info(String.valueOf(result));
+			if(result==1) {
+				msg="정상적으로 입력이 되었습니다.";
+			}else {
+				msg="확인후 다시 입력해주십시오";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return msg;
+	}
+
+	public String HRSalery_insert_commit_one(Map<String, Object> pMap) {
+		logger.info("HRSalery_insert_commit_one//////////////////Dao");
+		int result = 0;
+		String msg = null;
+		try {
+			result = sqlSessionTemplate.insert("HRSalery_insert_commit_one",pMap);
+			logger.info(String.valueOf(result));
+			if(result==1) {
+				msg="정상적으로 입력이 되었습니다.";
+			}else {
+				msg="확인후 다시 입력해주십시오";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return msg;
+	}
 }
