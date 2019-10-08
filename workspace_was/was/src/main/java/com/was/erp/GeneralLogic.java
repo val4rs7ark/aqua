@@ -39,7 +39,7 @@ public class GeneralLogic {
 	public List<Map<String,Object>> invengroupList() {
 		logger.info("invengroupList 호출 성공");
 		List<Map<String,Object>> invengroupList = null;
-		generalDao.invengroupList();
+		invengroupList=generalDao.invengroupList();
 		return invengroupList;
 	}
 	public int getInven_no() {
@@ -48,8 +48,17 @@ public class GeneralLogic {
 		return getInven_no;
 	}
 	public void invenAdd2(Map<String, Object> pMap) {
+		logger.info("invenAdd2 호출 성공");
 		generalDao.invenAdd2(pMap);
 		
+	}
+	public void invenDel(List<String> list) {
+		logger.info("GeneralLogic invenDel 호출 성공");
+		generalDao.invenDel(list);
+		
+	}
+	public void pummokadd(Map<String, Object> pMap) {
+		generalDao.pummokadd(pMap);
 	}
 
 }

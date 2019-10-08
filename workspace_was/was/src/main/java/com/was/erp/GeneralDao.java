@@ -31,23 +31,24 @@ public class GeneralDao {
 		return getInvenTotal;
 	}
 	
-	public int getInvenGroupTotal() {
-		int getInvenGroupTotal= sqlSessionTemplate.selectOne("getInvenGroupTotal");
-		logger.info("getInvenGroupTotal 호출 성공");
-		return getInvenGroupTotal;
-	}
 
 	public void invenAdd_daegi(Map<String, Object> pMap) {
 		logger.info("invenAdd_daegi 호출 성공");
 		sqlSessionTemplate.update("invenAdd_daegi",pMap);
 		
 	}
-
+	//invengroup 리스트 조회
 	public List<Map<String, Object>> invengroupList() {
 		logger.info("invengroupList 호출 성공");
 		List<Map<String,Object>> invengroupList = null;
 		invengroupList = sqlSessionTemplate.selectList("invengroupList");
 		return invengroupList;
+	}
+	//invengroup 총 row 구하기.
+	public int getInvenGroupTotal() {
+		int getInvenGroupTotal= sqlSessionTemplate.selectOne("getInvenGroupTotal");
+		logger.info("getInvenGroupTotal 호출 성공");
+		return getInvenGroupTotal;
 	}
 
 	public int getInven_no() {
@@ -58,7 +59,48 @@ public class GeneralDao {
 	}
 
 	public void invenAdd2(Map<String, Object> pMap) {
-	sqlSessionTemplate.insert("invenAdd2",pMap);
+		logger.info("invenAdd2 호출 성공");
+		sqlSessionTemplate.insert("invenAdd2",pMap);
+	}
+
+	public void invenDel(List<String> list) {
+		logger.info("GeneralDao invenDel 호출 성공");
+		sqlSessionTemplate.delete("invenDel",list);
+	}
+
+	public void pummokadd(Map<String, Object> pMap) {
+		logger.info("GeneralDao pummokadd 호출 성공");
+		sqlSessionTemplate.insert("pummokadd", pMap);
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

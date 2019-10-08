@@ -1,6 +1,7 @@
 package com.was.erp;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -49,5 +50,33 @@ public class WasDao {
 		logger.info("wasDao.dumyIndex에 들어왔다!");
 		result = sqlSessionTemplate.selectOne("dumyIndex", empno);
 	return result;
+	}
+	public List<Map<String, Object>> wasEmpStatus(Map<String, Object> pMap) {
+		logger.info("wasDao.wasEmpStatus에 들어왔다!");
+		logger.info("pMap::::::::::::::::"+pMap);
+		List<Map<String, Object>> result = null;
+			result = sqlSessionTemplate.selectList("wasEmpStatus", pMap);	
+		return result;
+	}
+	public List<Map<String, Object>> wasEmpStatusNoteList(Map<String, Object> pMap) {
+		logger.info("wasDao.wasEmpStatusNoteList에 들어왔다!");
+		logger.info("pMap::::::::::::::::"+pMap);
+		List<Map<String, Object>> result = null;
+			result = sqlSessionTemplate.selectList("wasEmpStatusNoteList", pMap);
+		return result;
+	}
+	public List<Map<String, Object>> wasEmpStatusNoteDetail(Map<String, Object> pMap) {
+		logger.info("wasDao.wasEmpStatusNoteDetail에 들어왔다!");
+		logger.info("pMap::::::::::::::::"+pMap);
+		List<Map<String, Object>> result = null;
+			result = sqlSessionTemplate.selectList("wasEmpStatusNoteDetail", pMap);
+		logger.info("DB탐 noteDetail :::::::"+result);
+		return result;
+	}
+	public int wasEmpStatusNoteInsert(Map<String, Object> pMap) {
+		int result = 0;
+			result = sqlSessionTemplate.update("wasEmpStatusNoteInsert", pMap);
+			logger.info("result 성공:1 실패:0-->"+result);
+		return result;
 	}
 }

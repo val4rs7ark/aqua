@@ -10,13 +10,14 @@
 	int getTotal = Integer.parseInt(getInvenTotal);
 	out.print("getTotal="+getTotal+"&nbsp");
 	int pageSize = (int)Math.ceil(getTotal/numberperpage);
+	out.print("invenList.size():"+invenList.size());
 %>           
 <!--========================메인페이지 관련 로직 끝===========================-->
-<!--========================모달창 (메인 - 신규 등록 -품목검색) 관련 로직 시작===========================-->
+<!--========================모달로직 (메인 - 신규 등록 -품목검색) 관련 로직 시작===========================-->
 <%
 	
 %>		
-<!--========================모달창 (메인 - 신규 등록 -품목검색) 관련 로직 끝===========================-->
+<!--========================모달로직 (메인 - 신규 등록 -품목검색) 관련 로직 끝===========================-->
 
 <%="pageSize="+pageSize%>
 <%double t = 10;
@@ -35,19 +36,76 @@
    <%@ include file="/common/bs_css.jsp" %>
 <title>Insert title here</title>
 <script type="text/javascript">  
-/* 	function openWin(w,h){
-	 x = (screen.availWidth - w) / 2;
-	 y = (screen.availHeight - h) / 2;
-	 window.open('./inventory_register.jsp','pop','width='+w+', height='+h+', left='+x+', top='+y+','toolbar=no, 
-			 location=0, directories=0, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no')}; */
-/* 	$("#myModal").draggable({
-		handle: ".modal-header"}); */
 	
-	//메인-구매/사용신청-품목검색
-	function pummoksearch(){
-		alert("품목검색 호출");
-		}
+	//돔구성이 완료되면 실행- #뒤에 버튼 아이디등을 입력해주면 해당 아이디 클릭시 실행됨.
+	$(document).ready(function(){
+		  $("#").click(function(){
+			alert("얼럿");
+		  });
+		  //체크 박스 선택 삭제시 선택 안한 체크박스 확인 후 체크박스 선택한 경우 진짜 삭제 모달창 띄우기.
+		  $("#delete").click(function(){
+			    //선택된 체크박스가 없는 상태에서 삭제 버튼 클릭시 deleteempty 모달 실행 후 함수 빠져나오기.
+				var order_no = "";
+				  $("input[name='checkRow']:checked").each (function(){
+					  order_no = order_no + $(this).val()+"," ;
+					  });
+				  if(order_no == ''){
+					    $("#deleteempty").modal();
+					    return false;
+					  }
+				var order_writers = "";
+				var s_emp_name = $("#s_emp_name").val();
+				var checkedbox = $("input[name='checkRow']:checked");
+				checkedbox.each(function(i){
+					var tr = checkedbox.parent().parent().eq(i);
+					var td = tr.children();	
+					order_writers = order_writers+td.eq(10).text()+",";
+				});
+	     			 /* alert("order_writers="+order_writers);  */
+	     			order_writers = order_writers.substring(0,order_writers.lastIndexOf(","));
+	     			 /* alert("order_writers="+order_writers); */ 
+	     			var order_writer = new Array();
+	     			order_writer = order_writers.split(",");
+	     			 /* alert("order_writer="+order_writer[0]); */
+	     			/* alert("order_writer.length="+order_writer.length);  */
+	     			for(var i=0;i<order_writer.length;i++){
+	     				 /* alert("s_emp_name="+s_emp_name); */ 
+	     				if(order_writer[i] !== s_emp_name){
+	     				$("#notOrderWriter").modal();
+	     				return false;
+	     				}
+	     			}
+					$("#deletealert").modal();
+		  });//end of 체크박스 삭제
+		  
+		  //진짜 삭제 진행 
+		  $("#realdel").click(function(){
+			var order_no = "";
+			  $("input[name='checkRow']:checked").each (function(){
+				  order_no = order_no + $(this).val()+",";
+				  });
+			  var lastindex = order_no.lastIndexOf(",");
+			  order_no = order_no.substring(0,lastindex);
+			  alert(order_no);
+			  location.href="/erp/general_invenDel?order_no="+order_no;
+		  });
+		  
+		});//end of document ready 함수
 
+	//메인-구매/사용신청-품목검색 아작스
+ 	function pummoksearch(gubun){
+			alert("gubun="+gubun);
+		$.ajax({
+			url:"/erp/general_pummokSearch?gubun="+gubun
+			,method:"get"
+			,success:function(data){
+				$("#pummoksearch").html(data);
+			}
+			,error:function(e){
+				alert(e.responseText);
+			}
+		});	
+	} 
 	//메인페이지 체크박스 선택값 승인	
 	function confirm(){
 		alert("승인");	
@@ -56,12 +114,22 @@
 			alert("담김");
 		}
 	}
-	//구매/사용신청 저장	
+	//구매/사용신청 저장 그룹코드,수량,단가중 미선택 사항이 있으면 모달창을 띄워줌. 정상일 경우만 invendAdd2 실행,저장됨.	
 	function addAction(){
-		alert("addAction 호출성공")
-		$("#invenAdd").attr("method","post");
-		$("#invenAdd").attr("action","/sample/was/invenAdd2");
-		$("#invenAdd").submit();
+		var ivgroup_code = document.getElementById('ivgroup_code');
+		var order_count = document.getElementById('order_count');
+		var order_unitprice = document.getElementById('order_unitprice');
+		if( ivgroup_code.value == '' || ivgroup_code.value == null ||
+			order_count.value == '' || order_count.value == null ||
+			order_unitprice.value == '' || order_unitprice.value ==null){
+		    /* alert("품목코드,수량,단가는 필수 입력사항 입니다."); */
+		    $("#alert").modal();
+		}else{
+			$("#invenAdd").attr("method","post");
+			$("#invenAdd").attr("action","/erp/general_invenAdd2");
+			$("#invenAdd").submit();
+			$("#register").modal('close');
+		}
 	}
 	//전체선택 /해제
 	function checkAll(){
@@ -76,48 +144,204 @@
 	  	  if (object.value.length > object.maxLength){
 	    object.value = object.value.slice(0, object.maxLength);}   
 	 }
-	
+
+	//재고 사용/등록 모달 공백 체크	
+ 	function check(){
+		alert("체크");
+		var ivgroup_code = document.getElementById('ivgroup_code');
+		var order_count = document.getElementById('order_count');
+		var order_unitprice = document.getElementById('order_unitprice');
+		if( ivgroup_code.value == '' || ivgroup_code.value == null ||
+			order_count.value == '' || order_count.value == null ||
+			order_count.value == '' || order_count.value){
+		    return false;
+		}
+	} 
+	//모달창 리셋 - 동작안함..;;
+	$('#main_resister').on('hidden.bs.modal', function () {
+		$(this).removeData();
+	});
+	function selectBtn(gubun){
+		alert("gubun="+gubun);
+		var rowData = new Array();
+		var tdArr = new Array();
+		var checkbox = $("input[name=user_CheckBox]:checked");
+		// 체크된 체크박스 값을 가져온다
+		checkbox.each(function(i) {
+			// checkbox.parent() : checkbox의 부모는 <td>이다.
+			// checkbox.parent().parent() : <td>의 부모이므로 <tr>이다.
+			var tr = checkbox.parent().parent().eq(i);
+			var td = tr.children();
+			// 체크된 row의 모든 값을 배열에 담는다.
+			rowData.push(tr.text());
+			// td.eq(0)은 체크박스 이므로  td.eq(1)의 값부터 가져온다.
+			var gubun = td.eq(1).text();
+			var code = td.eq(2).text();
+			var name = td.eq(3).text();
+			var size = td.eq(4).text();
+			// 가져온 값을 배열에 담는다.
+			tdArr.push(gubun);
+			tdArr.push(code);
+			tdArr.push(name);
+			tdArr.push(size);
+		});
+		$("#ex3_Result1").html(" * 체크된 Row의 모든 데이터 = "+rowData);	
+		$("#ex3_Result2").html(tdArr);
+		//location.href="/erp/general_invenList?tdArr="+tdArr
+		if(gubun=='update'){
+			alert("성공");
+			$.ajax({
+				url:"/erp/general_newresister?tdArr="+tdArr
+				,method:"get"
+				,success:function(data){
+					$("#resister_update").html(data);
+				}
+				,error:function(e){
+					alert(e.responseText);
+				}
+			});
+			}else{
+				$.ajax({
+					url:"/erp/general_newresister?tdArr="+tdArr
+					,method:"get"
+					,success:function(data){
+						$("#register").html(data);
+					}
+					,error:function(e){
+						alert(e.responseText);
+					}
+				});
+			} 	
+	};
+	//신규등록화면 취소시, 모달창 초기화(새 모달창 불러오기)-아작스가 안됨.. 그냥 페이지 이동 처리.
+	function cancel(){
+/* 		$.ajax({
+			url:"/erp/general_resistercancel"
+			,method:"get"
+			,suceess:function(data){
+				$("#main_resister").html(data);
+			}
+			,error:function(e){
+				alert(e.responseText);
+			}
+		}); */
+		location.href="/erp/general_invenList";
+	}
+	//품목검색 중복선택 방지(출처: https://canworld42.tistory.com/25 [깨어 있는 세상])
+	function onlyOneCheck(chk){
+    var obj = document.getElementsByName("user_CheckBox");
+    for(var i=0; i<obj.length; i++){
+        if(obj[i] != chk){
+            obj[i].checked = false;
+        }
+    }
+}	
+	//품목추가_이벤트
+	function pummokadd(){
+		var p_code= document.getElementById('pid_code');
+		var p_size = document.getElementById('pid_size');
+		var p_name = document.getElementById('pid_name');
+		if( p_code.value == '' || p_code.value == null ||
+				p_size.value == '' || p_size.value == null ||
+				p_name.value == '' || p_name.value ==null){
+		    /* alert("품목코드,수량,단가는 필수 입력사항 입니다."); */
+		    $("#alert").modal();
+		}else{
+			$("#alert").modal('hide');
+		$("#f_pummokadd").attr('method','post');
+		$("#f_pummokadd").attr('action','/erp/general_pommokAdd');
+		$("#f_pummokadd").submit();
+		}
+		
+	}
+	//로우 마우스 오버,아웃시 배경색 바꾸기 (참고소스 원본) - 기존 부트스트립 퐁당퐁당 배경식이 지워져서 일단 미적용
+/* 	function changeTrColor(trObj, oldColor, newColor) {
+		trObj.style.backgroundColor = newColor;
+		trObj.onmouseout = function(){
+			trObj.style.backgroundColor = oldColor;
+		}
+	} */
+	//상세조회 - 로우 클릭시 실행
+	function clickTrEvent(imsi) {
+		$("#inven_detail_"+imsi).modal();
+	}
+		/* location.href = "general_invendetail?checkRow="+checkRow; */
+
+	//수정
+	function update(imsi){
+		$("#inven_update_"+imsi).modal();	
+	}
 </script> 
 </head>
 <body>
+<script type="text/javascript">  
+	//구매/사용 신청 총액 자동 구하기
+	$(function(){
+	$('input.num_only').on('keyup',function(){
+     var order_unitprice = parseInt($("#order_unitprice").val() || 0 ); // input 값을 가져오며 계산하지만 값이 없을경우 0이 대입된다  뒷부분에 ( || 0 ) 없을경우 합계에 오류가 생겨 NaN 값이 떨어진다
+     var order_count = parseInt($("#order_count").val() || 0);
+     var totalPrice = order_unitprice * order_count
+     $("#order_totalprice").val(totalPrice);
+        });
+	});
+	$(function(){
+	$('input.num_only').on('mouseup',function(){
+     var order_unitprice = parseInt($("#order_unitprice").val() || 0 ); // input 값을 가져오며 계산하지만 값이 없을경우 0이 대입된다  뒷부분에 ( || 0 ) 없을경우 합계에 오류가 생겨 NaN 값이 떨어진다
+     var order_count = parseInt($("#order_count").val() || 0);
+     var totalPrice = order_unitprice * order_count
+     $("#order_totalprice").val(totalPrice);
+        });
+	});
+	//구매/사용 신청 총액 자동 구하기(수정화면)
+	$(function(){
+	$('input.num_only2').on('keyup',function(){
+     var order_unitprice = parseInt($("#order_unitprice2").val() || 0 ); // input 값을 가져오며 계산하지만 값이 없을경우 0이 대입된다  뒷부분에 ( || 0 ) 없을경우 합계에 오류가 생겨 NaN 값이 떨어진다
+     var order_count = parseInt($("#order_count2").val() || 0);
+     var totalPrice = order_unitprice * order_count
+     $("#order_totalprice2").val(totalPrice);
+        });
+	});
+	$(function(){
+	$('input.num_only2').on('mouseup',function(){
+     var order_unitprice = parseInt($("#order_unitprice2").val() || 0 ); // input 값을 가져오며 계산하지만 값이 없을경우 0이 대입된다  뒷부분에 ( || 0 ) 없을경우 합계에 오류가 생겨 NaN 값이 떨어진다
+     var order_count = parseInt($("#order_count2").val() || 0);
+     var totalPrice = order_unitprice * order_count
+     $("#order_totalprice2").val(totalPrice);
+        });
+	});
 
-<div class="row" >
+       
+</script>	
+<div class="row"  >
    <div style="width:20%">
       <%@ include file="/common/MenuCommon.jsp" %>
-     <!-- ======================================================================================================================================================================= -->
-    <!--                                              여기부터 내영역                                                                -->
-     <!-- ======================================================================================================================================================================= -->
+    <!-- 삭제 시 작성자만 삭제 할수 있도록 현재 로그인한 세션에 담긴 작성자 이름을 input태그에 저장.  -->  
+   	<input id="s_emp_name" type="hidden" value=<%=s_emp_name%>>
+      
+<%
+//////////////////세션에 담긴 아이디 담기.////////////
+	out.print("s_emp_name:"+s_emp_name);    
+%>
   </div>
 <div style="width:80%" >
 <div class="container" style="margin-left: 0px;">
-<div class="base_table_div" style="height: 865px; ">
-<!--================================상단바===========================================-->
+<div class="base_table_div" style="height: 865px;width:1350px">
+<!--=====================================상단바===========================================-->
    <div class="card bg-dark text-white" style="height:50px; margin-top:70px">
        <div class="card-body" style="font-size:20px;display:table">
           <div style="display:table-cell;valign:middle;">자산 구매 신청/사용 내역</div>
        </div>
-     </div>
-     <div class="row">
-   </div>  
-<!--================================상단바===========================================-->
+   </div>
+<!--=====================================상단바===========================================-->
+  <div class="row"> 
   <table class="table table-hover" style="margin-bottom: 5px; background-color:#F1F1F1">
     <thead>
       <tr>
-<!--<th style="width:10%">-->
-<!--         <th style="border-top-width: 10px;border-top-color: white;">
-              <button type="button" class="btn btn-dark" style="width:60px;padding:6px 5px 6px 5px">삭제</button>
-      </th> -->
-        <!-- =========================== -->
         <th style="border-top-width: 10px;border-top-color: white;">
    			<select class="btn btn-dark" style="height:38px;border-radius:5%;padding-right:3px">
     			<option>구분
     			<option>구매
     			<option>사용
-   			</select>
-   			<select class="btn btn-dark" style="height:38px;border-radius:5%;padding-right:3px">
-    			<option>분류
-    			<option>사무
-    			<option>생산
    			</select>
    			<select class="btn btn-dark" style="height:38px;border-radius:5%;">
     			<option>품목명
@@ -131,7 +355,7 @@
          <input type="date" class="form-control" style="padding-right:0px">
 	    </th>
 	    <th style="border-top-width:10px;border-top-color: white;padding-left:0px;padding-right:0px">
-	       <i class='fas fa-minus-square' style="font-size:36px;"></i>
+	       <i class='fas fa-minus-square' style="font-size:36px;margin-left: 20px;"></i>
 	    </th>
 	    <th style="border-top-width:10px;border-top-color: white;padding-left:1px;padding-right:0px">
 	       <input type="date" class="form-control">
@@ -142,19 +366,21 @@
       </tr>
     </thead>
   </table>
-  <div class="container">
+  </div> 
+  <div style="margin-left:0px;">
   <div style="margin:12px 0px -4px 0px">
 	  <button type="button" class="btn btn-dark" style="padding:6px 5px 6px 5px" 
-	  data-toggle="modal" data-target="#register">구매/사용신청</button>
-	  <button type="button" class="btn btn-dark" style="width:60px;padding:6px 5px 6px 5px"
-	  data-toggle="modal" data-target="#update">수정</button>
-	  <button type="button" class="btn btn-dark" style="width:60px;padding:6px 5px 6px 5px">삭제</button>
+	  data-toggle="modal" data-target="#main_resister">신규등록</button>
+	  <!-- <button type="button" class="btn btn-dark" style="width:60px;padding:6px 5px 6px 5px"
+	  data-toggle="modal" data-target="#inven_update">수정</button> -->
+	  <input id="delete" type="button" class="btn btn-dark" style="width:60px;padding:6px 5px 6px 5px" value="삭제">
 	  <button type="button" class="btn btn-dark" style="padding:6px 5px 6px 5px"
 	  data-toggle="modal" data-target="#nowsearch">현재재고조회</button>
-	  <button type="button" class="btn btn-dark" style="float:right;padding:6px 5px 6px 5px" onClick="javascript:confirm()">선택승인</button>
+	  <!-- <button type="button" class="btn btn-dark" style="float:right;padding:6px 5px 6px 5px;margin-right:7px" onClick="javascript:confirm()">선택승인</button> -->
   </div>
-     <div class="row" style="margin-top:15px">
-        <div class="col-sm-12">
+  
+     <div class="row" style="margin-top:15px;width:1350px">
+        <div class="col-sm-12" style="padding-left: 0px;padding-right: 0px;">
            <table class="table table-striped" style="border-top-style:solid; border-bottom-style:solid;width:100%;border-top-width:2px;border-bottom-width:2px;" > 
               <thead style="text-align:center;">
                  <tr style="width:10%">
@@ -168,9 +394,9 @@
                     <th style="width:7%;">단가</th>
                     <th style="width:8%;">총액</th>
                     <th style="width:9%;">구매일</th>
-                    <th style="width:9%;">사용일</th>
+                    <th style="width:9%;">소모일</th>
                     <th style="width:9%;">신청일</th>
-                    <th style="width:7%;">담당자</th>
+                    <th style="width:7%;">작성자</th>
                     <th style="width:9%;">상태</th>
                  </tr>
               <tbody style="text-align:center;font-size:13px;">
@@ -180,37 +406,69 @@
 	for(int i=0;i<invenList.size();i++){
 		Map<String,Object> kMap = new HashMap<>();
 		kMap = invenList.get(i);
-		String use_date = "";
-		String buy_date = "";
-		if(kMap.get("USE_DATE")!=null){
-			use_date = kMap.get("USE_DATE").toString();
+		String order_enddate = "";
+		String order_startdate = "";
+		if(kMap.get("ORDER_ENDDATE")!=null){
+			order_enddate = kMap.get("ORDER_ENDDATE").toString();
 		}
-		if(kMap.get("BUY_DATE")!=null){
-			buy_date = kMap.get("BUY_DATE").toString();
+		if(kMap.get("ORDER_STARTDATE")!=null){
+			order_startdate = kMap.get("ORDER_STARTDATE").toString();
 		}
-		
 %>       
-       
+<!--               	 <tr id="mainRow" onclick="javascript:clickTrEvent(this)"
+					 onmouseover="javascript:changeTrColor(this, '#FFFFFF', '#F4FFFD')"
+					 style="cursor:hand"> -->
               	 <tr>
-              		<td style="padding-top:18px;"><input id="checkRow" name="checkRow" type="checkbox"></td>     		
-              		<td><%=kMap.get("INVEN_GUBUN")%></td>
-              		<td><%=kMap.get("IVGROUP_NAME")%></td>
-              		<td><%=kMap.get("IVGROUP_SIZE")%></td>
-              		<td><%=kMap.get("INVEN_COUNT")%></td>
-              		<td><%=kMap.get("BUY_UNITPRICE")%></td>
-              		<td><%=kMap.get("BUY_TOTALPRICE")%></td>
-              		<td><%=buy_date%></td>
-              		<td><%=use_date%></td>
-              		<td><%=kMap.get("INVEN_REGDATE")%></td>
-              		<td><%=kMap.get("EMP_NAME")%></td>
+              		<td style="padding-top:18px;">
+              		<input id="checkRow" name="checkRow" type="checkbox" value="<%=kMap.get("ORDER_NO")%>">
+              		</td>     		
+              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
+					    style="cursor:hand"><%=kMap.get("ORDER_GUBUN")%>
+					</td>
+              		<td onclick="javascript:clickTrEvent(<%=i%>)"
+					 	style="cursor:hand"><%=kMap.get("IVGROUP_NAME")%>
+              		</td>
+              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
+              			style="cursor:hand"><%=kMap.get("IVGROUP_SIZE")%>
+           			</td>
+              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
+              			style="cursor:hand"><%=kMap.get("ORDER_COUNT")%>
+           			</td>
+              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
+              			style="cursor:hand"><%=kMap.get("ORDER_UNITPRICE")%>
+           			</td>
+              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
+              			style="cursor:hand"><%=kMap.get("TOTALPRICE")%>
+              		</td>
+              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
+              			style="cursor:hand"><%=order_startdate%>
+              		</td>
+              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
+              			style="cursor:hand"><%=order_enddate%>
+              		</td>
+              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
+              			style="cursor:hand"><%=kMap.get("ORDER_INDATE")%>
+              		</td>
+              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
+              			style="cursor:hand"><%=kMap.get("ORDER_WRITER")%></td>
 <%
-	if(kMap.get("INVEN_STATUS")!=null && kMap.get("INVEN_STATUS").toString().equals("승인대기")){
+	if(kMap.get("DELIVERY_STATE")!=null && kMap.get("DELIVERY_STATE").toString().equals("11")){
 %>		
-              		<td><div style="background-color:Green;color:#fff;padding-top:5px;padding-bottom:5px;"><%=kMap.get("INVEN_STATUS")%></div></td>
+              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
+              			style="cursor:hand">
+              			<div style="background-color:Green;color:#fff;padding-top:5px;padding-bottom:5px;">
+              			승인대기
+              			</div>
+           			</td>
 <%
 	}else{
 %>              		
-              		<td><div style="background-color:#343a40;color:#fff;padding-top:5px;padding-bottom:5px;"><%=kMap.get("INVEN_STATUS")%></div></td>
+              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
+              			style="cursor:hand">
+              			<div style="background-color:#343a40;color:#fff;padding-top:5px;padding-bottom:5px;"><%=kMap.get("DELIVERY_STATE")%>
+              			</div>
+              		</td>
+              		
 <%
 	}
 %>              		
@@ -219,7 +477,6 @@
 		}
 	}
 %>              	 
-            	 
               </tbody>
               </table>                 
         </div>
@@ -241,28 +498,28 @@
 </div>
 </div>
 
-<!-- ===================================모달창 (메인 - 신규 등록) 시작===================================== -->
-<div class="modal fade" id="register" data-backdrop="static">
+<!-- ===================================모달뷰 (메인 - 신규 등록) 시작===================================== -->
+<div class="modal fade" id="main_resister" data-backdrop="static">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
 
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">자산 구매/사용 신청</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" onclick="cancel()">&times;</button>
       </div>
 
       <!-- Modal body -->
       <div class="modal-body">
       	<form id = "invenAdd">
-        <table class="table" style="border-top-style: solid; border-bottom-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 2px;"> 
+        <table class="table" style="border-top-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 0px;margin-bottom: 0px;"> 
       		<tbody style="text-align: left;">
 		          <tr>
 		             <td class="bi_table_insert" style="width:25%; padding-top:7px; padding-bottom: 7px;">구분</td>
 		             <td style="width:30%;padding-top: 5px; padding-bottom: 5px;">
-		              <select>
-		              	<option>구매
-		              	<option>소모
+		              <select id="order_gubun" name="order_gubun">
+		              	<option value="구매">구매
+		              	<option value="사용">사용
 		              </select>
 		           	 </td>
 		        	 <td style="width:25%;padding-top:7px; padding-bottom: 7px;">
@@ -270,83 +527,67 @@
 		           	 <td style="width:10%"></td>
 		           	 <td style="width:10%"></td>
 		          </tr>
+	          </tbody>
+          </table>
+          <table id="register" class="table" style="margin-bottom: 0px;border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 0px;"> 
+      		<tbody style="text-align: left;">
 		          <tr>
-		             <td class="bi_table_insert" style="padding-top:7px; padding-bottom:7px;">분류</td>
-		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <select>
-		              	<option>사무
-		              	<option>생산
-		              </select>
-		           	 </td>
-		        	 <td style="padding-top:7px; padding-bottom:7px;">
-		           	 </td>
-		           	 <td></td><td></td>
-		          </tr>
-		          <tr>
-		             <td class="bi_table_insert" style="padding-top:9px; padding-bottom: 0px;">품목코드</td>
-		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input id="ivgroup_code" name="ivgroup_code" type="text" class="form-control" style="height:auto;font-size: 13px;text-align:right">
+		             <td class="bi_table_insert" style="width:25%;padding-top:9px; padding-bottom: 0px;">품목코드</td>
+		             <td style="width:30%;padding-top: 5px; padding-bottom: 5px;">
+		              <input id="ivgroup_code" name="ivgroup_code" type="text" class="form-control" style="height:28px;;font-size: 13px;text-align:right" readonly>
 		           	 </td>
 		        	 <td style="padding-top:7px; padding-bottom:7px;width:auto" colspan="3">
 		           		<input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" 
-		           			   style="height:26px;margin-right:0px" data-toggle="modal" 
-		           			   data-target="#pummoksearch" onClick="javascript:pummoksearch()"value="검색" >
+		           			   style="height:26px;margin-right:0px" onClick="javascript:pummoksearch('resister')" data-toggle="modal" data-target="#pummoksearch" value="검색" >
 		           		<input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" style="height:26px;width:auto" data-toggle="modal" data-target="#itemadd" value="품목추가">
 		           	 </td>
 		          </tr>
 		          <tr>
 		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >품목명</td>
 		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input id="ivgroup_name" name="ivgroup_name" type="text" class="form-control" style="height: 28px;font-size: 13px;text-align:right">
+		              <input id="ivgroup_name" name="ivgroup_name" type="text" class="form-control" style="height: 28px;font-size: 13px;text-align:right" readonly>
 		           	 </td>
-		           	 <td></td><td></td><td></td>
+		           	 <td colspan="3" style="font-size:12px">※  품목 검색창에서 선택하세요.</td>
 		          </tr>
 		          <tr>
 		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >규격</td>
 		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input id="ivgroup_size" name="ivgroup_size" type="text" class="form-control" style="height:28px;font-size:13px;text-align:right">
+		              <input id="ivgroup_size" name="ivgroup_size" type="text" class="form-control" style="height:28px;font-size:13px;text-align:right" readonly>
 		           	 </td>
-		             <td></td><td></td><td></td>
+		             <td colspan="3" style="font-size:12px"></td>
 		          </tr>
+	          </tbody>
+          </table>
+          <table id="register" class="table" style="border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 2px;"> 
+      		<tbody style="text-align: left;">          
 		          <tr>
-		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >수량</td>
-		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input id="inven_count" name="inven_count" type="number" class="form-control" style="height:28px;font-size:13px; text-align:right;" maxlength="5" oninput="maxLengthCheck(this)">
+		             <td class="bi_table_insert" style="width:25%;padding-top: 7px; padding-bottom: 7px;" >수량</td>
+		             <td style="width:30%;padding-top: 5px; padding-bottom: 5px;">
+		              <input class="num_only num_sum form-control" id="order_count" name="order_count" type="number" style="height:28px;font-size:13px; text-align:right;" maxlength="5" oninput="maxLengthCheck(this)">
 		           	 </td>
 		           	 <td style="padding-top:8px; padding-bottom:5px;padding-left:0px;text-align:left;font-size:14px">EA</td><td></td><td></td>
 		          </tr>
 		          <tr>
 		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >단가</td>
 		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input id="buy_unitprice" name="buy_unitprice" type="text" class="form-control" style="height:28px;font-size:13px;text-align:right">
+		              <input class="num_only num_sum form-control" id="order_unitprice" name="order_unitprice" type="text" style="height:28px;font-size:13px;text-align:right">
 		           	 </td>
 		           	 <td style="padding-top:8px; padding-bottom:5px;padding-left:0px;text-align:left;font-size:14px">원</td><td></td><td></td>
 		          </tr>
 		          <tr>
 		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >총액</td>
 		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input id="buy_totalprice" name="buy_totalprice" type="text" class="form-control" style="height:28px;font-size:13px;text-align:right">
+		              <input id="order_totalprice" name="order_totalprice"  class="form-control" type="text" 
+		               style="height:28px;font-size:13px;text-align:right" readonly>
 		           	 </td>
-		           	 <td style="padding-top:8px; padding-bottom:5px;padding-left:0px;text-align:left;font-size:14px">원</td><td></td><td></td>
-		          </tr>
-		          <tr>
-		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >구매일</td>
-		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input id="buy_date" name="buy_date" type="date" class="form-control"  style="height: 28px;font-size: 13px;text-align:right">
-		           	 </td>
-		           	 <td></td><td></td><td></td>
-		          </tr>
-		          <tr>
-		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >소모일</td>
-		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input id="use_date" name="use_date" type="date" class="form-control"  style="height: 28px;font-size: 13px;text-align:right">
-		           	 </td>
-		           	 <td></td><td></td><td></td>
+		           	 <td style="padding-top:8px; padding-bottom:5px;padding-left:0px;text-align:left;font-size:14px">원</td>
+		           	 <td colspan="2"></td>
 		          </tr>
 		          <tr>
 		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">비고</td>
 		             <td colspan="4">
-		                <textarea id="inven_memo" name="inven_memo"style="height:95%; width:95%;"></textarea>
+		                <textarea id="order_memo" name="order_memo" style="height:95%; width:95%;"></textarea>
+		                <input id="s_emp_no" type="hidden" name="s_emp_no" value="<%=s_emp_no%>">
 		             </td>
 		          </tr>
        		</tbody>
@@ -356,131 +597,302 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal" onClick='javascript:addAction()'>저장</button>
-        <button type="button" class="btn btn-dark" data-dismiss="modal">취소</button>
+        <input id="newresister_save" class="btn btn-dark" type="button" value="저장" onClick='javascript:addAction()'>
+        <button type="button" class="btn btn-dark" data-dismiss="modal" onclick="cancel()">취소</button>
       </div>
-
     </div>
   </div>
 </div>
-<!-- ===================================모달창 (메인 - 신규 등록) 끝===================================== -->
-<!-- ===================================모달창 (메인 - 수정) 시작===================================== -->
-<div class="modal fade" id="update">
+<!-- ===================================모달뷰 (메인 - 신규 등록) 끝===================================== -->
+<!-- ===================================모달뷰 (메인 - 상세조회) 시작===================================== -->
+<%
+	String order_memo2 = "";
+	for(int i=0;i<invenList.size();i++){
+		Map<String,Object> pMap = new HashMap<>();
+		pMap = invenList.get(i);
+		if(pMap.get("ORDER_MEMO")!=null){
+			order_memo2 = pMap.get("ORDER_MEMO").toString();
+		}
+%>
+
+<div class="modal fade" id="inven_detail_<%=i %>" data-backdrop="static">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">수정</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">자산 구매/사용 상세조회</h4>
+        <button type="button" class="close" data-dismiss="modal" onclick="cancel()">&times;</button>
       </div>
-
       <!-- Modal body -->
-      <div class="modal-body">
-        <table class="table" style="border-top-style: solid; border-bottom-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 2px;"> 
+      <div class="modal-body" style="padding-bottom: 0px;">
+      	<form id = "invenAdd">
+        <table class="table" style="border-top-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 0px;margin-bottom: 0px;"> 
       		<tbody style="text-align: left;">
 		          <tr>
-		             <td class="bi_table_insert" style="width:30%; padding-top:7px; padding-bottom: 7px;">구분</td>
+		             <td class="bi_table_insert" style="width:25%; padding-top:7px; padding-bottom: 7px;">구분</td>
 		             <td style="width:30%;padding-top: 5px; padding-bottom: 5px;">
-		              <select>
-		              	<option>구매
-		              	<option>소모
-		              </select>
+	   		              <input id="ivgroup_name" name="ivgroup_name" type="text" class="form-control" 
+	   		              		 style="height: 28px;font-size: 13px;text-align:right" readonly
+	   		              		 value="<%=pMap.get("ORDER_GUBUN")%>">
+<!-- 		              <select id="order_gubun" name="order_gubun">
+		              	<option value="구매">구매
+		              	<option value="사용">사용
+		              </select> -->
 		           	 </td>
-		        	 <td style="width:20%;padding-top:7px; padding-bottom: 7px;">
+		        	 <td style="width:25%;padding-top:7px; padding-bottom: 7px;">
 		           	 </td>
 		           	 <td style="width:10%"></td>
 		           	 <td style="width:10%"></td>
 		          </tr>
+	          </tbody>
+          </table>
+          <table id="register" class="table" style="margin-bottom: 0px;border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 0px;"> 
+      		<tbody style="text-align: left;">
 		          <tr>
-		             <td class="bi_table_insert" style="padding-top:7px; padding-bottom:7px;">분류</td>
-		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <select>
-		              	<option>사무
-		              	<option>생산
-		              </select>
+		             <td class="bi_table_insert" style="width:25%;padding-top:9px; padding-bottom: 0px;">품목코드</td>
+		             <td style="width:30%;padding-top: 5px; padding-bottom: 5px;">
+		              <input id="ivgroup_code" name="ivgroup_code" type="text" class="form-control" 
+		              	     style="height: 28px;;font-size: 13px;text-align:right" readonly
+		              	     value="<%=pMap.get("IVGROUP_CODE")%>">
 		           	 </td>
-		        	 <td style="padding-top:7px; padding-bottom:7px;">
-		           	 </td>
-		           	 <td></td><td></td>
-		          </tr>
-		          <tr>
-		             <td class="bi_table_insert" style="padding-top:7px; padding-bottom: 7px;">품목코드</td>
-		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input type="text" class="form-control" style="height: 28px;font-size: 13px;text-align:right" >
-		           	 </td>
-		        	 <td style="padding-top:7px; padding-bottom:7px;" colspan="3">
-		           		<button class="btn btn-secondary btn_firstrow btn_tableRow" type="submit" style="height:26px;margin-right:0px" data-toggle="modal" data-target="#search">검색</button>
-		           		<button class="btn btn-secondary btn_firstrow btn_tableRow" type="submit" style="height:26px;width:auto" data-toggle="modal" data-target="#itemadd">품목추가</button>
+		        	 <td style="padding-top:7px; padding-bottom:7px;width:auto" colspan="3">
+		           		<!-- <input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" 
+		           			   style="height:26px;margin-right:0px" onClick="javascript:pummoksearch()" data-toggle="modal" data-target="#pummoksearch" value="검색" >
+		           		<input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" style="height:26px;width:auto" data-toggle="modal" data-target="#itemadd" value="품목추가"> -->
 		           	 </td>
 		          </tr>
 		          <tr>
 		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >품목명</td>
 		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input type="text" class="form-control" style="height: 28px;font-size: 13px;text-align:right" >
+		              <input id="ivgroup_name" name="ivgroup_name" type="text" class="form-control" 
+		                     style="height: 28px;font-size: 13px;text-align:right" readonly
+		                     value="<%=pMap.get("IVGROUP_NAME")%>">
 		           	 </td>
-		           	 <td></td><td></td><td></td>
+		           	 <td colspan="3" style="font-size:12px"></td>
 		          </tr>
 		          <tr>
 		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >규격</td>
 		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input type="text" class="form-control" style="height:28px;font-size:13px;text-align:right" >
+		              <input id="ivgroup_size" name="ivgroup_size" type="text" 
+	              			 class="form-control" style="height:28px;font-size:13px;
+	              			 text-align:right" readonly
+	              			  value="<%=pMap.get("IVGROUP_SIZE")%>">
 		           	 </td>
-		             <td></td><td></td><td></td>
+		             <td colspan="3" style="font-size:12px"></td>
 		          </tr>
+	          </tbody>
+          </table>
+          <table id="register" class="table" style="border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 2px;"> 
+      		<tbody style="text-align: left;">          
 		          <tr>
-		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >수량</td>
-		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input type="number" class="form-control" style="height:28px;font-size:13px;text-align:right" >
+		             <td class="bi_table_insert" style="width:25%;padding-top: 7px; padding-bottom: 7px;" >수량</td>
+		             <td style="width:30%;padding-top: 5px; padding-bottom: 5px;">
+		              <input class="num_only num_sum form-control" id="order_count" 
+		                 	 name="order_count" type="number" style="height:28px;font-size:13px; 
+		                 	 text-align:right;" maxlength="5" oninput="maxLengthCheck(this)" readonly
+		                 	 value="<%=pMap.get("ORDER_COUNT")%>">
 		           	 </td>
 		           	 <td style="padding-top:8px; padding-bottom:5px;padding-left:0px;text-align:left;font-size:14px">EA</td><td></td><td></td>
 		          </tr>
 		          <tr>
 		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >단가</td>
 		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input type="text" class="form-control" style="height:28px;font-size:13px;text-align:right" >
+		              <input class="num_only num_sum form-control" id="order_unitprice" 
+		                 	 name="order_unitprice" type="text" style="height:28px;
+		                 	 font-size:13px;text-align:right" readonly
+		                 	 value="<%=pMap.get("ORDER_UNITPRICE")%>">
 		           	 </td>
 		           	 <td style="padding-top:8px; padding-bottom:5px;padding-left:0px;text-align:left;font-size:14px">원</td><td></td><td></td>
 		          </tr>
 		          <tr>
 		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >총액</td>
 		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input type="text" class="form-control" style="height:28px;font-size:13px;text-align:right" >
+		              <input id="order_totalprice" name="order_totalprice"  class="form-control" 
+	              			 type="text" style="height:28px;font-size:13px;text-align:right" readonly
+		               		 value="<%=pMap.get("TOTALPRICE")%>">
 		           	 </td>
-		           	 <td style="padding-top:8px; padding-bottom:5px;padding-left:0px;text-align:left;font-size:14px">원</td><td></td><td></td>
-		          </tr>
-		          <tr>
-		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >구매/소모일</td>
-		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input type="date" class="form-control"  style="height: 28px;font-size: 13px;text-align:right" >
-		           	 </td>
-		           	 <td></td><td></td><td></td>
+		           	 <td style="padding-top:8px; padding-bottom:5px;padding-left:0px;text-align:left;font-size:14px">원</td>
+		           	 <td colspan="2"></td>
 		          </tr>
 		          <tr>
 		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">비고</td>
 		             <td colspan="4">
-		                <textarea style="height:95%; width:95% ;" ></textarea>
+		                <input id="order_memo" name="order_memo" class="form-control" 
+	              			   type="text"style="height:95%; width:95%;" readonly
+		                 value="<%=order_memo2%>">
+		                <input type="hidden" name="order_writer" value="<%=s_emp_no%>">
 		             </td>
 		          </tr>
        		</tbody>
     	</table>
+    	</form>
       </div>
 
       <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal" onClick='save()'>저장</button>
-        <button type="button" class="btn btn-dark" data-dismiss="modal">취소</button>
+      <div style="display:table;text-align:center;margin:15px">
+	      <div style="display:table-cell;float:left;vertical-align:middle">
+		       <input id="b_confirm" class="btn btn-dark" type="button" value="승인" onClick='javascript:confirm()'>
+	      </div>
+	      <div style="display:table-cell;float:right;vertical-align:middle">
+	       	   <input id="b_update" class="btn btn-dark" type="button" value="수정" onClick='javascript:update(<%=i %>)'>
+	           <button type="button" class="btn btn-dark" data-dismiss="modal" onclick="cancel()">닫기</button>
+	      </div>	
       </div>
-
     </div>
   </div>
 </div>
-<!-- ===================================모달창 (메인 - 수정) 끝===================================== -->
-<!-- ===================================모달창 (메인 - 현재재고조회) 시작===================================== -->
-<div class="modal" id="nowsearch">
+<%
+	}
+%>
+<!-- ===================================모달뷰 (메인 - 상세조회) 끝===================================== -->
+<!-- ===================================모달뷰 수정 (메인 - 상세조회 - 수정) 시작===================================== -->
+<%
+	order_memo2 = "";
+	for(int i=0;i<invenList.size();i++){
+		Map<String,Object> pMap = new HashMap<>();
+		pMap = invenList.get(i);
+		if(pMap.get("ORDER_MEMO")!=null){
+			order_memo2 = pMap.get("ORDER_MEMO").toString();
+		}
+%>
+
+<div class="modal" id="inven_update_<%=i%>" data-backdrop="static">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
 
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">자산 구매/사용 상세조회</h4>
+        <button type="button" class="close" data-dismiss="modal" onclick="cancel()">&times;</button>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body" style="padding-bottom: 0px;">
+      	<form id = "invenAdd">
+        <table class="table" style="border-top-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 0px;margin-bottom: 0px;"> 
+      		<tbody style="text-align: left;">
+		          <tr>
+		             <td class="bi_table_insert" style="width:25%; padding-top:7px; padding-bottom: 7px;">구분</td>
+		             <td style="width:55%;padding-top: 5px; padding-bottom: 5px;">
+<%-- 	   		              <input id="ivgroup_name" name="ivgroup_name" type="text" class="form-control" 
+	   		              		 style="height: 28px;font-size: 13px;text-align:right" readonly
+	   		              		 value="<%=pMap.get("ORDER_GUBUN")%>"> --%>
+	          	<select id="order_gubun" name="order_gubun">
+		              	<option value="구매">구매
+		              	<option value="사용">사용
+		              </select> 
+		              <input value="(기존값:<%=pMap.get("ORDER_GUBUN")%>)" readonly style="border:none">
+		           	 </td>
+		        	 <td style="width:10%;padding-top:7px; padding-bottom: 7px;">
+		           	 </td>
+		           	 <td style="width:5%"></td>
+		           	 <td style="width:5%"></td>
+		          </tr>
+	          </tbody>
+          </table>
+          <table id="resister_update" class="table" style="margin-bottom: 0px;border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 0px;"> 
+      		<tbody style="text-align: left;">
+		          <tr>
+		             <td class="bi_table_insert" style="width:25%;padding-top:9px; padding-bottom: 0px;">품목코드</td>
+		             <td style="width:30%;padding-top: 5px; padding-bottom: 5px;">
+		              <input id="ivgroup_code" name="ivgroup_code" type="text" class="form-control" 
+		              	     style="height: 28px;;font-size: 13px;text-align:right" readonly
+		              	     value="<%=pMap.get("IVGROUP_CODE")%>">
+		           	 </td>
+		        	 <td style="padding-top:7px; padding-bottom:7px;width:auto" colspan="3">
+		           		<input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" 
+		           			   style="height:26px;margin-right:0px" onClick="javascript:pummoksearch('update')" data-toggle="modal" data-target="#pummoksearch" value="검색" >
+		           		<!-- <input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" style="height:26px;width:auto" data-toggle="modal" data-target="#itemadd" value="품목추가"> -->
+		           	 </td>
+		          </tr>
+		          <tr>
+		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >품목명</td>
+		             <td style="padding-top: 5px; padding-bottom: 5px;">
+		              <input id="ivgroup_name" name="ivgroup_name" type="text" class="form-control" 
+		                     style="height: 28px;font-size: 13px;text-align:right" readonly
+		                     value="<%=pMap.get("IVGROUP_NAME")%>">
+		           	 </td>
+		           	 <td colspan="3" style="font-size:12px"></td>
+		          </tr>
+		          <tr>
+		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >규격</td>
+		             <td style="padding-top: 5px; padding-bottom: 5px;">
+		              <input id="ivgroup_size" name="ivgroup_size" type="text" 
+	              			 class="form-control" style="height:28px;font-size:13px;
+	              			 text-align:right" readonly
+	              			  value="<%=pMap.get("IVGROUP_SIZE")%>">
+		           	 </td>
+		             <td colspan="3" style="font-size:12px"></td>
+		          </tr>
+	          </tbody>
+          </table>
+          <table id="register" class="table" style="border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 2px;"> 
+      		<tbody style="text-align: left;">          
+		          <tr>
+		             <td class="bi_table_insert" style="width:25%;padding-top: 7px; padding-bottom: 7px;" >수량</td>
+		             <td style="width:30%;padding-top: 5px; padding-bottom: 5px;">
+		              <input class="num_only2 num_sum form-control" id="order_count2" 
+		                 	 name="order_count2" type="number" style="height:28px;font-size:13px; 
+		                 	 text-align:right;" maxlength="5" oninput="maxLengthCheck(this)" 
+		                 	 value="<%=pMap.get("ORDER_COUNT")%>">
+		           	 </td>
+		           	 <td style="padding-top:8px; padding-bottom:5px;padding-left:0px;text-align:left;font-size:14px">EA</td><td></td><td></td>
+		          </tr>
+		          <tr>
+		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >단가</td>
+		             <td style="padding-top: 5px; padding-bottom: 5px;">
+		              <input class="num_only2 num_sum form-control" id="order_unitprice2" 
+		                 	 name="order_unitprice2" type="text" style="height:28px;
+		                 	 font-size:13px;text-align:right" 
+		                 	 value="<%=pMap.get("ORDER_UNITPRICE")%>">
+		           	 </td>
+		           	 <td style="padding-top:8px; padding-bottom:5px;padding-left:0px;text-align:left;font-size:14px">원</td><td></td><td></td>
+		          </tr>
+		          <tr>
+		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >총액</td>
+		             <td style="padding-top: 5px; padding-bottom: 5px;">
+		              <input id="order_totalprice2" name="order_totalprice2"  class="form-control" 
+	              			 type="text" style="height:28px;font-size:13px;text-align:right" readonly
+		               		 value="<%=pMap.get("TOTALPRICE")%>">
+		           	 </td>
+		           	 <td style="padding-top:8px; padding-bottom:5px;padding-left:0px;text-align:left;font-size:14px">원</td>
+		           	 <td colspan="2"></td>
+		          </tr>
+		          <tr>
+		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">비고</td>
+		             <td colspan="4">
+		                <input id="order_memo" name="order_memo" class="form-control" 
+	              			   type="text"style="height:95%; width:95%;" 
+		                 value="<%=order_memo2%>">
+		                <input type="hidden" name="order_writer" value="<%=s_emp_no%>">
+		             </td>
+		          </tr>
+       		</tbody>
+    	</table>
+    	</form>
+      </div>
+
+      <!-- Modal footer -->
+      <div style="display:table;text-align:center;margin:15px">
+	      <div style="display:table-cell;float:left;vertical-align:middle">
+		       <input id="b_confirm" class="btn btn-dark" type="button" value="승인" onClick='javascript:confirm()'>
+	      </div>
+	      <div style="display:table-cell;float:right;vertical-align:middle">
+	       	   <input id="b_update" class="btn btn-dark" type="button" value="적용" onClick='javascript:update()'>
+	           <button type="button" class="btn btn-dark" data-dismiss="modal" onclick="cancel()">닫기</button>
+	      </div>	
+      </div>
+    </div>
+  </div>
+</div>
+<%
+	}
+%>
+<!-- ===================================모달뷰 수정(메인 - 상세조회- 수정) 끝===================================== -->
+<!-- ===================================모달뷰 (메인 - 현재재고조회) 시작===================================== -->
+<div class="modal" id="nowsearch">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
       <!-- Modal Header -->
       <div class="modal-header">
         <h5 class="modal-title">현재재고조회</h5>
@@ -555,9 +967,9 @@
     </div>
   </div>
 </div>
-<!-- ===================================모달창 (메인 - 현재재고조회) 끝===================================== -->
-<!-- ===================================모달창 (메인 - 신규 등록 -품목검색) 시작===================================== -->
-<div class="modal" id="pummoksearch">
+<!-- ===================================모달뷰 (메인 - 현재재고조회) 끝===================================== -->
+<!-- ===================================모달뷰 (메인 - 신규 등록 -품목검색) 시작===================================== -->
+<div class="modal" id="pummoksearch" style="border:1px solid black">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
 
@@ -591,10 +1003,9 @@
               <thead style="text-align:center;">
                  <tr style="width:10%">
                     <th style="width">
-                       <div><input type="checkbox"></div> 
+                       
                     </th>
                     <th style="width:">구분</th>
-                    <th style="width:">분류</th>
                     <th style="width:">코드</th>
                     <th style="width:">품목명</th>
                     <th style="width:">규격</th>
@@ -602,28 +1013,12 @@
               <tbody style="text-align:center;font-size:13px;">
               	 <tr>
               		<td><input type="checkbox"></td>
-              		<td>구매</td>
               		<td>사무</td>
               		<td>a001</td>
               		<td>사무용 모니터</td>
               		<td>32"</td>
               	 </tr>
-              	 <tr>
-              		<td><input type="checkbox"></td>
-              		<td>구매</td>
-              		<td>생산</td>
-              		<td>a0022</td>
-              		<td>사무용 책상</td>
-              		<td>120*100*100"</td>
-              	 </tr>
-              	 <tr>
-              		<td><input type="checkbox"></td>
-              		<td>소모</td>
-              		<td>사무</td>
-              		<td>a0022</td>
-              		<td>사무용 책상</td>
-              		<td>120*100*100"</td>
-              	 </tr>              	             	             	             	 
+             	             	             	             	 
               </tbody>
          </table> 
       </div>
@@ -637,8 +1032,8 @@
     </div>
   </div>
 </div>
-<!-- ===================================모달창 (메인 - 신규 등록 -품목검색) 끝===================================== -->
-<!-- ===================================모달창 (메인 - 신규 등록 -품목추가) 시작===================================== -->
+<!-- ===================================모달뷰 (메인 - 신규 등록 -품목검색) 끝===================================== -->
+<!-- ===================================모달뷰 (메인 - 신규 등록 -품목추가_뷰) 시작===================================== -->
 <div class="modal fade" id="itemadd">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -651,24 +1046,13 @@
 
       <!-- Modal body -->
       <div class="modal-body">
+      <form id="f_pummokadd">
         <table class="table" style="border-top-style: solid; border-bottom-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 2px;"> 
       		<tbody style="text-align: left;">
 		          <tr>
-		             <td class="bi_table_insert" style="padding-top:7px; padding-bottom:7px;">분류</td>
-		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <select>
-		              	<option>사무
-		              	<option>생산
-		              </select>
-		           	 </td>
-		        	 <td style="padding-top:7px; padding-bottom:7px;">
-		           	 </td>
-		           	 <td></td><td></td>
-		          </tr>
-		          <tr>
 		             <td class="bi_table_insert" style="padding-top:7px; padding-bottom: 7px;">품목코드</td>
 		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input type="text" class="form-control" style="height: 28px;font-size: 13px;text-align:right">
+		              <input id="pid_code" name="p_code" type="text" class="form-control" style="height: 28px;font-size: 13px;text-align:right">
 		           	 </td>
 		        	 <td style="padding-top:7px; padding-bottom:7px;" colspan="3">
 		           		<button class="btn btn-secondary btn_firstrow btn_tableRow" type="submit" style="width:auto;height:26px;margin-right:0px" data-toggle="modal" data-target="#search">중복확인</button>
@@ -677,31 +1061,120 @@
 		          <tr>
 		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >품목명</td>
 		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input type="text" class="form-control" style="height: 28px;font-size: 13px;text-align:right">
+		              <input id="pid_name" name="p_name" type="text" class="form-control" style="height: 28px;font-size: 13px;text-align:right">
 		           	 </td>
 		           	 <td></td><td></td><td></td>
 		          </tr>
 		          <tr>
 		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >규격</td>
 		             <td style="padding-top: 5px; padding-bottom: 5px;">
-		              <input type="text" class="form-control" style="height:28px;font-size:13px;text-align:right">
+		              <input id="pid_size" name="p_size" type="text" class="form-control" style="height:28px;font-size:13px;text-align:right">
 		           	 </td>
 		             <td></td><td></td><td></td>
 		          </tr>
        		</tbody>
     	</table>
+      </form>
       </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal" onClick='save()'>저장</button>
+        <button type="button" class="btn btn-dark" onclick='pummokadd()'>저장</button>
         <button type="button" class="btn btn-dark" data-dismiss="modal">취소</button>
       </div>
 
     </div>
   </div>
 </div>
-<!-- ===================================모달창 (메인 - 품목 추가) 끝===================================== -->
-
+<!-- ===================================모달뷰 (메인 - 신규 등록 - 품목 추가) 끝===================================== -->
+<!-- ===================================모달뷰 (메인 - 신규등록- alert) 시작=========================================== -->
+<div class="modal" id="alert" data-backdrop="static" data-keyboard="true">
+  <div class="modal-dialog modal-dialog-centered" style="text-align:center">
+    <div class="modal-content" style="height:120px;width:90%;margin-left:5%;margin-right:5%;">
+      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:center;" >
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div style="height:50%;background-color:rgba(0,0,0,.05);color:black;width:100%;text-align:center;display:table;">
+        <h6 style="display:table-cell;vertical-align:middle;font-weight: bold;
+    	           font-size: large;">품목코드,수량,단가는 <br>필수  입력 사항입니다.</h6>
+      </div>
+      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:right;display:table">
+      	<button style="width: 13%;height: 100%;border-top-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;
+    					margin-right: 3px;padding-top: 0px;border-left-width: 0px;padding-right: 0px;padding-left: 0px;
+    border-right-width: 0px;display:table-cell;font-size:14px" type="button" class="btn btn-dark" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ===================================모달뷰(메인 - 신규등록- alert) 끝=========================================== -->
+<!-- ===================================모달뷰 (메인 - 삭제- alert-정말삭제?) 시작=========================================== -->
+<div class="modal" id="deletealert" data-backdrop="static" data-keyboard="true">
+  <div class="modal-dialog modal-dialog-centered" style="text-align:center">
+    <div class="modal-content" style="height:120px;width:90%;margin-left:5%;margin-right:5%;">
+      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:center;" >
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div style="display:table;height:50%;background-color:rgba(0,0,0,.05);color:black;width:100%;">
+      	<div style="display:table-cell;vertical-align:middle;text-align:center;">
+      		<img style="heigth:20px;width:20px"src="/erp/images/warning-black.png" alt="주의:">
+        	<h6 style="display:inline;font-weight:bold;font-size:large">삭제 하시겠습니까?</h6>
+      	</div>	
+      </div>
+      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:right;display:table">
+      	<input id="realdel" style="width: 13%;height: 100%;border-top-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;
+    					margin-right: 3px;padding-top: 0px;border-left-width: 0px;padding-right: 0px;padding-left: 0px;
+    border-right-width: 0px;display:table-cell;font-size:14px" type="button" class="btn btn-dark" data-dismiss="modal" value="삭제">
+      	<button style="width: 13%;height: 100%;border-top-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;
+    					margin-right: 3px;padding-top: 0px;border-left-width: 0px;padding-right: 0px;padding-left: 0px;
+    border-right-width: 0px;display:table-cell;font-size:14px" type="button" class="btn btn-dark" data-dismiss="modal">취소</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ===================================모달뷰(메인 - 삭제- alert-정말삭제?) 끝=========================================== -->
+<!-- ===================================모달뷰 (메인 - 삭제- alert-정말삭제?) 시작=========================================== -->
+<div class="modal" id="deleteempty" data-backdrop="static" data-keyboard="true">
+  <div class="modal-dialog modal-dialog-centered" style="text-align:center">
+    <div class="modal-content" style="height:120px;width:90%;margin-left:5%;margin-right:5%;">
+      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:center;" >
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div style="display:table;height:50%;background-color:rgba(0,0,0,.05);color:black;width:100%;">
+      	<div style="display:table-cell;vertical-align:middle;text-align:center;">
+      		<img style="heigth:20px;width:20px"src="/erp/images/warning-black.png" alt="주의:">
+        	<h6 style="display:inline;font-weight:bold;font-size:large">삭제할 대상을 선택하세요.</h6>
+      	</div>	
+      </div>
+      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:right;display:table">
+      	<button style="width: 13%;height: 100%;border-top-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;
+    					margin-right: 3px;padding-top: 0px;border-left-width: 0px;padding-right: 0px;padding-left: 0px;
+    border-right-width: 0px;display:table-cell;font-size:14px" type="button" class="btn btn-dark" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ===================================모달뷰(메인 - 삭제- alert-정말삭제?) 끝=========================================== -->
+<!-- ===================================모달뷰 (메인 - 삭제- alert-작성자만 삭제) 시작=========================================== -->
+<div class="modal" id="notOrderWriter" data-backdrop="static" data-keyboard="true">
+  <div class="modal-dialog modal-dialog-centered" style="text-align:center">
+    <div class="modal-content" style="height:120px;width:90%;margin-left:5%;margin-right:5%;">
+      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:center;" >
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div style="display:table;height:50%;background-color:rgba(0,0,0,.05);color:black;width:100%;">
+      	<div style="display:table-cell;vertical-align:middle;text-align:center;">
+      		<img style="heigth:20px;width:20px"src="/erp/images/warning-black.png" alt="주의:">
+        	<h6 style="display:inline;font-weight:bold;font-size:large">작성자만 삭제할 수 있습니다.</h6>
+      	</div>	
+      </div>
+      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:right;display:table">
+      	<button style="width: 13%;height: 100%;border-top-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;
+    					margin-right: 3px;padding-top: 0px;border-left-width: 0px;padding-right: 0px;padding-left: 0px;
+    border-right-width: 0px;display:table-cell;font-size:14px" type="button" class="btn btn-dark" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ===================================모달뷰(메인 - 삭제- alert-작성자만 삭제) 끝=========================================== -->
 </body>
 </html>

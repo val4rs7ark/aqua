@@ -100,18 +100,63 @@ public class WasDao {
 		}
 		return result;
 	}
-	public List<Map<String, Object>> wasEmpStatus(String empno) {
+	public List<Map<String, Object>> wasEmpStatus(Map<String, Object> pMap) {
 		logger.info("wasDao.wasEmpStatus에 들어왔다!");
+		logger.info("pMap::::::::::::::::"+pMap);
 		List<Map<String, Object>> result = null;
 		try {
 			sqlSession = sqlSessionFactory.openSession();
-			result = sqlSession.selectList("wasEmpStatus", empno);
+			result = sqlSession.selectList("wasEmpStatus", pMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			sqlSession.close();
 		}
-		logger.info("wasDao.wasEmpStatus 결과다!!!!"+result.size());
+		return result;
+	}
+	public List<Map<String, Object>> wasEmpStatusNoteList(Map<String, Object> pMap) {
+		logger.info("wasDao.wasEmpStatusNoteList에 들어왔다!");
+		logger.info("pMap::::::::::::::::"+pMap);
+		List<Map<String, Object>> result = null;
+		try {
+			sqlSession = sqlSessionFactory.openSession();
+			result = sqlSession.selectList("wasEmpStatusNoteList", pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return result;
+	}
+	public int wasEmpStatusNoteInsert(Map<String, Object> pMap) {
+		logger.info("wasDao.wasEmpStatusNoteInsert에 들어왔다!");
+		logger.info("pMap::::::::::::::::"+pMap);
+		int result = 0;
+		try {
+			sqlSession = sqlSessionFactory.openSession();
+			result = sqlSession.update("wasEmpStatusNoteInsert", pMap);
+			logger.info("result 성공:1 실패:0-->"+result);
+			sqlSession.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		return result;
+	}
+	public List<Map<String, Object>> wasEmpStatusNoteDetail(Map<String, Object> pMap) {
+		logger.info("wasDao.wasEmpStatusNoteDetail에 들어왔다!");
+		logger.info("pMap::::::::::::::::"+pMap);
+		List<Map<String, Object>> result = null;
+		try {
+			sqlSession = sqlSessionFactory.openSession();
+			result = sqlSession.selectList("wasEmpStatusNoteDetail", pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		logger.info("DB탐 noteDetail :::::::"+result);
 		return result;
 	}
 }
