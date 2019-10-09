@@ -1,5 +1,6 @@
 package com.was.erp;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,5 +79,12 @@ public class WasDao {
 			result = sqlSessionTemplate.update("wasEmpStatusNoteInsert", pMap);
 			logger.info("result 성공:1 실패:0-->"+result);
 		return result;
+	}
+	public List<Map<String, Object>> wasEmpAttendance(Map<String, Object> pMap) {
+		pMap.put("msg", " ");
+		sqlSessionTemplate.selectOne("wasEmpAttendance", pMap);
+		List<Map<String,Object>> rList = new ArrayList<>();
+		rList.add(pMap);
+		return rList;
 	}
 }

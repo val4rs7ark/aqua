@@ -61,7 +61,17 @@ public class ResultView {
 	////////////////////////////응답화면 method/////////////////////////
 	public RequestDispatcher resultView() {
 		RequestDispatcher view = null;
-		if("wasEmpStatusNoteInsert".equals(mapping)) {
+		if("wasEmpAttendance".equals(mapping)) {
+			view = req.getRequestDispatcher(model.getFullView());
+			try {
+				view.forward(req, res);
+			} catch (ServletException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else if("wasEmpStatusNoteInsert".equals(mapping)) {
 			view = req.getRequestDispatcher(model.getFullView());
 			try {
 				view.forward(req, res);

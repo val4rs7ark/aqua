@@ -255,4 +255,34 @@ public class WasLogic {
 		List<Map<String, Object>> result = wasDao.wasEmpStatusNoteDetail(pMap);
 		return result;
 	}
+	public List<Map<String, Object>> wasEmpAttendance(Map<String, Object> pMap) {
+		List<Map<String,Object>> result = wasDao.wasEmpAttendance(pMap);
+		List<Map<String,Object>> rList = new ArrayList<>();
+		Map<String,Object> resultMap = result.get(0);
+		Map<String,Object> rMap = new HashMap<>();
+		String msg = resultMap.get("msg").toString();
+		//+가 응답문자에 들어가 있을 때 즉 출석체크 해서 시간도 보여주려고 할 때
+		if(msg.indexOf("+")>-1) {
+			logger.info("+가 있음~+++++++++++++++++++++++++++++++++++++++");
+			StringTokenizer st = new StringTokenizer(msg,"+");
+			String mrdate = st.nextToken();
+			String mresult = st.nextToken();
+			resultMap.put("rdate", mrdate);
+			resultMap.put("result", mresult);
+			rList.add(resultMap);
+			
+		}else {//+가 응답문자에 없을 때 즉 이미 출석체크 했다고 결과만 보여줄 때
+			logger.info("+가 없음~++++++++++++++++++++++++++++++++++++++++");
+			resultMap.put("rdate", " ");
+			resultMap.put("result", result.get(0).get("msg"));
+			rList.add(resultMap);
+		}
+		Gson g = new Gson();
+		String gSon = g.toJson(rList);
+		Map<String,Object> map = new HashMap<>();
+		map.put("gSon", gSon);
+		List<Map<String,Object>> list = new ArrayList<>();
+		list.add(map);
+		return list;
+	}
 }

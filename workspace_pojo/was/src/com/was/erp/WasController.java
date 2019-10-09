@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+
+import com.google.gson.Gson;
 //190925
 public class WasController implements ActionServlet{
 	private static final Logger logger = Logger.getLogger(EmpController.class);
@@ -21,7 +23,15 @@ public class WasController implements ActionServlet{
 	public Model execute() {
 		Model model = new Model();
 		logger.info("mapping --"+mapping);
-		if("wasEmpStatusNoteInsert".equals(mapping)) {
+		if("wasEmpAttendance".equals(mapping)) {
+			List<Map<String,Object>> rList = wasLogic.wasEmpAttendance(pMap);
+			model.setAddAttribute(rList);
+			model.setListName("attendanceJson");
+			model.setViewName("attendanceJson");
+			model.setViewPath("WEB-INF/views/login");
+			model.setViewExtension("jsp");
+		}
+		else if("wasEmpStatusNoteInsert".equals(mapping)) {
 			logger.info("컨트롤러에서 분기 정해짐.");
 			List<Map<String,Object>> rList = wasLogic.wasEmpStatusNoteInsert(pMap);
 			model.setAddAttribute(rList);

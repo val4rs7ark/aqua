@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mybatis.mapper.WasMapper">
+	<select id="wasEmpAttendance" parameterType="map" statementType="CALLABLE">
+		{ CALL proc_empAttendance(#{empno, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+							     ,#{msg, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String}) }
+	</select>
 	<update id="wasEmpStatusNoteInsert" parameterType="map">
 		insert into notepad(note_no,empno,note_content,note_write_date)
         values((select nvl((select max(note_no)+1 from notepad),1)from dual),#{empno},#{note_content},#{note_write_date, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}) 
 	</update>
 	<select id="wasEmpStatusNoteDetail" parameterType="map" resultType="map">
-		select note_write_date,note_content from notepad
+		select note_write_date,note_content,note_no from notepad
             where empno = #{empno, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
             and note_write_date like #{empStatus_year, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}||'_'
             						||#{empStatus_month, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}||'_'
