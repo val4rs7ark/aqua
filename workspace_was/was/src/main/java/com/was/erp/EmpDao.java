@@ -17,8 +17,10 @@ public class EmpDao {
 	int total =0;
 	///////////////////////////////////   등록       ////////////////////////////////
 	public void empSignUp(Map<String, Object> pMap) {
-		logger.info("empSignUp Dao 호출 성공");
-		sqlSessionTemplate.selectOne("empSignUp", pMap);
+		logger.info("empDao --empSignUp 호출 성공");
+					sqlSessionTemplate.selectOne("empSignUp", pMap);
+		String msg = pMap.get("msg").toString();
+		logger.info(msg);
 	}
 	
 	///////////////////////////////////   조회        ////////////////////////////////
@@ -56,7 +58,16 @@ public class EmpDao {
 	}
 	///////////////////////////////////   수정       ////////////////////////////////
 	public void empUPD(Map<String, Object> pMap) {
-		logger.info("empUPD Dao 호출 성공");
+		logger.info("EmpDao --empUPD 호출 성공");
 		sqlSessionTemplate.selectOne("empUPD", pMap);
+	}
+	
+	///////////////////////////////////   검색       ////////////////////////////////
+	public List<Map<String, Object>> empSearch(Map<String, Object> pMap) {
+		logger.info("EmpDao --empSearch 호출 성공");
+		List<Map<String,Object>> scList = 
+				sqlSessionTemplate.selectList("empListSignUp",pMap);
+		return scList;
+		
 	}
 }
