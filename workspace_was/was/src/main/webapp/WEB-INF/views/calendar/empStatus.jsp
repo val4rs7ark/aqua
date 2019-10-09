@@ -194,12 +194,16 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
 								i_note_day = Integer.parseInt(rMap.get("NOTE_DAY").toString());
 								if(day[month][i][j]==i_note_day){
 									if(note_count ==0){
-										out.print("<td><a href='javascript:noteDetail("+cyyyy+","+(month+1)+","+day[month][i][j]+")'><span class='badge badge-secondary'>메모</span></a></td></tr>");
+										out.print("<td><a href='javascript:noteDetail("+cyyyy+","+(month+1)+","+day[month][i][j]+")'><span class='badge badge-secondary'>메모</span></a></td>");
 										note_count ++;
 									}
 								}
-							}else{
-								out.print("</tr>");
+							}
+							if(rMap.get("STATUS_DAY")!=null){
+								i_status_day = Integer.parseInt(rMap.get("STATUS_DAY").toString());
+								if(day[month][i][j]==i_status_day){
+									out.print("</tr>");
+								}
 							}
 						}
 						if(note_count==0){
