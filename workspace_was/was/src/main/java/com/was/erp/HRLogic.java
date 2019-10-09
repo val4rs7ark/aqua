@@ -22,4 +22,16 @@ public class HRLogic {
 		return r_List;
 	}
 
+	public String HRSalery_insert_commit(Map<String, Object> pMap) {
+		logger.info("HRSalery_insert_commit//////////////////logic");
+		String gubun = pMap.get("sal_gubun").toString();
+		String msg = null;
+		if("jung".equals(gubun)) {// 정규식 등록 버튼일경우
+			msg = hrDao.HRSalery_insert_commit(pMap);
+		}else if("one".equals(gubun)) {// 일용직 등록 버튼일경우
+			msg = hrDao.HRSalery_insert_commit_one(pMap);
+		}
+		return msg;
+	}
+
 }

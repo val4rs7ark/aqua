@@ -4,6 +4,7 @@
 <%@ page import="com.util.PageBar" %>
 <%
 	List<Map<String,Object>> r_list = (List<Map<String,Object>>)request.getAttribute("r_list");
+	String msg = (String)request.getAttribute("msg");
 %>
 <!doctype html>
 <html lang="ko">
@@ -30,21 +31,16 @@
 	       obj.value =  num01;
 	  
 	  }
-	  function numberWithCommas(x) {
-
+	  function numberWithCommas(x) { //콤마 박아주는 함수
 		    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
 		}
-	  
 	  function setComma(inNum){
-	       
 	       var outNum;
 	       outNum = inNum; 
 	       while (rgx2.test(outNum)) {
 	            outNum = outNum.replace(rgx2, '$1' + ',' + '$2');
 	        }
 	       return outNum;
-	  
 	  }
   	function seach_emp_name(){
   		alert("사원명 검색버튼 양호");
@@ -52,6 +48,27 @@
   	function removeComma(str){ //콤마 제거 함수
 		n = parseInt(str.replace(/,/g,""));
 		return n;
+	}
+  	
+  	function sal_cancle(){
+		href="erp/HRSalery_insert";
+	}
+  	//모달창 닫는 함수
+  	function close_modal(){
+  		$("#notOrderWriter").hide();
+	}
+  	//정규직 등록버튼
+  	function sal_insert(){
+  		$("#f_deli_insert").attr("method","post");
+  		$("#f_deli_insert").attr("action","/erp/HRSalery_insert_commit");
+  		$("#f_deli_insert").submit();
+	}
+  	//일용직 등록버튼
+  	function sal_insert_one(){
+  		alert("일용직등록버튼");
+  		$("#f_deli_insert_one").attr("method","post");
+  		$("#f_deli_insert_one").attr("action","/erp/HRSalery_insert_commit");
+  		$("#f_deli_insert_one").submit();
 	}
   	
   	function sal_equals_one(){//========================================일용직 산출 버튼
@@ -125,10 +142,10 @@
   			r_sal_default =	parseInt(removeComma(sal_default));
   		}
   		
-  		var sal_plas = $("#sal_plas").val().toString();
-  		var r_sal_plas = 0;
-  		if(""!=sal_plas){
-  			r_sal_plas = parseInt(removeComma(sal_plas));
+  		var sal_plus = $("#sal_plus").val().toString();
+  		var r_sal_plus = 0;
+  		if(""!=sal_plus){
+  			r_sal_plus = parseInt(removeComma(sal_plus));
   		}
   		
   		var sal_over = $("#sal_over").val().toString();
@@ -188,48 +205,48 @@
  		var sal_etc_detail = $("#sal_etc_detail").val(); //기타항목 상세 내용
  		
  		//임시 토탈값
-  		var imsi_sal_total = r_sal_default+r_sal_plas+r_sal_over+r_sal_rest+r_sal_etc+r_sal_rice+r_sal_drive+r_sal_life+r_sal_tel+r_sal_level+r_sal_baby;
+  		var imsi_sal_total = r_sal_default+r_sal_plus+r_sal_over+r_sal_rest+r_sal_etc+r_sal_rice+r_sal_drive+r_sal_life+r_sal_tel+r_sal_level+r_sal_baby;
   		
 
   		//공제항목
   		//==========================여기부터 계산하기
-  		var sal_soduc = imsi_sal_total*5/100;
-  		$("#sal_soduc").val(numberWithCommas(sal_soduc));
+  		var tax_soduc = imsi_sal_total*5/100;
+  		$("#tax_soduc").val(numberWithCommas(tax_soduc));
   		
-  		var sal_jungsan = imsi_sal_total*5/100;
-  		$("#sal_jungsan").val(numberWithCommas(sal_jungsan));
+  		var tax_jungsan = imsi_sal_total*5/100;
+  		$("#tax_jungsan").val(numberWithCommas(tax_jungsan));
   		
-  		var sal_chon = imsi_sal_total*5/100;
-  		$("#sal_chon").val(numberWithCommas(sal_chon));
+  		var tax_chon = imsi_sal_total*5/100;
+  		$("#tax_chon").val(numberWithCommas(tax_chon));
   		
-  		var sal_nocheck = imsi_sal_total*5/100;
-  		$("#sal_nocheck").val(numberWithCommas(sal_nocheck));
+  		var tax_nocheck = imsi_sal_total*5/100;
+  		$("#tax_nocheck").val(numberWithCommas(tax_nocheck));
   		
-  		var sal_kukmin = imsi_sal_total*5/100;
-  		$("#sal_kukmin").val(numberWithCommas(sal_kukmin));
+  		var tax_kukmin = imsi_sal_total*5/100;
+  		$("#tax_kukmin").val(numberWithCommas(tax_kukmin));
   		
-  		var sal_health = imsi_sal_total*5/100;
-  		$("#sal_health").val(numberWithCommas(sal_health));
+  		var tax_health = imsi_sal_total*5/100;
+  		$("#tax_health").val(numberWithCommas(tax_health));
   		
-  		var sal_pain = imsi_sal_total*5/100;
-  		$("#sal_pain").val(numberWithCommas(sal_pain));
+  		var tax_pain = imsi_sal_total*5/100;
+  		$("#tax_pain").val(numberWithCommas(tax_pain));
   		
-  		var sal_work = imsi_sal_total*5/100;
-  		$("#sal_work").val(numberWithCommas(sal_work));
+  		var tax_work = imsi_sal_total*5/100;
+  		$("#tax_work").val(numberWithCommas(tax_work));
   		
-  		var sal_long = imsi_sal_total*5/100;
-  		$("#sal_long").val(numberWithCommas(sal_long));
+  		var tax_long = imsi_sal_total*5/100;
+  		$("#tax_long").val(numberWithCommas(tax_long));
   		
-  		var sal_etc_sudang = $("#sal_etc_sudang").val().toString();
-  		var r_sal_etc_sudang = 0;
-  		if(""!=sal_etc_sudang){
-  			r_sal_etc_sudang = parseInt(removeComma(sal_etc_sudang));
+  		var tax_etc_sudang = $("#tax_etc_sudang").val();
+  		var r_tax_etc_sudang = 0;
+  		if(""!=tax_etc_sudang){
+  			r_tax_etc_sudang = parseInt(removeComma(tax_etc_sudang));
   		}
   		
-  		var imsi_sal_etc_sudang_dt = parseInt($("#sal_etc_sudang_dt").val()); // 받아온 값을 숫자형으로 변환 
+  		var imsi_tax_etc_sudang_dt = $("#tax_etc_sudang_dt").val(); // 받아온 값을 숫자형으로 변환 
   		
   		//공제 토탈값
-  		var imsi_minus_total = sal_soduc+sal_jungsan+sal_chon+sal_nocheck+sal_kukmin+sal_health+sal_pain+sal_work+sal_long+r_sal_etc_sudang;
+  		var imsi_minus_total = tax_soduc+tax_jungsan+tax_chon+tax_nocheck+tax_kukmin+tax_health+tax_pain+tax_work+tax_long+r_tax_etc_sudang;
   		
   		//총토탈값
   		
@@ -239,11 +256,12 @@
   		 
 
   	}
-  	function select_empno(r_empno){
+  	function select_empno(r_empno,r_gubun){
   		<%
   			for(int i=0;i<r_list.size();i++){
   				Map<String,Object> oneSMap = r_list.get(i);	
 	  	%>
+	  		//검색한 사원번호와 해당하는사원번호가 같을경우 정보를 꺼냄 
 	  		if(r_empno=="<%=oneSMap.get("EMPNO").toString()%>"){
 	  			var r_emp_name = "<%=oneSMap.get("EMP_NAME").toString()%>";
 	  			var r_resident_no = "<%=oneSMap.get("RESIDENT_NO").toString()%>";
@@ -252,7 +270,11 @@
 	  			var r_emp_sosoc = "<%=oneSMap.get("EMP_SOSOC").toString()%>";
 	  			var r_emp_back = "<%=oneSMap.get("EMP_BACK").toString()%>";
 	  			var r_sal_account = "<%=oneSMap.get("SAL_ACCOUNT").toString()%>"; 
-			  	$.ajax({
+	  			var s_emp_sal = "<%=oneSMap.get("EMP_SAL").toString()%>"; 
+	  			var l_emp_sal = removeComma(s_emp_sal);
+	  			r_emp_sal = numberWithCommas(parseInt(l_emp_sal)/12);
+			  	//사원 정보부분 아작스로 변경
+	  			$.ajax({
 			    	url:"/erp/HRsalary_select_empno.was?empno="+r_empno+"&emp_name="+r_emp_name+"&resident_no="+r_resident_no+"&emp_hp="+r_emp_hp+"&emp_indate="+r_emp_indate+"&emp_sosoc="+r_emp_sosoc+"&emp_back="+r_emp_back+"&sal_account="+r_sal_account
 			    	,method:"get"
 			    	,success:function(data){//해석하기
@@ -262,10 +284,47 @@
 			    		alert(e.responseText);
 			    	}
 			    });
+			  	if(r_gubun=='jungkyu'){
+		  			$.ajax({
+				    	url:"/erp/HRsalary_change_default.was?emp_sal="+r_emp_sal
+				    	,method:"get"
+				    	,success:function(data){//해석하기
+				    		$("#change_default").html(data);//해석하기
+				    	}
+				    	,error:function(e){
+				    		alert(e.responseText);
+				    	}
+				    });
+			  	}else if(r_gubun=='one'){
+		  			$.ajax({
+				    	url:"/erp/HRsalary_change_default.was?emp_sal="+r_emp_sal
+				    	,method:"get"
+				    	,success:function(data){//해석하기
+				    		$("#change_default_one").html(data);//해석하기
+				    	}
+				    	,error:function(e){
+				    		alert(e.responseText);
+				    	}
+				    });
+			  	}
+			  	
+			  	
+			  	
 			  }
 	  	<%
 	  		}
   		%>
+  		/* 검색버튼 눌르면 급여변경정보 모달창이 최신화됨 */
+  		$.ajax({
+	    	url:"/erp/HRemp_sal_update.was?empno="+r_empno+"&emp_name="+r_emp_name+"&emp_back="+r_emp_back+"&sal_account="+r_sal_account+"&emp_sal="+s_emp_sal
+	    	,method:"get"
+	    	,success:function(data){//해석하기
+	    		$("#sal_update").html(data);//해석하기
+	    	}
+	    	,error:function(e){
+	    		alert(e.responseText);
+	    	}
+	    });
   		$("#emp_imfo .close").click();//선택후 자동 모달창 끄기
   	}
   	function select_empno_one(r_empno){
@@ -301,6 +360,16 @@
   </script>
   </head>
   <body>
+  <script type="text/javascript">
+  $(document).ready(function(){
+	  if('<%=msg%>'=='null'){
+		  $("#notOrderWriter").hide();	
+	  }else{
+		  $("#notOrderWriter").show();	
+	  }
+  });
+  </script>
+  <div class="container-fluid" >
 	<div class="row">
 	   <div style="width:20%">
 	      <%@ include file="/common/MenuCommon.jsp"%>
@@ -342,7 +411,7 @@
 			        
 			            <ul class="nav nav-tabs">
 			              <li class="nav-item">
-			                <a class="nav-link active" data-toggle="tab" href="#qwe">정직원 급여</a>
+			                <a class="nav-link active" data-toggle="tab" href="#qwe">직원 급여</a>
 			              </li>
 			              <li class="nav-item">
 			                <a class="nav-link" data-toggle="tab" href="#asd">일용직 급여</a>
@@ -353,6 +422,8 @@
 			              <div class="tab-pane fade show active" id="qwe">
 <!-- *********************************************************************************************************************************************************************************************************** -->
 						  <form id="f_deli_insert">
+	                	  <input type="hidden" name="sal_gubun" value="jung">
+	                	  <input type="hidden" name="sal_writer" value="ghost">
 	                	  	<div class="row"  style="width:1340px;">
 	                	  		<div style="width:35%">
 							  		<table id="select_empno_change_jungkyu" class="table" style=" width: 100%; margin-bottom: 0px;"> 
@@ -365,7 +436,7 @@
 							  				<tr>
 							  					<td style=" height: 50px; padding-left: 40px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none;">사원번호</td>
 							  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle;">
-													<input type="text" class="form-control" name="companyname" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent;"readonly>
+													<input type="text" class="form-control" name="empno" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent;"readonly>
 												</td>
 							  				</tr>
 							  				<tr>
@@ -433,19 +504,18 @@
 									  				<tr>
 									  					<td style="width: 160px; height: 35px; padding-left: 20px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none;"/>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle;"/>
-									  					<td style=" width: 160px; height: 35px; padding-left: 20px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none;"/>
-									  					<td style="padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 80px; font-size: 14px;" >
-									  						*는 필수 입력사항입니다.
+									  					<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 80px; font-size: 14px; text-align:right;" >
+									  						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*검색버튼에서 사원을 선택해 주세요.
 									  					</td>
 									  				</tr>
 									  				<tr>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">기본급*</td>
-									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
-															<input id="sal_default" name="sal_default" type="text" class="form-control" placeholder="금액을 입력하세요." size="27" style="text-align:right; height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline;"  onchange="getNumber(this,'sal_default')" onkeyup="getNumber(this,'sal_default')">&nbsp;원
+									  					<td id="change_default" style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
+															<input id="sal_default" name="sal_default" type="text" class="form-control" size="27" style="text-align:right; height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline;"  onchange="getNumber(this)" onkeyup="getNumber(this)" readonly>&nbsp;원
 														</td>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">성과급</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
-															<input id="sal_plas" name="sal_plas" type="text" class="form-control" placeholder="금액을 입력하세요." size="27" style="text-align:right; height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline;" onchange="getNumber(this)" onkeyup="getNumber(this)">&nbsp;원
+															<input id="sal_plus" name="sal_plus" type="text" class="form-control" placeholder="금액을 입력하세요." size="27" style="text-align:right; height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline;" onchange="getNumber(this)" onkeyup="getNumber(this)">&nbsp;원
 														</td>
 									  				</tr>
 									  				<tr>
@@ -589,47 +659,47 @@
 									  				<tr>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;" >소득세</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
-															<input id="sal_soduc" name="sal_soduc" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>&nbsp;원
+															<input id="tax_soduc" name="tax_soduc" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>&nbsp;원
 														</td>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;" >연말정산소득세</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
-															<input id="sal_jungsan" name="sal_jungsan" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
+															<input id="tax_jungsan" name="tax_jungsan" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
 														</td>
 									  				</tr>
 									  				<tr>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">지방소득세</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
-															<input id="sal_chon" name="sal_chon" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
+															<input id="tax_chon" name="tax_chon" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
 														</td>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">결근공제액</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
-															<input id="sal_nocheck" name="sal_nocheck" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
+															<input id="tax_nocheck" name="tax_nocheck" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
 														</td>
 									  				</tr>
 									  				<tr>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">국민연금</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
-															<input id="sal_kukmin" name="sal_kukmin" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
+															<input id="tax_kukmin" name="tax_kukmin" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
 														</td>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">장기요양보험</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
-									  						<input id="sal_long" name="sal_long" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
+									  						<input id="tax_long" name="tax_long" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
 														</td>
 									  				</tr>
 									  				<tr>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">건강보험</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
-															<input id="sal_health" name="sal_health" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
+															<input id="tax_health" name="tax_health" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
 														</td>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">산재보험</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
-															<input id="sal_pain" name="sal_pain" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
+															<input id="tax_pain" name="tax_pain" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
 														</td>
 									  				</tr>
 									  				<tr>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">고용보험</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
-															<input id="sal_work" name="sal_work" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
+															<input id="tax_work" name="tax_work" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;" readonly>&nbsp;원
 														</td>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;"></td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; "></td>
@@ -641,10 +711,13 @@
 									  				<tr>
 									  					<td style="width: 156px; height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">기타공제</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 100px; padding-right: 5px; ">
-									  						<input id="sal_etc_sudang_dt" name="sal_etc_sudang_dt" type="text" class="form-control" placeholder="항목을 입력하세요."  size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent;">
+									  						<input id="tax_etc_sudang_dt" name="tax_etc_sudang_dt" type="text" class="form-control" placeholder="항목을 입력하세요."  size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent;">
 														</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 100px; padding-left: 5px; padding-right: 5px; color: darkgray;">
-															<input id="sal_etc_sudang" name="sal_etc_sudang" type="text" class="form-control" placeholder="금액을 입력하세요." size="27" style="text-align:right; height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline;" onchange="getNumber(this);" onkeyup="getNumber(this);">&nbsp;원
+															<input id="tax_etc_sudang" name="tax_etc_sudang" type="text" class="form-control" placeholder="금액을 입력하세요." size="27" style="text-align:right; height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline;" onchange="getNumber(this);" onkeyup="getNumber(this);">&nbsp;원
+														</td>
+									  					<td style=" width: 90px; padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; ">
+															<button type="button" class="btn btn-secondary btn pull-left" onclick="javascript:sal_equals()" style="padding-left: 7px; padding-right: 7px; font-size: 14px; padding-top: 2px; padding-bottom: 2px;" >추가</button>
 														</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 5px;"></td>
 									  				</tr>
@@ -669,16 +742,19 @@
 						  	</div>   
 						  	</form> 
 <!-- *********************************************************************************************************************************************************************************************************** -->
-					    	<button type="button" onclick="javascript:bs_cancle()" class="btn btn-dark btn pull-right" style="width:54.5px; margin-top: 20px; margin-bottom:3px; margin-left:10px; padding-top: 2px; padding-bottom: 2px; ">취소</button>
-							<button type="button" onclick="javascript:bs_insert()" class="btn btn-dark btn pull-right" style="width:54.5px; margin-top: 20px; padding-top: 2px; padding-bottom: 2px;">등록</button>
+					    	<button type="button" onclick="javascript:sal_cancle()" class="btn btn-dark btn pull-right" style="width:54.5px; margin-top: 20px; margin-bottom:3px; margin-left:10px; padding-top: 2px; padding-bottom: 2px; ">취소</button>
+							<button type="button" onclick="javascript:sal_insert()" class="btn btn-dark btn pull-right" style="width:54.5px; margin-top: 20px; padding-top: 2px; padding-bottom: 2px;">등록</button>
 							<button type="button" class="btn btn-secondary btn pull-left" style="padding-left: 7px; margin-top: 20px; padding-right: 7px; font-size: 14px; margin-left:20px; padding-top: 2px; padding-bottom: 2px;"  data-toggle="modal" data-target="#emp_imfo" data-backdrop="static" >검색</button>
+							<button type="button" class="btn btn-secondary btn pull-left" style="padding-left: 7px; margin-top: 20px; padding-right: 7px; font-size: 14px; margin-left:20px; padding-top: 2px; padding-bottom: 2px;"  data-toggle="modal" data-target="#sal_update" data-backdrop="static" >급여정보 수정</button>
 			              </div>
 			              
 <!-- ====================================================================================================================================================================================================================================== -->
 <!-- ====================================================================================================================================================================================================================================== -->
 			              <div class="tab-pane fade" id="asd">
 <!-- *********************************************************************************************************************************************************************************************************** -->
-						  <form id="f_deli_insert">
+						  <form id="f_deli_insert_one">
+						  <input type="hidden" name="sal_gubun" value="one">
+						  <input type="hidden" name="sal_writer" value="ghost">
 	                	  	<div class="row"  style="width:1340px;">
 	                	  		<div style="width:35%">
 							  		<table id="select_empno_change_one" class="table" style=" width: 100%; margin-bottom: 0px;"> 
@@ -691,7 +767,7 @@
 							  				<tr>
 							  					<td style=" height: 50px; padding-left: 40px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none;">임시사번</td>
 							  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle;">
-													<input type="text" class="form-control" name="companyname" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent;"readonly>
+													<input type="text" class="form-control" name="empno" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent;"readonly>
 												</td>
 							  				</tr>
 							  				<tr>
@@ -759,15 +835,14 @@
 									  				<tr>
 									  					<td style="width: 160px; height: 35px; padding-left: 20px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none;"/>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle;"/>
-									  					<td style=" width: 160px; height: 35px; padding-left: 20px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none;"/>
-									  					<td style="padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 80px; font-size: 14px;" >
-									  						*는 필수 입력사항입니다.
+									  					<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 80px; font-size: 14px; text-align:right;" >
+									  						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*검색버튼에서 사원을 선택해 주세요.
 									  					</td>
 									  				</tr>
 									  				<tr>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">일급*</td>
-									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
-															<input id="sal_default_one" name="sal_default_one" type="text" class="form-control" placeholder="금액을 입력하세요." size="27" style="text-align:right; height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline;" onchange="getNumber(this,'sal_default')" onkeyup="getNumber(this,'sal_default')">&nbsp;원
+									  					<td id ="change_default_one" style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
+															<input id="sal_default_one" name="sal_default_one" type="text" class="form-control" size="27" style="text-align:right; height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline;" onchange="getNumber(this,'sal_default')" onkeyup="getNumber(this,'sal_default')" readonly>&nbsp;원
 														</td>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">일수*</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px; color: darkgray;">
@@ -893,31 +968,31 @@
 									  				<tr>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;" >소득세</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px;">
-															<input id="sal_soduc_one" name="sal_soduc_one" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>&nbsp;원
+															<input id="tax_soduc_one" name="tax_soduc_one" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>&nbsp;원
 														</td>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;" >고용보험</td>
 														<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px;">
-															<input id="sal_work_one" name="sal_work_one" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>&nbsp;원
+															<input id="tax_work_one" name="tax_work_one" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>&nbsp;원
 														</td>
 									  				</tr>
 									  				<tr>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">국민연금</td>
 														<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px;">
-															<input id="sal_kukmin_one" name="sal_kukmin_one" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>&nbsp;원
+															<input id="tax_kukmin_one" name="tax_kukmin_one" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>&nbsp;원
 														</td>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">장기요양보험</td>
 														<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px;">
-															<input id="sal_long_one" name="sal_long_one" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>&nbsp;원
+															<input id="tax_long_one" name="tax_long_one" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>&nbsp;원
 														</td>
 									  				</tr>
 									  				<tr>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">건강보험</td>
 														<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px;">
-															<input id="sal_health_one" name="sal_health_one" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>&nbsp;원
+															<input id="tax_health_one" name="tax_health_one" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>&nbsp;원
 														</td>
 									  					<td style=" height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">산재보험</td>
 														<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 271.25px;">
-															<input id="sal_pain_one" name="sal_pain_one" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>&nbsp;원
+															<input id="tax_pain_one" name="tax_pain_one" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>&nbsp;원
 														</td>
 									  				</tr>
 									  				<tr>
@@ -942,10 +1017,13 @@
 									  				<tr>
 									  					<td style="width: 156px; height: 50px; padding-left: 30px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 50px;">기타공제</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 100px; padding-right: 5px; ">
-									  						<input id="sal_etc_sudang_dt_one" name="sal_etc_sudang_dt_one" type="text" class="form-control" placeholder="항목을 입력하세요."  size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent;">
+									  						<input id="tax_etc_sudang_dt_one" name="tax_etc_sudang_dt_one" type="text" class="form-control" placeholder="항목을 입력하세요."  size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent;">
 														</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 100px; padding-left: 5px; padding-right: 5px; color: darkgray;">
-															<input id="sal_etc_sudang_one" name="sal_etc_sudang_one" type="text" class="form-control" name="companyname" placeholder="금액을 입력하세요." size="27" style="text-align:right; height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline;" onchange="getNumber(this);" onkeyup="getNumber(this);">&nbsp;원
+															<input id="tax_etc_sudang_one" name="tax_etc_sudang_one" type="text" class="form-control" name="companyname" placeholder="금액을 입력하세요." size="27" style="text-align:right; height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline;" onchange="getNumber(this);" onkeyup="getNumber(this);">&nbsp;원
+														</td>
+														<td style=" width: 90px; padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; ">
+															<button type="button" class="btn btn-secondary btn pull-left" onclick="javascript:sal_equals_one()" style="padding-left: 7px; padding-right: 7px; font-size: 14px; padding-top: 2px; padding-bottom: 2px;" >추가</button>
 														</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 5px;"></td>
 									  				</tr>
@@ -970,9 +1048,10 @@
 						  	</div>   
 						  	</form> 
 <!-- *********************************************************************************************************************************************************************************************************** -->
-					    	<button type="button" onclick="javascript:bs_cancle()" class="btn btn-dark btn pull-right" style="width:54.5px; margin-top: 20px; margin-bottom:3px; margin-left:10px; padding-top: 2px; padding-bottom: 2px; ">취소</button>
-							<button type="button" onclick="javascript:bs_insert()" class="btn btn-dark btn pull-right" style="width:54.5px; margin-top: 20px; padding-top: 2px; padding-bottom: 2px;">등록</button>
+					    	<button type="button" onclick="javascript:sal_cancle()" class="btn btn-dark btn pull-right" style="width:54.5px; margin-top: 20px; margin-bottom:3px; margin-left:10px; padding-top: 2px; padding-bottom: 2px; ">취소</button>
+							<button type="button" onclick="javascript:sal_insert_one()" class="btn btn-dark btn pull-right" style="width:54.5px; margin-top: 20px; padding-top: 2px; padding-bottom: 2px;">등록</button>
 							<button type="button" class="btn btn-secondary btn pull-left" style="padding-left: 7px; margin-top: 20px; padding-right: 7px; font-size: 14px; margin-left:20px; padding-top: 2px; padding-bottom: 2px;"  data-toggle="modal" data-target="#emp_imfo_one" data-backdrop="static" >검색</button>
+							<button type="button" class="btn btn-secondary btn pull-left" style="padding-left: 7px; margin-top: 20px; padding-right: 7px; font-size: 14px; margin-left:20px; padding-top: 2px; padding-bottom: 2px;"  data-toggle="modal" data-target="#sal_update" data-backdrop="static" >급여정보 수정</button>
 			              </div>
 <!-- ====================================================================================================================================================================================================================================== -->
 			              </div>   
@@ -1012,7 +1091,7 @@
 							<tr>
 								<th style="width:150px;">사번</th>
 								<th style="width:150px;">이름</th>
-								<th style="width:150px;">부서</th>
+								<th style="width:150px;">소속</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -1024,7 +1103,7 @@
 						%>
 							<tr>
 								<td>
-									<a href="javascript:select_empno('<%=rMap.get("EMPNO").toString()%>')" style="color:black;" >
+									<a href="javascript:select_empno('<%=rMap.get("EMPNO").toString()%>','jungkyu')" style="color:black;" >
 										<%=rMap.get("EMPNO")%>
 									</a>
 								</td>
@@ -1081,7 +1160,7 @@
 							<tr>
 								<th style="width:150px;">사번</th>
 								<th style="width:150px;">이름</th>
-								<th style="width:150px;">부서</th>
+								<th style="width:150px;">소속</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -1093,7 +1172,7 @@
 						%>
 							<tr>
 								<td>
-									<a href="javascript:select_empno_one('<%=rMap.get("EMPNO").toString()%>')" style="color:black;" >
+									<a href="javascript:select_empno_one('<%=rMap.get("EMPNO").toString()%>','one')" style="color:black;" >
 										<%=rMap.get("EMPNO")%>
 									</a>
 								</td>
@@ -1124,6 +1203,133 @@
 <!-- ===============================================================일용직 검색창================================================================= -->
 <!-- ============================================================================================================================================= -->
 		  	
+		  	
+<!-- ============================================================================================================================================= -->
+<!-- ===============================================================기본급 변경창================================================================= -->
+<!-- ============================================================================================================================================= -->
+<div class="container">
+
+	<div class="modal" id="sal_update">
+		<div class="modal-dialog modal-dialog-centered" ">
+			<div class="modal-content" style="height: 500px;">
+			
+				<!-- 조회버튼 -->
+				<div class="modal-header">
+					<div class="modal-title">급여정보 변경</div>
+					<button type="button" class="close" data-dismiss="modal">×</button>
+				</div>
+				<!-- select됨, 링크기능 -->
+				<div class="modal-body">
+					<table class="table" style="margin-bottom: 0px;">
+						<tbody>
+							<tr>
+								<td colspan="3" style="border:none;height:62.5px; color: darkgray; vertical-align: middle; text-align: center;">
+									선택된 사원이 없습니다. 사원을 먼저 선택해 주세요
+								</td>
+								
+							</tr>
+							<tr>
+								<td style="border:none; width:42%;font-weight: 800;">
+									기본급 변동 내용	
+								</td>
+								<td style="border:none; width:16%;"></td>
+								<td style="border:none; width:42%;"></td>
+							</tr>
+							<tr>
+								<td style="border:none;text-align: right; ">
+									<input type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right; " readonly>
+								</td>
+								<td style="border:none;text-align: center; ">
+									<div>
+										<img src="/erp/images/right.png" width="30" height="30">
+									</div>
+								</td>
+								<td style="border:none; ">
+									<input id="sal_long_one" name="sal_long_one" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;"readonly>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" style="border:none; width:42%;font-weight: 800;">
+									입금계좌정보 변경
+								</td>
+							</tr>
+							<tr>
+								<td style="border:none;text-align: right; ">
+									<input type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; " readonly>
+								</td>
+								<td style="border:none;text-align: center; ">
+									<div>
+										<img src="/erp/images/right.png" width="30" height="30">
+									</div>
+								</td>
+								<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; width: 271.25px;">
+									<div class="dropdown" style="width: 140px;" >
+										<select class="btn btn-white dropdown_bs" id="sal_life_one" name="sal_life_one" style=" margin-left: 0px; color:black; width:140px; height:28px; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px; border: solid; border-color: lightgray; border-width: 1px;">
+											<option value="#">선택</option>
+										</select>
+									</div>		
+								</td>
+							</tr>
+							<tr>
+								<td style="border:none;text-align: right; ">
+									<input type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; " readonly>
+								</td>
+								<td style="border:none;text-align: center; ">
+									<div>
+										<img src="/erp/images/right.png" width="30" height="30">
+									</div>
+								</td>
+								<td style="border:none;height:40px;">
+									<input id="sal_long_one" name="sal_long_one" type="text" class="form-control" size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline; text-align:right;"readonly>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" style="border:none;text-align: right;color: darkgray; ">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<!-- 클로즈 -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary btn_firstrow btn_tableRow" style="width:40px;" data-dismiss="modal">취소</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- ============================================================================================================================================= -->
+<!-- ===============================================================기본급 변경창================================================================= -->
+<!-- ============================================================================================================================================= -->
+	
+<!-- ============================================================================================================================================= -->
+<!-- ===============================================================경고 모달창================================================================= -->
+<!-- ============================================================================================================================================= -->
+<div class="modal" id="notOrderWriter" data-backdrop="static" data-keyboard="true">
+  <div class="modal-dialog modal-dialog-centered" style="text-align:center">
+    <div class="modal-content" style="height:120px;width:90%;margin-left:5%;margin-right:5%;">
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:center;" >
+      </div>
+      <div style="display:table;height:50%;background-color:rgba(0,0,0,0);color:black;width:100%;">
+         <div style="display:table-cell;vertical-align:middle;text-align:center;">
+           <h6 style="display:inline;font-weight:bold;font-size:large">정상적으로 등록 되었습니다.</h6>
+         </div>   
+      </div>
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:right;display:table">
+         <button style="width: 42px;height: 25px;border-top-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;
+                   margin-right: 3px;padding-top: 0px;border-left-width: 0px;padding-right: 0px;padding-left: 0px;
+    			border-right-width: 0px;display:table-cell;font-size:14px" type="button" class="btn btn-dark" onclick="javascript:close_modal()" >닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ============================================================================================================================================= -->
+<!-- ===============================================================경고 모달창================================================================= -->
+<!-- ============================================================================================================================================= -->
+	
+	
+	</div>  	
   </body>
 </html>
 
