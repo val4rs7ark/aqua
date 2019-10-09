@@ -40,6 +40,20 @@
 <head>
 <meta charset="UTF-8">
 <script type="text/javascript">
+	function Attendance(){
+		$.ajax({
+			type : "get"
+			,url : "/erp/wasEmpAttendance.was"
+			,data : "gap=0&empno=<% if(s_emp_no!=null){ out.print(s_emp_no);}else if(empno!=null){out.print(empno);}%>"
+	  	    ,success:function(data){
+	  	    	var jsonDoc = JSON.parse(data);
+	  	    			alert(jsonDoc[0].rdate);
+		  	    		$("#d_AttendanceDate").text(jsonDoc[0].rdate);
+		  	    		$("#d_AttendanceContent").text(jsonDoc[0].result);
+		  	    		$("#d_AttendanceModal").modal();	
+	  	    	}
+		});
+	}
 	function f_EmpLoginSend(){
 		$("#f_wasLogin").submit();
 	}
@@ -53,6 +67,13 @@
 		$("#f_empStatus").submit();
 	}
 </script>
+<style type="text/css">
+ #d_button{
+ 	width : 300px;
+ 	text-align-last: right;
+ 	background-color:#383E49;
+ }
+</style>
 </head>
 <body>
 	  <form id="f_empStatus" action="/erp/wasEmpStatus.was" method="post">
@@ -111,8 +132,9 @@
            </div>
       </div>
        <div class="row">
+       <div id="d_button"><button type="button" class="btn btn-dark btn-sm" onClick="location.href='index.jsp'"style="width:70px;text-align: center;font-size: small;">로그아웃</button></div>
           <div style="background-color:#383E49; width:300px; height:90px; color:#FFFFFF; text-align: center;">
-             <p>반갑습니다, 사원<strong> 
+                          반갑습니다, 사원<strong> 
              <%if(emp_name!=null){
             	 out.print(emp_name);
              }
@@ -120,7 +142,7 @@
             	out.print(s_emp_name);             	 
              }
              %>
-             </strong>님</p>
+             </strong>님
             <h6>최근 접속 시간은&nbsp;
             <%if(outtime!=null){
             	out.print(outtime);
@@ -134,6 +156,7 @@
     <div style="background-color:#383E49; width:300px; height:900px; color:#FFFFFF">
        <ul class="nav flex-column">
             <div class="list-group" style="width:300px; background-color: #383E49">
+            <button type="button" class="btn btn-dark" onClick="Attendance()"style="width:300px;text-align: center;font-size: large;">출근입력</button>
             <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major" style="width:300px;text-align: center;font-size: large;">생산/품질관리</button>
                <div id="major" class="collapse">         
                   <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">품목조회</a>
@@ -156,10 +179,31 @@
                   <a href="javascript:f_empAdd()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">사원등록/조회</a>
                   <a href="javascript:f_empStatus()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">출퇴근</a>
                   <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">휴가</a>
-               </div>
+               </div>   
             </div>
          </ul> 
     </div>
      </div>
+<!-- 출근입력 모달창 구현  -->
+<div class="modal fade" id="d_AttendanceModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">출근입력결과</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body">
+	      <div id="d_AttendanceDate" style="font-weight: bold;">시간</div>
+	      <div id="d_AttendanceContent">결과</div>
+	  </div>    
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>   
 </body>
 </html>

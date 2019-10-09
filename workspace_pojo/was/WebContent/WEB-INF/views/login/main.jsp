@@ -11,14 +11,14 @@
 <body>
 <div class="container-fluid">
 <div class="row">
-   <div class="col-sm-3">
+   <div style="width:20%">
        <%@ include file="/common/MenuCommon.jsp" %>
   </div>
-   <div class="col-sm-9">
+   <div style="width:80%">
    <div class="row" style="height: 100px;"></div>
-         <%@ include file="/common/chart.jsp" %>
+      <%@ include file="/common/chartjs_bar.jsp" %>
       <div class="row">
-         <!-- 공지사항 -->
+         <!-- 공지사항 -->  
       <div id="notice" style="width: 700px;height: 500px;margin-top: 50px;">
           <h2>사내 공지사항</h2>
            <p>The .table-striped class adds zebra-stripes to a table:</p>            

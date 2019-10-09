@@ -22,6 +22,23 @@
 <head>
 <meta charset="UTF-8">
 <script type="text/javascript">
+function Attendance(){
+		$.ajax({
+			type : "get"
+			,url : "/erp/wasEmpAttendance.was"
+	  	    ,data : "empno=<%= s_emp_no%>"
+	  	    ,success:function(data){
+	  	    	var jsonDoc = data;
+	  	    	if(jsonDoc.length>0){
+	  	    		for(var i =0;i<jsonDoc.length;i++){
+		  	    		$("#d_AttendanceDate").text(jsonDoc[i].rdate);
+		  	    		$("#d_AttendanceContent").text(jsonDoc[i].result);
+		  	    		$("#d_AttendanceModal").modal();	
+	  	    		}
+	  	    	}
+	  	    }
+		});
+	}
 	function f_EmpLoginSend(){
 		$("#f_EmpLogin").submit();
 	}
@@ -35,6 +52,13 @@
 		$("#f_empStatus").submit();
 	}
 </script>
+<style type="text/css">
+ #d_button{
+ 	width : 300px;
+ 	text-align-last: center;
+ 	background-color:#383E49;
+ }
+</style>
 </head>
 <body>
 	  <form id="f_empStatus" action="/erp/wasEmpStatus.was" method="post">
@@ -70,19 +94,19 @@
 	  	}
 	  %>
 	  </form>
-      <div class="row">
           <div class="row">
               <a href="javascript:f_EmpLoginSend()" width="300px"><img src="/erp/images/logo.png" style="width: 300px; max-width: 760px; vertical-align: middle"></a>   
            </div>
        <div class="row">
+       	<div id="d_button"><button type="button" class="btn btn-dark btn-sm" onClick="location.href='index.jsp'"style="width:70px;text-align: center;font-size: small;">로그아웃</button></div>	
           <div style="background-color:#383E49; width:300px; height:90px; color:#FFFFFF; text-align: center;">
-             <p>반갑습니다, <strong> 
+                          반갑습니다, <strong> 
              <%
              if(s_emp_name!=null){
             	out.print(s_emp_name);             	 
              }
              %>
-             </strong>님</p>
+             </strong>님
             <h6>최근 접속 시간은&nbsp;<%if(s_outtime!=null)out.print(s_outtime); %></h6>
          </div>
    </div>
@@ -90,6 +114,7 @@
     <div style="background-color:#383E49; width:300px; height:900px; color:#FFFFFF">
        <ul class="nav flex-column">
             <div class="list-group" style="width:300px; background-color: #383E49">
+            <button type="button" class="btn btn-dark" onClick="Attendance()"style="width:300px;text-align: center;font-size: large;">출근입력</button>
             <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major" style="width:300px;text-align: center;font-size: large;">생산/품질관리</button>
                <div id="major" class="collapse">         
                   <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">품목조회</a>
@@ -97,14 +122,14 @@
                   <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">재고조회</a>
                   <a href="javascript:f_ProductListSend()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">생산품등록/조회</a>
                   <a href="registerCustomer.jsp" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">거래처등록/조회</a>
-                  <a href="delivery_List" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">배송처조회</a>
-                  <a href="deliveryInsert_ListF" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">배송처등록</a>
+                  <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">배송처조회</a>
+                  <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">배송처등록</a>
                   <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">근태조회</a>
                </div>
             <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major2" style="width:300px;text-align: center;font-size: large;">영업/매출관리</button>
                <div id="major2" class="collapse">
                   <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">매출</a>
-                  <a href="HRSalery_insert" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">급여</a>
+                  <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">급여</a>
                   
                </div>
             <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major3" style="width:300px;text-align: center;font-size: large;">인사관리</button>
@@ -112,11 +137,31 @@
                   <a href="javascript:f_empAdd()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">사원등록/조회</a>
                   <a href="javascript:f_empStatus()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">출퇴근</a>
                   <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">휴가</a>
-               </div>
+               </div>   
             </div>
          </ul> 
     </div>
      </div>
-</div>     
+<!-- 출근입력 모달창 구현  -->
+<div class="modal fade" id="d_AttendanceModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">출근입력결과</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body">
+	      <div id="d_AttendanceDate" style="font-weight: bold;">시간</div>
+	      <div id="d_AttendanceContent">결과</div>
+	  </div>    
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>

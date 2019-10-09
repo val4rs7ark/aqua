@@ -20,6 +20,7 @@ if(noteAjaxList!=null && noteAjaxList.size()>0){
         <%
         	for(int i=0;i<noteAjaxList.size();i++){
         		Map<String,Object> rMap = noteAjaxList.get(i);
+        		out.print("<a href='javascript:noteDelete("+rMap.get("NOTE_NO")+")'>"+(i+1)+"</a> :"+rMap.get("NOTE_CONTENT"));
         		out.print("<strong>"+(i+1)+"</strong> :"+rMap.get("NOTE_CONTENT"));
         		out.print("<br>");
         	}

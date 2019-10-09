@@ -22,6 +22,9 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
   		var v_yyyy;
   		var v_mm;
   		var v_dd;
+  		function noteDelete(noteno){
+  			
+  		}
   		function memoForm(yyyy,mm,dd){
   				v_yyyy = yyyy;
   				v_mm = mm;
@@ -184,17 +187,19 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
 							if(rMap.get("STATUS_DAY")!=null){
 								i_status_day = Integer.parseInt(rMap.get("STATUS_DAY").toString());
 								if(day[month][i][j]==i_status_day){
-									out.print("<tr><td><span class='badge badge-secondary'>출근</span></td></tr>");
+									out.print("<tr><td><span class='badge badge-secondary'>출근</span></td>");
 								}
 							}
 							if(rMap.get("NOTE_NO")!=null){
 								i_note_day = Integer.parseInt(rMap.get("NOTE_DAY").toString());
 								if(day[month][i][j]==i_note_day){
 									if(note_count ==0){
-										out.print("<tr><td><a href='javascript:noteDetail("+cyyyy+","+(month+1)+","+day[month][i][j]+")'><span class='badge badge-secondary'>메모</span></a></td></tr>");
+										out.print("<td><a href='javascript:noteDetail("+cyyyy+","+(month+1)+","+day[month][i][j]+")'><span class='badge badge-secondary'>메모</span></a></td></tr>");
 										note_count ++;
 									}
 								}
+							}else{
+								out.print("</tr>");
 							}
 						}
 						if(note_count==0){
@@ -266,7 +271,7 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Modal Heading</h4>
+        <h4 class="modal-title">메모 상세 페이지</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
@@ -303,6 +308,9 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
       </div>
     </div>
   </div>
-  <!-- 메모 등록 결과 페이지 The Modal -->  
+  <!-- 메모 등록 결과 페이지 The Modal --> 
+  <!-- 메모 삭제 확인 페이지 The Modal -->
+   
+  <!-- 메모 삭제 확인 페이지 The Modal --> 
 </body>
 </html>

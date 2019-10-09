@@ -1,5 +1,6 @@
 package com.was.erp;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -158,5 +159,20 @@ public class WasDao {
 		}
 		logger.info("DB탐 noteDetail :::::::"+result);
 		return result;
+	}
+	public List<Map<String, Object>> wasEmpAttendance(Map<String, Object> pMap) {
+		pMap.put("msg", " ");
+		logger.info("++++++++++++++"+pMap.get("empno"));
+		try {
+			sqlSession = sqlSessionFactory.openSession();
+			sqlSession.selectOne("wasEmpAttendance", pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			sqlSession.close();
+		}
+		List<Map<String,Object>> rList = new ArrayList<>();
+		rList.add(pMap);
+		return rList;
 	}
 }

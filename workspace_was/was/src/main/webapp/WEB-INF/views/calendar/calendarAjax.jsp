@@ -93,17 +93,19 @@ if(empStatusAList!=null && empStatusAList.size()>0){
 							if(rMap.get("STATUS_DAY")!=null){
 								i_status_day = Integer.parseInt(rMap.get("STATUS_DAY").toString());
 								if(day[month][i][j]==i_status_day){
-									out.print("<tr><td><span class='badge badge-secondary'>출근</span></td></tr>");
+									out.print("<tr><td><span class='badge badge-secondary'>출근</span></td>");
 								}
 							}
 							if(rMap.get("NOTE_NO")!=null){
 								i_note_day = Integer.parseInt(rMap.get("NOTE_DAY").toString());
 								if(day[month][i][j]==i_note_day){
 									if(note_count ==0){
-										out.print("<tr><td><a href='javascript:noteDetail("+cyyyy+","+(month+1)+","+day[month][i][j]+")'><span class='badge badge-secondary'>메모</span></a></td></tr>");
+										out.print("<td><a href='javascript:noteDetail("+cyyyy+","+(month+1)+","+day[month][i][j]+")'><span class='badge badge-secondary'>메모</span></a></td></tr>");
 										note_count ++;
 									}
 								}
+							}else{
+								out.print("</tr>");
 							}
 						}
 						if(note_count==0){
