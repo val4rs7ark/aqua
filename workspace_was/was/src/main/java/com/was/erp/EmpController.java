@@ -2,6 +2,7 @@
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class EmpController {
 		int tot = 0;
 		tot = empLogic.getTot(null);
 		HttpSession session = req.getSession();
-		session.setAttribute("s_tot", tot);
+		session.setAttribute("s_tot", tot); 
 		List<Map<String,Object>> eList = null;
 		//페이지처리 초기값 담기
 				int pageNumber = 0;
@@ -50,7 +51,7 @@ public class EmpController {
 										(pMap.get("pageSize").toString());
 				}
 				logger.info(pageNumber+", "+pageSize);
-		eList = empLogic.empListSignUp(pMap);
+		eList = empLogic.empListSignUp(pMap,tot);
 		model.addAttribute("eList",eList);
 		return "/emp/empAdd";
 	}
@@ -69,11 +70,20 @@ public class EmpController {
 	}
 	///////////////////////////////////   등록       ////////////////////////////////
 	@PostMapping("empSignUp.was")
-	public String empSignUp(@RequestParam Map<String,Object> pMap) {
+	public String empSignUp(@RequestParam Map<String,Object> pMap,Model mod) {
+		logger.info("pMap !!!"+pMap.size());
+		Object[] keys = pMap.keySet().toArray();
+		for(Object key : keys) {
+			logger.info("key :"+key.toString()+" , value :"+pMap.get(key.toString()));
+		}
 		logger.info("empSignUp 호출 성공");
-		empLogic.empSignUp(pMap);		
-		return "redirect:empListSignUp.was";
+		empLogic.empSignUp(pMap);
+		List<Map<String,Object>> eList = new ArrayList<>();
+		eList.add(pMap);
+		mod.addAttribute("eList", eList);
+		return "/emp/empAddAfter";
 	}
+	
 	///////////////////////////////////   삭제        ////////////////////////////////
 	@RequestMapping(value="empDel.was", method=RequestMethod.GET)
 	public String empDel(@RequestParam String tg_del) {
@@ -89,4 +99,18 @@ public class EmpController {
 		empLogic.empUPD(pMap);
 		return "redirect:empListSignUp.was";
 	}
+	///////////////////////////////////   검색       ////////////////////////////////
+	@GetMapping("empSearch.was")
+	public String empSearch(@RequestParam Map<String,Object> pMap,Model mod) {
+		Object[] keys = pMap.keySet().toArray();
+		for(Object key : keys) {
+			logger.info("파라미터::::: key :"+key.toString()+" , vlaue :"+pMap.get(key.toString()));
+		}
+		logger.info("empSearch 호출 성공!");
+		List<Map<String,Object>> scList =empLogic.empSearch(pMap);
+		mod.addAttribute("eList", scList);
+		return "/emp/empAddAjax"; 
+	}
+	
+	
 }

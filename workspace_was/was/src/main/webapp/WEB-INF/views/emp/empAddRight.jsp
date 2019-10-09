@@ -5,15 +5,8 @@
 		List<Map<String,Object>> sList = (List<Map<String,Object>>)request.getAttribute("sList");
 	
 %> 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-</head>
-<body>
 <!-- 아직 수정중.... 0928 -->
-<div id="empAddRight">
- <div class="card bg-dark text-white" style="height:50px;margin-top: 20px;">
+ <div class="card bg-dark text-white" style="height:50px;margin-top: 5px;">
     <div class="card-body">사원등록</div>
   </div>
   <form id="f_empUPD">
@@ -25,20 +18,22 @@
 		<td align="left" style="width:15%;padding-top:7px; padding-bottom:7px;">
 			<input type="text" class="form-control" style="width:80%;" value="<%=sList.get(0).get("EMP_NAME") %>" id="emp_name" name="emp_name" readonly>
 		</td>
-		<td style="width:15%; padding-top:14px; padding-bottom:9px;">전화번호</td>
-		<td align="left" style="width:15%;padding-top:7px; padding-bottom:7px;">
-			<input type="text" class="form-control" style="width:180px;" value="<%=sList.get(0).get("EMP_HP") %>" name="emp_hp"
-				   onChange="javascript:textChange()">
-		</td>
-	</tr>
-	<tr>
 		<td style="width:15%;padding-top:14px; padding-bottom:9px;">영문성명</td>
 		<td align="left" style="padding-top:6px; padding-bottom:6px;">
 			<input type="text" class="form-control" style="height:35px;width:80%;" value="<%=sList.get(0).get("EMP_ENGNAME") %>" name="emp_engname"readonly>
 		</td>
+	</tr>
+	<tr>
+		<td style="width:15%; padding-top:14px; padding-bottom:9px;">전화번호</td>
+		<td colspan="3" align="left" style="width:15%;padding-top:7px; padding-bottom:7px;">
+			<input type="text" class="form-control"  style="height:35px;width:230px;" value="<%=sList.get(0).get("EMP_HP") %>" name="emp_hp"
+				   id="emp_hp" onchange="javascript:R_set_hp()">
+		</td>
+	</tr>
+	<tr>
 		<td style="width:15%;padding-top:14px; padding-bottom:9px;">전역구분</td>
-		<td style="padding-top: 6px; padding-bottom: 6px;"> 
-			<select name="emp_mili" class="custom-select" style="width:80%"onChange="javascript:textChange()">
+		<td colspan="3" style="padding-top: 6px; padding-bottom: 6px;"> 
+			<select name="emp_mili" class="custom-select" style="width:30%"onChange="javascript:textChange()">
 			      <option selected><%=sList.get(0).get("EMP_MILI") %></option>
 			      <option value="만기전역">만기전역</option>
 			      <option value="미필">미필</option>
@@ -96,7 +91,7 @@
     	<tr>
 		<td style="width:15%;padding-top:14px; padding-bottom:9px;">급여계좌</td>
 		<td align="left" style="padding-top: 6px; padding-bottom: 6px;">
-			<input type="text" class="form-control" style="height:35px;width:190px;font-size:8pt;display:inline-block" 
+			<input type="text" class="form-control" style="height:35px;width:190px;display:inline-block" 
 					 value="<%=sList.get(0).get("SAL_ACCOUNT") %>" name="sal_account"onChange="javascript:textChange()">
 		</td>
 		<td style="width:15%;padding-top:14px; padding-bottom:9px;">&nbsp;은&nbsp;&nbsp;행&nbsp;</td>
@@ -115,10 +110,11 @@
 		<td style="width:15%;padding-top:14px; padding-bottom:9px;">&nbsp;부서명&nbsp;</td>
 		<td style="padding-top: 6px; padding-bottom: 6px;"> 
 			<select name="dept_code" class="custom-select" style="width:130px"onChange="javascript:textChange()">
-			      <option selected><%=sList.get(0).get("DEPT_CODE") %></option>
-			      <option value="z001">배송부</option>
-			      <option value="총무부">총무부</option>
-			      <option value="생산부">생산부</option>
+			      <option selected><%=sList.get(0).get("DEPT_NAME") %></option>
+			      <option value="Z001">배송부</option>
+			      <option value="B001">총무부</option>
+			      <option value="D001">생산부</option>
+			      <option value="C001">영업부</option>
  			</select>
  		</td>
  		<td style="width:15%;padding-top:14px; padding-bottom:9px;">&nbsp;팀&nbsp;&nbsp;명&nbsp;</td>
@@ -128,6 +124,12 @@
 			      <option value="배송1팀">배송1팀</option>
 			      <option value="배송2팀">배송2팀</option>
 			      <option value="배송3팀">배송3팀</option>
+			      <option value="총무1팀">총무1팀</option>
+			      <option value="생산1팀">생산1팀</option>
+			      <option value="생산2팀">생산2팀</option>
+			      <option value="생산3팀">생산3팀</option>
+			      <option value="영업1팀">영업1팀</option>
+			      <option value="영업2팀">영업2팀</option>
  			</select>
  		</td>
 	</tr>
@@ -149,20 +151,21 @@
 			<select name="emp_position" class="custom-select" style="width:130px"onChange="javascript:textChange()">
 			      <option selected><%=sList.get(0).get("EMP_POSITION") %></option>
 			      <option value="팀원">팀원</option>
-			      <option value="생산1팀장">생산1팀장</option>
+			      <option value="팀장">팀장</option>
+			      <option value="생산부장">생산부장</option>
 			      <option value="영업부장">영업부장</option>
+			      <option value="총무부장">총무부장</option>
+			      <option value="배송부장">배송부장</option>
+			      <option value="대표">대표이사</option>
  			</select>
  		</td>
 		
 	</tr>
 	<tr>
 		<td style="width:17%" colspan="4" align="right">
-			<button class="btn btn-outline-dark" style="margin-right:2px" onclick="javascript:cancel()">취소</button>
-			<button class="btn btn-outline-dark" onclick="javascript:updateAction()">수정</button>
+			<button class="btn btn-dark" style="margin-right:2px" onclick="javascript:cancel()">취소</button>
+			<button class="btn btn-dark" onclick="javascript:updateAction()">수정</button>
 		</td>
 	</tr>
   </table>
   </form>
-</div>
-</body>
-</html>
