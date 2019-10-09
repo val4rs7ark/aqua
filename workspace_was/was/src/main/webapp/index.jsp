@@ -17,7 +17,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <style type="text/css">
 html,body{
-background-image: url('/erp/images/ocean.jpg');
+background-image: url('/erp/images/sea.jpg');
 background-size: cover;
 background-repeat: no-repeat;
 height: 100%;

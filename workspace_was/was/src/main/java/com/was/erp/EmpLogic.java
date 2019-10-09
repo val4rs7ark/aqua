@@ -16,18 +16,36 @@ public class EmpLogic {
 	@Autowired
 	EmpDao empDao;
 	int total =0;
-
+	///////////////////////////////////   등록       ////////////////////////////////
 	public void empSignUp(Map<String, Object> pMap) {
 		String resident_no=(pMap.get("resident_no_1").toString())+(pMap.get("resident_no_2").toString());
 		logger.info("empSignUp Logic 호출 성공");
 		String emp_addr=(pMap.get("emp_addr_1").toString())+"/"+(pMap.get("emp_addr_2").toString());
 		pMap.put("resident_no", resident_no);
 		pMap.put("emp_addr", emp_addr);
+		pMap.put("msg", " ");
 		empDao.empSignUp(pMap);
 	}
 	///////////////////////////////////   조회        ////////////////////////////////
-	public List<Map<String, Object>> empListSignUp(Map<String, Object> pMap) {
+	public List<Map<String, Object>> empListSignUp(Map<String, Object> pMap, int tot) {
 		logger.info("EmpLogic --empListSignUp 호출 성공");
+		int nowPage = 1;//현재 페이지
+		if(pMap.get("nowPage")!=null) {
+			nowPage = Integer.parseInt(pMap.get("nowPage").toString())+1;
+		}
+		int pagePer_Num = 11;//한페이지에 뿌려질 로우수
+		int start = 0;
+		int end = 0;
+		if(nowPage>0) {
+			start = ((nowPage-1)*pagePer_Num)+1;
+			end = nowPage * pagePer_Num;
+			pMap.put("start",start);
+			if(end > tot) {
+				pMap.put("end",tot);
+			}else {
+				pMap.put("end",end);
+			}
+		}
 		List<Map<String,Object>> eList = empDao.empListSignUp(pMap);
 		return eList;
 	}
@@ -71,13 +89,47 @@ public class EmpLogic {
 		
 		return total;
 	}
+	///////////////////////////////////   수정        ////////////////////////////////
 	public void empUPD(Map<String, Object> pMap) {
 		String resident_no=(pMap.get("resident_no_1").toString())+(pMap.get("resident_no_2").toString());
 		logger.info("empUPD Logic 호출 성공");
 		String emp_addr=(pMap.get("emp_addr_1").toString())+"/"+(pMap.get("emp_addr_2").toString());
+		
+		//dept_name을 dept_code으로 바꿔서 내보내주자
+		String dept_code= "";
+		String dept_name = pMap.get("dept_code").toString();
+				if(dept_name.equals("배송부")) {
+					dept_code = "Z001";
+				}
+				else if(dept_name.equals("총무부")) {
+					dept_code = "B001";
+				}
+				else if(dept_name.equals("생산부")) {
+					dept_code = "D001";
+				}
+				else if(dept_name.equals("영업부")) {
+					dept_code = "C001";
+				}
+				logger.info("dept_code"+dept_code);
+		pMap.put("dept_code",dept_code);
 		pMap.put("resident_no", resident_no);
 		pMap.put("emp_addr", emp_addr);
 		empDao.empUPD(pMap);
+	}
+	///////////////////////////////////   검색       ////////////////////////////////
+	public List<Map<String, Object>> empSearch(Map<String, Object> pMap) {
+		logger.info("empLogic empSearch 호출!");
+		//empAdd 화면단에서 받아온 검색키워드(search_keyword_key) 값을 사용자가 입력한 값의 map key로 넣음.
+		String searchKey = pMap.get("search_keyword_key").toString();
+		String searchVal = pMap.get("search_keyword_val").toString();
+		pMap.put(searchKey, searchVal);
+		//값이 잘 들어갔는지 해체해서 까보기
+		Object[] keys = pMap.keySet().toArray();
+		for(Object key : keys) {
+			logger.info("key :"+key.toString()+" , value :"+pMap.get(key.toString()));
+		}
+		List<Map<String,Object>> scList = empDao.empSearch(pMap);
+		return scList;
 	}
 
 
