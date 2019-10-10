@@ -42,6 +42,7 @@
 <head>
 <meta charset="UTF-8" />
 	<%@ include file="/common/bootStrap4.jsp" %>
+	<%@ include file="/common/styles.jsp" %>
 <title>배송조회</title>
 <meta http-equiv="Content-Type" content="text/html;">
 <meta name="viewport" content="width=device-width, initial-scale=1">

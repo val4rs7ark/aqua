@@ -22,6 +22,7 @@
 <head>
 <meta charset="UTF-8" />
 <%@ include file="/common/bootStrap4.jsp" %>
+<%@ include file="/common/styles.jsp" %>
 <title>배송조회</title>
 <meta http-equiv="Content-Type" content="text/html;">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -45,7 +46,7 @@
     	});
 	}
 	function bs_trance(){
-		alert("전송버튼 호출");
+		alert("삭제버튼 호출");
 	}
 	function bs_update(id_update,deli_no){
 		$.ajax({
@@ -135,7 +136,7 @@
 	      <tr>
 	<!--<th style="width:10%">-->
 	        <th style="width: 250px;border-top-width: 10px;border-top-color: white;">
-	        		<button type="button" class="btn btn-dark" onclick="javascript:bs_trance()" style="width:54.5px">전송</button>
+	        		<button type="button" class="btn btn-dark" onclick="javascript:bs_trance()" style="width:54.5px">삭제</button>
 			</th>
 	        <th style="border-top-width: 10px;border-top-color: white; padding-right:2px;">
 		        <div class="dropdown" style="width: 125px;">

@@ -13,6 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <%@ include file="/common/bootStrap4.jsp" %>
+    <%@ include file="/common/styles.jsp" %>
     <title>Bootstrap 4</title>
   <%@ include file="/common/bs_css.jsp"%>
   <script type="text/javascript">
