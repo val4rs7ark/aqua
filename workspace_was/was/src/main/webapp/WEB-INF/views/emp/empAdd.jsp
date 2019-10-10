@@ -202,10 +202,10 @@
 <body>
 <div class="container-fluid">
 <div class="row">
-<div style="width:20%">
+<div style="width:23%">
 	 <%@ include file="/common/MenuCommon.jsp" %>
 </div>
-<div style="width:78%">
+<div style="width:75%">
 <div class="row">
     <!-- ========================================검색창 ================================ -->
   <div class="w3-container" style="margin-top: 30px; height: 80px;width:100%">

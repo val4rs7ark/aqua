@@ -54,7 +54,7 @@ function Attendance(){
 </script>
 <style type="text/css">
  #d_button{
- 	width : 300px;
+ 	width : 100%;
  	text-align-last: center;
  	background-color:#383E49;
  }
@@ -94,12 +94,12 @@ function Attendance(){
 	  	}
 	  %>
 	  </form>
-          <div class="row">
-              <a href="javascript:f_EmpLoginSend()" width="300px"><img src="/erp/images/logo.png" style="width: 300px; max-width: 760px; vertical-align: middle"></a>   
+          <div style="height:13%;width:90%;">
+              <a href="javascript:f_EmpLoginSend()" ><img src="/erp/images/logo.png" style="width: 100%; height: 100%;vertical-align:middle;"></a>   
            </div>
-       <div class="row">
+       <div  style="height:10%;width:90%;">
        	<div id="d_button"><button type="button" class="btn btn-dark btn-sm" onClick="location.href='index.jsp'"style="width:70px;text-align: center;font-size: small;">로그아웃</button></div>	
-          <div style="background-color:#383E49; width:300px; height:90px; color:#FFFFFF; text-align: center;">
+          <div style="height:100%;background-color:#383E49; color:#FFFFFF; text-align: center;">
                           반갑습니다, <strong> 
              <%
              if(s_emp_name!=null){
@@ -110,12 +110,12 @@ function Attendance(){
             <h6>최근 접속 시간은&nbsp;<%if(s_outtime!=null)out.print(s_outtime); %></h6>
          </div>
    </div>
-   <div class="row">
-    <div style="background-color:#383E49; width:300px; height:900px; color:#FFFFFF">
+   <div style="height:76%;width:90%;">
+    <div style="background-color:#383E49; height:100%; color:#FFFFFF">
        <ul class="nav flex-column">
-            <div class="list-group" style="width:300px; background-color: #383E49">
-            <button type="button" class="btn btn-dark" onClick="Attendance()"style="width:300px;text-align: center;font-size: large;">출근입력</button>
-            <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major" style="width:300px;text-align: center;font-size: large;">생산/품질관리</button>
+            <div class="list-group" style="background-color: #383E49">
+            <button type="button" class="btn btn-dark" onClick="Attendance()"style="text-align: center;font-size: large;">출근입력</button>
+            <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major" style="width:100%;text-align: center;font-size: large;">생산/품질관리</button>
                <div id="major" class="collapse">         
                   <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">품목조회</a>
                   <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">재고등록</a>
@@ -126,13 +126,13 @@ function Attendance(){
                   <a href="deliveryInsert_ListF" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">배송처등록</a>
                   <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">근태조회</a>
                </div>
-            <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major2" style="width:300px;text-align: center;font-size: large;">영업/매출관리</button>
+            <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major2" style="width:100%;text-align: center;font-size: large;">영업/매출관리</button>
                <div id="major2" class="collapse">
                   <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">매출</a>
                   <a href="HRSalery_insert" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">급여</a>
                   
                </div>
-            <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major3" style="width:300px;text-align: center;font-size: large;">인사관리</button>
+            <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major3" style="width:100%;text-align: center;font-size: large;">인사관리</button>
                <div id="major3" class="collapse">
                   <a href="javascript:f_empAdd()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">사원등록/조회</a>
                   <a href="javascript:f_empStatus()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">근태/일정관리</a>
