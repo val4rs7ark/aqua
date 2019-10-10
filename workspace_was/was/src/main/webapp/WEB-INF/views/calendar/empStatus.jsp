@@ -19,11 +19,29 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
   	<script type="text/javascript">
+  		var v_note_no;
   		var v_yyyy;
   		var v_mm;
   		var v_dd;
-  		function noteDelete(noteno){
-  			
+  		function noteDelete(){
+  			$.ajax({
+  				type : "get"
+  			   ,url : "/erp/wasEmpStatusNoteDelete.was"
+  			   ,data : "note_no="+v_note_no
+  			   ,success:function(data){
+	  					   //alert를 대신하여 썼다.
+	  					   $("#d_insertResultModal").text(data);
+	  					   $("#insertResultModal").modal();
+	  				//이 메소드를 타면 2.5초 뒤 location.reload();를 실행한다.
+				 	setTimeout(function() {
+				 		location.reload();
+					}, 2500);
+  			   }
+  			});
+  		}
+  		function deleteSelect(note_no){
+  			v_note_no = note_no;
+  			$("#deleteSelect").modal();
   		}
   		function memoForm(yyyy,mm,dd){
   				v_yyyy = yyyy;
@@ -39,7 +57,7 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
   			$.ajax({
   				type : "get"
   			   ,url : "/erp/wasEmpStatusNoteInsert.was"
-  			   ,data : "gap=0&note_write_date="+note_write_date+"&note_content="+note_content+"&empno=<%= calendar_empno%>"
+  			   ,data : "note_write_date="+note_write_date+"&note_content="+note_content+"&empno=<%= calendar_empno%>"
   			   ,success:function(data){
 	  				   var jsonDoc = JSON.parse(data);
 	  				   if(jsonDoc.length>0){
@@ -194,7 +212,7 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
 								i_note_day = Integer.parseInt(rMap.get("NOTE_DAY").toString());
 								if(day[month][i][j]==i_note_day){
 									if(note_count ==0){
-										out.print("<td><a href='javascript:noteDetail("+cyyyy+","+(month+1)+","+day[month][i][j]+")'><span class='badge badge-secondary'>메모</span></a></td>");
+										out.print("<td height='26'><a href='javascript:noteDetail("+cyyyy+","+(month+1)+","+day[month][i][j]+")'><span class='badge badge-secondary'>메모</span></a></td>");
 										note_count ++;
 									}
 								}
@@ -214,7 +232,7 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
 						}
 						////////////////////////////////////////////////////
 			/* +버튼을 추가하여 메모등록 구현해보기  */
-						out.print("<tr><td align='right'><a href='javascript:memoForm("+cyyyy+","+(month+1)+","+day[month][i][j]+")'>+</a></td></tr>");					
+						out.print("<tr><td align='right' height='26'><a href='javascript:memoForm("+cyyyy+","+(month+1)+","+day[month][i][j]+")'>+</a></td></tr>");					
 						out.print("</table></td>");
 					}else{
 						out.print("<td>&nbsp;</td>");					
@@ -269,7 +287,7 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
  <!-- 메모를 등록하는 The Modal End  -->
  <!-- 메모 상세 페이지 The Modal --> 
  <div id="d_noteDetail">
-<div class="modal" id="myNote">
+<div class="modal fade" id="myNote">
   <div class="modal-dialog">
     <div class="modal-content">
 
@@ -314,7 +332,30 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
   </div>
   <!-- 메모 등록 결과 페이지 The Modal --> 
   <!-- 메모 삭제 확인 페이지 The Modal -->
-   
+ <div class="modal fade" id=deleteSelect>
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">메모 삭제 페이지</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        	메모를 삭제하시겠습니까?
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+        <button type="button" onClick="noteDelete()"class="btn btn-danger" data-dismiss="modal">확인</button>
+      </div>
+
+    </div>
+  </div>
+</div> 	 
   <!-- 메모 삭제 확인 페이지 The Modal --> 
 </body>
 </html>
