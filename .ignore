@@ -1,7 +1,7 @@
 *.iml
 pom.properties
 local.properties
-
+MANIFEST.MF
 ######################
 # Windows
 ######################
