@@ -32,4 +32,10 @@ public class AjaxRestController {
 		logger.info(gson);
 		return gson;
 	}
+	@GetMapping(value="wasEmpStatusNoteDelete.was")
+	public String wasEmpStatusNoteDelete(@RequestParam Map<String,Object> pMap,Model model) {
+		String result = null;
+		result = wasLogic.wasEmpStatusNoteDelete(pMap);
+		return result;
+	}
 }

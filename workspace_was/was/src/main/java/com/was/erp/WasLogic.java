@@ -281,4 +281,16 @@ public class WasLogic {
 		}
 		return rList;
 	}
+
+	public String wasEmpStatusNoteDelete(Map<String, Object> pMap) {
+		logger.info("wasEmpStatusNoteDelete Logic타는중~~~~~~~~~~~~~~~~~~~~~");
+		String result = null;
+		int rint = wasDao.wasEmpStatusNoteDelete(pMap);
+		if(rint==1) {
+			result = "삭제되었습니다.";
+		}else {
+			result = "다시시도하세요.";
+		}
+		return result;
+	}
 }

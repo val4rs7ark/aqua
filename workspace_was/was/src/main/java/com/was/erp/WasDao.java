@@ -87,4 +87,10 @@ public class WasDao {
 		rList.add(pMap);
 		return rList;
 	}
+	public int wasEmpStatusNoteDelete(Map<String, Object> pMap) {
+		int result = 0;
+		result = sqlSessionTemplate.update("wasEmpStatusNoteDelete", pMap);
+		logger.info("result 성공:1 실패:0-->"+result);
+	return result;
+	}
 }
