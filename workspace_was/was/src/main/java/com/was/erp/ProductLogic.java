@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,30 +24,61 @@ public class ProductLogic {
 		productDao.productShipOut(pMap);
 		
 	}
-
-	public void productInsert(Map<String, Object> pMap) {
-		logger.info("productInsert 호출 성공");
-		double pd_weight = 0;
-		if(pMap.get("pd_weight")!=null) {//화면 input태그에 name속성에 없어서 널포 일어날 수 있는 것을 방지 or 그 전에 화면에서 hidden속성으로 넘겨주면 널포 당할 일 없다.
-			logger.info("pd_weight : "+pMap.get("pd_weight").toString());
-			pd_weight = Double.parseDouble(pMap.get("pd_weight").toString());
-		}
-		logger.info("pd_weight : "+pd_weight);
-		pMap.put("pd_weight", pd_weight);//채번한 것을 넘김
-		productDao.productInsert(pMap);
-		
+	
+	public int get_Total(Map<String, Object> pMap) {
+		logger.info("get_total호출성공");
+		int tot = productDao.get_Total(pMap);
+		return tot;
 	}
 
-	public List<Map<String, Object>> productList(Map<String, Object> pMap) {
-		logger.info("productList 호출 성공");
+	public List<Map<String, Object>> productList(Map<String, Object> pMap, int tot) {
+		logger.info("Logic-productList 호출 성공");
+		int nowPage = 1;//현재 페이지
+		if(pMap.get("nowPage")!=null) {
+			nowPage = Integer.parseInt(pMap.get("nowPage").toString())+1;
+		}
+		int pagePer_Num = 5;//한페이지에 뿌려질 로우수
+		int start = 0;
+		int end = 0;
+		if(nowPage>0) {
+			start = ((nowPage-1)*pagePer_Num)+1;
+			end = nowPage * pagePer_Num;
+			pMap.put("start",start);
+			if(end > tot) {
+				pMap.put("end",tot);
+			}else {
+				pMap.put("end",end);
+			}
+		}
+		logger.info("tot :"+tot);
+		logger.info("nowPage :"+nowPage);
+		logger.info("start :"+start);
+		logger.info("end :"+end);
 		List<Map<String,Object>> rList = productDao.productList(pMap);
-		logger.info(rList.get(0).toString());
 		return rList;
 	}
 
 	public List<Map<String, Object>> productDetail(Map<String, Object> pMap) {
-		logger.info("productList 호출 성공");
-		List<Map<String,Object>> rList = productDao.productDetail(pMap);
-		return rList;
+		
+		return null;
 	}
+	public int productInsert(Map<String, Object> pMap) {
+		logger.info("productInsert 호출 성공");
+		int result = 0;
+		try { 
+	    	result = productDao.supplyInsert(pMap);
+		  }catch (DataAccessException e) { 
+			  throw e; 
+			  } 
+	    return result;		 
+	}
+
+	public void productDelete(String[] r_rowid) {
+		logger.info("productDelete 호출 성공");
+		
+		productDao.productDelete(r_rowid);
+		
+	}
+
+
 }

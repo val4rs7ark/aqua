@@ -1,26 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mybatis.mapper.ProductMapper">
+    <select id="get_Total" parameterType="map" resultType="int">
+	   	select count(s.supso_no) supso_no
+	      from supplyandsobi s
+    </select>
     <select id="productList" parameterType="map" resultType="map">
-    	select p.pd_no,p.pd_weight,p.pd_regdate,p.ship_code,f.fish_name,p.pd_indate,p.pd_outdate
- 		  from product p,fishtype f
-         where p.fish_code = f.fish_code
-         order by pd_no asc
+    	select 
+			   row_number() over(order by supso_no) as supso_no
+		      ,s.ivgroup_code,i.ivgroup_name,s.empno
+		      ,s.supso_startdate,s.supso_enddate,s.supso_count
+		      ,s.supso_date,s.ship_code
+		  from supplyandsobi s, invengroup i
+		 where s.ivgroup_code = i.ivgroup_code 
+		 <if test="start>0 and end>0">		 
+ 			and rownum between #{start} and #{end}
+		 </if>
     </select>
-    <insert id="productInsert" parameterType="map">
-    	INSERT INTO product(pd_no
-    					   ,pd_weight,pd_regdate
-    					   ,ship_code,fish_code
-    					   ,pd_indate,pd_outdate) 
-             		 VALUES(nvl((select (MAX (pd_no) + 1) pd_no from product),1)
-             		 	   ,#{pd_weight},#{pd_regdate}
-             		 	   ,#{ship_code},#{fish_code}
-             		 	   ,#{pd_indate},#{pd_outdate}) 
-    </insert>
+	<select id="supplyInsert" parameterType="map" resultType="map">
+	    INSERT INTO SUPPLYANDSOBI (ivgroup_code, empno
+	                              ,supso_no, supso_startdate
+	                              ,supso_enddate, supso_count
+	                              ,supso_gubun, supso_date, ship_code)
+	                       VALUES (#{ivgroup_code},#{empno}
+		                          ,nvl((select (max (supso_no) + 1) supso_no from supplyandsobi),1)
+		                          ,#{supso_startdate}
+		                          ,#{supso_enddate},#{supso_count}
+		                          ,'A',to_char(sysdate,'YYYY-MM-DD'),#{ship_code})
+    </select>
       <select id="productDetail" parameterType="map" resultType="map">
-    	select p.pd_no,p.pd_weight,p.pd_regdate,p.ship_code,f.fish_name,p.pd_indate,p.pd_outdate
- 		  from product p,fishtype f
-         where p.fish_code = f.fish_code
-         order by pd_no asc
+    	
     </select>
+    <delete id="productDelete" parameterType="list">
+    	delete from supplyandsobi
+ 		 where supso_no in
+ 		 <foreach item="item" index="index" collection="list"
+				  open="(" separator="," close=")"><!-- where ivgroup_code in (2,3,5) -->
+				  #{item}
+		</foreach>
+    </delete>
 </mapper> 
