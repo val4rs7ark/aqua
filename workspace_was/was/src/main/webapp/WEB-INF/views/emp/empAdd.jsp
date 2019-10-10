@@ -30,6 +30,7 @@
 <meta charset="utf-8">
 <!-- 아직 수정중.... 0928 -->
 <%@ include file="/common/bootStrap4.jsp" %>
+<%@ include file="/common/styles.jsp" %>
 	<script type="text/JavaScript" src="http://code.jquery.com/jquery-1.7.min.js"></script>
 	<script type="text/JavaScript" src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 	<style type="text/css">
