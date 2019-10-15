@@ -35,7 +35,7 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<div style="width:75%;">
+<div style="width:55%;">
 		<!-- html의 canvas태그는 애니메이션을 지원하는 태그이다. 즉 차트를 그릴 위치를 선언. -->
 		<canvas id="myChart" style="display: block; width: 545px; height: 272px;" width="545" height="272" class="chartjs-render-monitor"></canvas>
 	</div>
@@ -50,7 +50,7 @@ $(document).ready(function() {
     data: {
         labels: barLabel,
         datasets: [{
-            label: '6개월 매출데이터', //상단 라벨(데이터값들의 그룹명)
+            label: '6개월 매출', //상단 라벨(데이터값들의 그룹명)
             data: barData,//데이터값
              backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',   //1번째 그래프의 바탕색
