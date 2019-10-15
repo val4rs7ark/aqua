@@ -11,3 +11,4 @@
 <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"/></script>
 <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"/></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
