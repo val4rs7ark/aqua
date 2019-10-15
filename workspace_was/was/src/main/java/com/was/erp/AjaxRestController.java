@@ -24,7 +24,7 @@ public class AjaxRestController {
 	WasLogic wasLogic;
 	
 	@GetMapping(value="wasEmpAttendance.was",produces="application/json;charset=UTF-8")
-	public String wasEmpAttendance(@RequestParam Map<String,Object> pMap,Model model) {
+	public String wasEmpAttendance(@RequestParam Map<String,Object> pMap) {
 		String gson = null;
 		List<Map<String,Object>> rList = wasLogic.wasEmpAttendance(pMap);
 		Gson g = new Gson();
@@ -33,9 +33,18 @@ public class AjaxRestController {
 		return gson;
 	}
 	@GetMapping(value="wasEmpStatusNoteDelete.was")
-	public String wasEmpStatusNoteDelete(@RequestParam Map<String,Object> pMap,Model model) {
+	public String wasEmpStatusNoteDelete(@RequestParam Map<String,Object> pMap) {
 		String result = null;
 		result = wasLogic.wasEmpStatusNoteDelete(pMap);
 		return result;
+	}
+	@PostMapping(value="wasMainChart.was",produces="application/json;charset=UTF-8")
+	public String wasMainChart(@RequestParam Map<String,Object> pMap,Model model) {
+		List<Map<String,Object>> resultList = null;
+		String gson =null;
+		resultList = wasLogic.wasMainChart(pMap);
+		Gson g = new Gson();
+		gson = g.toJson(resultList);
+		return gson;
 	}
 }

@@ -93,4 +93,8 @@ public class WasDao {
 		logger.info("result 성공:1 실패:0-->"+result);
 	return result;
 	}
+	public List<Map<String,Object>> wasMainChart(Map<String, Object> pMap) {
+		List<Map<String,Object>> resultList = sqlSessionTemplate.selectList("wasMainChart",pMap);
+		return resultList;
+	}
 }

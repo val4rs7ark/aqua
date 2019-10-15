@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mybatis.mapper.WasMapper">
+	<select id="wasMainChart" parameterType="map" resultType="map">
+		select sum(touch) as touch, mcmonth  from(select   sum(order_unitprice*order_count) as touch  
+		   ,CASE WHEN '${mcYear}-${mcMonth}-01' <![CDATA[ <= ]]> order_enddate and '${mcYear}-${mcMonth}-31' <![CDATA[ >= ]]> order_enddate THEN '${mcMonth}'
+            WHEN '${mcYear1}-${mcMonth1}-01' <![CDATA[ <= ]]> order_enddate and '${mcYear1}-${mcMonth1}-31' <![CDATA[ >= ]]> order_enddate THEN '${mcMonth1}'
+            WHEN '${mcYear2}-${mcMonth2}-01' <![CDATA[ <= ]]> order_enddate and '${mcYear2}-${mcMonth2}-31' <![CDATA[ >= ]]> order_enddate THEN '${mcMonth2}'
+            WHEN '${mcYear3}-${mcMonth3}-01' <![CDATA[ <= ]]> order_enddate and '${mcYear3}-${mcMonth3}-31' <![CDATA[ >= ]]> order_enddate THEN '${mcMonth3}'
+            WHEN '${mcYear4}-${mcMonth4}-01' <![CDATA[ <= ]]> order_enddate and '${mcYear4}-${mcMonth4}-31' <![CDATA[ >= ]]> order_enddate THEN '${mcMonth4}'
+            WHEN '${mcYear5}-${mcMonth5}-01' <![CDATA[ <= ]]> order_enddate and '${mcYear5}-${mcMonth5}-31' <![CDATA[ >= ]]> order_enddate THEN '${mcMonth5}'
+            end as mcmonth
+            from order_deli
+            where order_gubun = '생산'
+      group by order_enddate )
+      group by mcmonth
+      order by mcmonth   
+	</select>
 	<select id="wasEmpAttendance" parameterType="map" statementType="CALLABLE">
 		{ CALL proc_empAttendance(#{empno, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
 							     ,#{msg, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String}) }
