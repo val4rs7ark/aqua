@@ -31,6 +31,13 @@
 		</td>
 	</tr>
 	<tr>
+		<td style="width:15%; padding-top:14px; padding-bottom:9px;">이메일</td>
+		<td colspan="3" align="left" style="width:15%;padding-top:7px; padding-bottom:7px;">
+			<input type="text" class="form-control" style="height:35px;width:230px;font-size:8pt;" placeholder="xxxx@xxxx.com" 
+					id="emp_email" name="emp_email">
+		</td>
+	</tr>
+	<tr>
 		<td style="width:15%;padding-top:14px; padding-bottom:9px;">전역구분</td>
 		<td colspan="3" style="padding-top: 6px; padding-bottom: 6px;"> 
 			<select name="emp_mili" class="custom-select" style="width:30%"onChange="javascript:textChange()">
@@ -66,9 +73,9 @@
 	<tr>
 		<td style="width:15%;padding-top:14px; padding-bottom:9px;">&nbsp;주&nbsp;&nbsp;소&nbsp;</td>
 		<td colspan="3" style="padding-top: 6px; padding-bottom: 6px;">
-			<input id="adrr1" class="form-control" type="text" style="height:35px;width:220px;display:inline-block" 
+			<input id="adrr1" class="form-control" type="text" style="height:35px;width:290px;display:inline-block" 
 				value="<%=sList.get(1).get("EMP_ADDR_1") %>" name="emp_addr_1"onChange="javascript:textChange()">
-			<input id="adrr2" class="form-control" type="text" style="height:35px;width:220px;display:inline-block"
+			<input id="adrr2" class="form-control" type="text" style="height:35px;width:210px;display:inline-block"
 				value="<%=sList.get(1).get("EMP_ADDR_2") %>" name="emp_addr_2"onChange="javascript:textChange()">
 		</td>
 	</tr>

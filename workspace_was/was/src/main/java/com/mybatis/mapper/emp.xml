@@ -18,6 +18,7 @@
 					,#{emp_bank, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
 					,#{emp_zipcode, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
 					,#{emp_position, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+					,#{emp_email, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
 					,#{msg, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String}
     	)}
     </update> 
@@ -61,7 +62,8 @@
               ,e.emp_addr,e.emp_indate,e.emp_outdate
               ,d.dept_name,e.emp_level,e.emp_engname
               ,e.emp_mili,e.emp_bank,e.emp_zipcode
-              ,e.emp_position,e.sal_account,e.team_name,e.empno
+              ,e.emp_position,e.sal_account,e.team_name
+              ,e.emp_email,e.empno
          from emp e, dept d
         where e.empno = #{empno}
           and e.dept_code = d.dept_code 
@@ -85,6 +87,7 @@
  		      ,emp_bank = #{emp_bank, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
  		      ,emp_zipcode = #{emp_zipcode, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
  		      ,emp_position = #{emp_position, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+ 		      ,emp_email = #{emp_email, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
 		 where empno = #{empno, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
      </update>
 </mapper> 

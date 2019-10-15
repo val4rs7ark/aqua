@@ -17,7 +17,7 @@
 		   size = rList.size();
 		}
 		///////////////// 페이지 네이션 /////////////////
-		int numPerPage = 11; //페이지당 로우 수 
+		int numPerPage = 12; //페이지당 로우 수 
 		int nowPage = 0; //현재 페이지
 		if(request.getParameter("nowPage")!=null){
 			nowPage = Integer.parseInt(request.getParameter("nowPage"));
@@ -182,7 +182,6 @@
 				 }	
 			}); 
 		}
-		
 		$(document).ready(function() {
 			//최상단 체크박스 클릭
 			$("#checkall").click(function() {
@@ -202,7 +201,7 @@
 <body>
 <div class="container-fluid">
 <div class="row">
-<div style="width:23%">
+<div style="width:20%">
 	 <%@ include file="/common/MenuCommon.jsp" %>
 </div>
 <div style="width:75%">
@@ -337,6 +336,13 @@
 		</td>
 	</tr>
 	<tr>
+		<td style="width:15%; padding-top:14px; padding-bottom:9px;">이메일</td>
+		<td colspan="3" align="left" style="width:15%;padding-top:7px; padding-bottom:7px;">
+			<input type="text" class="form-control" style="height:35px;width:230px;font-size:8pt;" placeholder="xxxx@xxxx.com" 
+					id="emp_email" name="emp_email">
+		</td>
+	</tr>
+	<tr>
 		<td style="width:15%;padding-top:14px; padding-bottom:9px;">전역구분</td>
 		<td colspan="3" style="padding-top: 6px; padding-bottom: 6px;"> 
 			<select name="emp_mili" class="custom-select" style="width:30%">
@@ -372,9 +378,9 @@
 	<tr>
 		<td style="width:15%;padding-top:14px; padding-bottom:9px;">&nbsp;주&nbsp;&nbsp;소&nbsp;</td>
 		<td colspan="3" style="padding-top: 6px; padding-bottom: 6px;">
-			<input id="adrr1" class="form-control" type="text" style="height:35px;width:220px;display:inline-block" 
+			<input id="adrr1" class="form-control" type="text" style="height:35px;width:290px;display:inline-block" 
 					placeholder="&nbsp;주소" name="emp_addr_1" >
-			<input id="adrr2" class="form-control" type="text" style="height:35px;width:220px;display:inline-block"
+			<input id="adrr2" class="form-control" type="text" style="height:35px;width:210px;display:inline-block"
 					 name="emp_addr_2">
 		</td>
 	</tr>
