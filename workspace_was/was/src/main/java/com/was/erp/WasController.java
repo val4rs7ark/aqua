@@ -103,4 +103,5 @@ public class WasController {
 		path="calendar/insertAjax";
 		return path;
 	}
+	
 }

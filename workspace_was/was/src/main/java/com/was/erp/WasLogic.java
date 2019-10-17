@@ -1,6 +1,8 @@
 package com.was.erp;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -291,6 +293,46 @@ public class WasLogic {
 		}else {
 			result = "다시시도하세요.";
 		}
+		return result;
+	}
+
+	public List<Map<String,Object>> wasMainChart(Map<String, Object> pMap) {
+		//////////////////6개월구하기/////////////////
+		DecimalFormat df = new DecimalFormat("00");
+		Calendar currCal = Calendar.getInstance();
+		//////////////////현재날자///////////////////
+		String df_month = df.format(currCal.get(Calendar.MONTH)+1);
+		String df_year = df.format(currCal.get(Calendar.YEAR));
+		//////////////////현재날자//////////////////
+		pMap.put("mcMonth", df_month);
+		pMap.put("mcYear", df_year);
+		//////////////////나머지5달/////////////////
+		String df_lastyear = null;
+		String df_lastmonth = null;
+		int imonth = Integer.parseInt(df_month);
+		int j = 1;
+		for(int i=0;i<5;i++) {
+			//1월보다 낮다면 이전년도로 바꿔야 하기에 분기
+			if(imonth-(i+1)<1) {
+				df_lastyear = df.format(currCal.get(Calendar.YEAR)-1);
+				//이전달이 1월보다 더 전이고 그 차이가 0보다 클 때
+				if((0-(imonth-(i+1)))>0) {
+					df_lastmonth = 12-(0-(imonth-(i+1)))+"";
+				//이전달이 1월보다 전이고 그차이가 0일 때 == 12월	
+				}else {
+					df_lastmonth = "12";
+				}
+			}else {
+				df_lastyear = df.format(currCal.get(Calendar.YEAR));
+				df_lastmonth = df.format(imonth-(i+1));
+			}
+			pMap.put("mcMonth"+j, df_lastmonth);
+			pMap.put("mcYear"+j, df_lastyear);
+			j++;
+		}
+		//////////////////나머지5달/////////////////
+		//////////////////6개월구하기/////////////////
+		List<Map<String,Object>> result = wasDao.wasMainChart(pMap);
 		return result;
 	}
 }

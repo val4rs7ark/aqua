@@ -11,10 +11,31 @@
 	canvas { 
 		background-color : #ffffff;
 	}
-</style>		
+</style>
+<script>
+var barData = new Array();
+var barLabel= new Array();
+$(document).ready(function() {
+	 $.ajax({
+			type : "POST"
+		   ,url : "/erp/wasMainChart.was"
+		   ,data : "gap=1"
+		   ,success:function(data){
+			   var jsonDoc = data;
+				   if(jsonDoc.length>0){
+					   for(var i=0;i<(jsonDoc.length-1);i++){
+					   		barLabel[i] = jsonDoc[i].MCMONTH;
+					   		barData[i] = jsonDoc[i].TOUCH;
+					   }
+				   }
+		   }
+		}); 
+});
+
+</script>
 </head>
 <body>
-<div style="width:75%;">
+<div style="width:55%;">
 		<!-- html의 canvas태그는 애니메이션을 지원하는 태그이다. 즉 차트를 그릴 위치를 선언. -->
 		<canvas id="myChart" style="display: block; width: 545px; height: 272px;" width="545" height="272" class="chartjs-render-monitor"></canvas>
 	</div>
@@ -27,10 +48,10 @@
 	var myChart = new Chart(ctx, {
     type: 'bar', //그래프 형태 지정하기
     data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        labels: barLabel,
         datasets: [{
-            label: '2019 매출현황', //상단 라벨(데이터값들의 그룹명)
-            data: [12, 19, 3, 5, 2, -30],//데이터값
+            label: '6개월 매출', //상단 라벨(데이터값들의 그룹명)
+            data: barData,//데이터값
              backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',   //1번째 그래프의 바탕색
                 'rgba(54, 162, 235, 0.2)',   //2번째 그래프의 바탕색
