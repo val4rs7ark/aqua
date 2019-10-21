@@ -1,5 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>     
+<%
+	int size = 0;
+	List<Map<String,Object>> gList = 
+	      (List<Map<String,Object>>)request.getAttribute("gList");
+	String[] valGraph = gList.toArray(new String[gList.size()]);
+	if(gList !=null && gList.size()>0){
+	   size = gList.size();
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,6 +32,9 @@ var pre_year;
 var next_year
 var pre_month;
 var next_month;
+//첫화면에 뿌릴 그래프 값 담을 변수
+var barLabel = new Array();
+var barData  = new Array();
 
 
 
@@ -62,6 +75,7 @@ var next_month;
 		alert(selectDate_1+" - "+selectDate_2);
 		
 	}
+	
 
 </script>
 <style type="text/css">
@@ -144,7 +158,18 @@ var next_month;
   </div>
   </div>
     <!-- ========================================검색창 끝================================ -->
-	
+ <div>
+ 		<!-- html의 canvas태그는 애니메이션을 지원하는 태그이다. 즉 차트를 그릴 위치를 선언. -->
+		<canvas id="salesChart" style="display: block; width: 545px; height: 272px;" class="chartjs-render-monitor"></canvas>
+ 		<script type="text/javascript">
+ 		//캔버스 id값 가져오기
+ 		var schart = document.getElementById("salesChart"); 
+ 		//new Chart ==> chart.js에서 지원하는 클래스이다
+ 		//첫번째 파라미터에 canvas(즉 차트를 생성할 위치)
+ 		//두번째 파라미터에 차트의 속성들을 선언.
+
+ 		</script>
+ </div>	
 	
 	
 </div>	

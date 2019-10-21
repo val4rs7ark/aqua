@@ -1,5 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.List, java.util.Map" %>  
+<%
+
+		int size = 0;
+		List<Map<String,Object>> gList = 
+		      (List<Map<String,Object>>)request.getAttribute("gList");
+		Map<String,Object> gMap = (Map<String,Object>)request.getAttribute("gMap");
+		if(gList !=null && gList.size()>0){
+		   size = gList.size();
+		}
+%>        
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +19,8 @@
 <%@ include file="/common/bootStrap4.jsp" %>
 <%@ include file="/common/styles.jsp" %>
 <script type="text/JavaScript" src="http://code.jquery.com/jquery-1.7.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
 <script type="text/javascript">
 //현재 년도 가져와서 담는 변수
 var thisDate = new Date();
@@ -21,8 +34,6 @@ var pre_year;
 var next_year
 var pre_month;
 var next_month;
-
-
 
 	///////////////////////// 년도  //////////////////////////
 	// (금년) < 버튼 클릭시 
@@ -90,8 +101,6 @@ var next_month;
   <div class="card-body" style="height:30px;">매출현황</div>
   </div>
 	    <!-- ========================================검색창 ================================ -->
-  <div class="w3-container" style="margin-top: 5px; height: 80px;width:100%">
-  <div class="box-container" style="margin-top: 5px; height: 40px;" align="center">
   <div id="box">
   <table>
      <thead>
@@ -136,14 +145,52 @@ var next_month;
            <td style="padding-left:5px;"><input id="btn_search" type="submit" value="조회" onClick="javascript:selectDate()"></td>
         </th>
      </thead>
-  </div>
-  </div>
   </table>
   </div>
   </div>
   </div>
     <!-- ========================================검색창 메인모양================================ -->
-	
+	 <table id="t_gList" class="table table-striped">
+    <thead>
+      <tr>
+      	<th><input id="checkall" type="checkbox" ></th>
+        <th>사원번호</th>
+        <th>사원명</th>
+        <th>부서명</th>
+        <th>핸드폰번호</th>
+      </tr>
+    </thead>
+    <tbody>
+<%
+   if(size==0){
+%>    
+       <tr>
+          <td colspan="6">조회 결과가 없습니다.</td>
+       </tr>
+<%
+   }
+   else if(size>0){
+	   for(int i=0;i>size;i++){
+		   if(size == i) break;
+		   Map<String,Object> rMap = gList.get(i);
+%>
+		<tr>
+			<td>
+				<input id="checkbox" name="checkbox" type="checkbox" onClick="targetDel('<%=rMap.get("EMPNO")%>')">
+			</td>
+			
+			<td onClick="C_selectEmp(<%=i%>)"><input type="hidden" id="s_empno<%=i %>" value="<%=rMap.get("EMPNO") %>"/><%=rMap.get("EMPNO") %></td>
+			<td onClick="C_selectEmp(<%=i%>)"><input type="hidden" id="s_empname<%=i %>" value="<%=rMap.get("EMPNO") %>"/><%=rMap.get("EMP_NAME") %></td>
+			<td onClick="C_selectEmp(<%=i%>)"><input type="hidden" id="s_deptname<%=i %>" value="<%=rMap.get("EMPNO") %>"/><%=rMap.get("DEPT_NAME") %></td>
+			<td onClick="C_selectEmp(<%=i%>)"><input type="hidden" id="s_emphp<%=i %>" value="<%=rMap.get("EMPNO") %>"/><%=rMap.get("EMP_HP") %></td>
+			
+		</tr>
+<% 
+	   }
+   }
+%>      
+    </tbody>
+  </table>
 	
 	
 </div>	

@@ -51,6 +51,9 @@ function Attendance(){
 	function f_empStatus(){
 		$("#f_empStatus").submit();
 	}
+	function f_salesGraph(){
+		$("#f_salesGrapg").submit();
+	}
 </script>
 <style type="text/css">
  #d_button{
@@ -83,7 +86,11 @@ function Attendance(){
 	  </form>
 	  <form id="f_empAdd" action="/erp/empListSignUp.was" method="get">
 	  </form>
+	  <form id="f_salesGrapg" action="/erp/salesMainSelect.was" method="get">
+	  		<input type="hidden" value="1" name="gap"> 
+	  </form>
 	  <form id="f_EmpLogin"action="/erp/wasLogin.was" method="post">
+	 
 	  <%
 	  	if(s_emp_no!=null && s_emp_pw!=null){
 	  %>
@@ -128,7 +135,7 @@ function Attendance(){
                </div>
             <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major2" style="width:100%;text-align: center;font-size: large;">영업/매출관리</button>
                <div id="major2" class="collapse">
-                  <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">매출</a>
+                  <a href="javascript:f_salesGraph()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">매출현황</a>
                   <a href="HRSalery_insert" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">급여</a>
                   
                </div>

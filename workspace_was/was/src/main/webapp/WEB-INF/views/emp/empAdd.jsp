@@ -28,7 +28,7 @@
 <head>
 <title>WAS,AQUA - 사원등록</title>
 <meta charset="utf-8">
-<!-- 아직 수정중.... 0928 -->
+<!-- 아직 수정중.... 1018 -->
 <%@ include file="/common/bootStrap4.jsp" %>
 <%@ include file="/common/styles.jsp" %>
 	<script type="text/JavaScript" src="http://code.jquery.com/jquery-1.7.min.js"></script>
@@ -295,6 +295,7 @@
 			<td onClick="C_selectEmp(<%=i%>)"><input type="hidden" id="s_empname<%=i %>" value="<%=rMap.get("EMPNO") %>"/><%=rMap.get("EMP_NAME") %></td>
 			<td onClick="C_selectEmp(<%=i%>)"><input type="hidden" id="s_deptname<%=i %>" value="<%=rMap.get("EMPNO") %>"/><%=rMap.get("DEPT_NAME") %></td>
 			<td onClick="C_selectEmp(<%=i%>)"><input type="hidden" id="s_emphp<%=i %>" value="<%=rMap.get("EMPNO") %>"/><%=rMap.get("EMP_HP") %></td>
+			
 		</tr>
 <% 
 	   }
@@ -470,7 +471,6 @@
 			      <option value="대표">대표이사</option>
  			</select>
  		</td>
-		
 	</tr>
 	<tr>
 		<td colspan="4" align="right">
@@ -516,11 +516,15 @@
 	%>
   </ul>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div>
 
+	
 </div>
-</div>
-</div>
-</div>
+
 <!-- 
 ================================================================================================================================
 												Modal 다이얼로그 창 (우편번호 검색기)

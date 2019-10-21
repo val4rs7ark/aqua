@@ -1,5 +1,6 @@
 package com.was.erp;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -12,10 +13,13 @@ public class SalesGraphDao {
 	private static final Logger logger = LoggerFactory.getLogger(SalesGraphDao.class);
 	@Autowired
 	SqlSessionTemplate sqlSessionTemplate;
-	public List<Map<String, Object>> salesSelect(Map<String, Object> pMap) {
-		logger.info("Logic salesSelect =======");
+	public List<Map<String, Object>> salesMainSelect(Map<String, Object> pMap) {
+		logger.info("Logic salesMainSelect =======");
+		logger.info("가져온 값은 잘 성장하고 있습니까?"+pMap.get("g_date_1"));
+		logger.info("가져온 값은 잘 성장하고 있습니까?"+pMap.get("g_date_2"));
 		List<Map<String,Object>> sList = 
-				sqlSessionTemplate.selectList("salesSelect",pMap);
+				sqlSessionTemplate.selectList("salesMainSelect",pMap);
+	
 		return sList;
 	}
 
