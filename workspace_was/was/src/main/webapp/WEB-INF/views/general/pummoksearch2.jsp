@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="java.util.HashMap,java.util.Map,java.util.List"%>
-<%@ page import="com.util.PageBar" %> 
 <!--========================콤보 박스 체크 관련 로직 시작=============================================-->
 <script type="text/javascript">
 
@@ -81,42 +80,13 @@
 	}
 %>             	          	             	             	             	 
               </tbody>
-         </table>
-<!-- =======================페이지 네이션 시작====================== -->    
-<div style="text-align:center">
-  <table style="width:auto;height:20px;display:inline-block">
- 	<tr>
- 	<td align="center" >
- 	<ul class="pagination" style="justify-content: center;"> 
-<%
-	int numPerPage = 5;
-	int nowPage = 0;
-	String pagePath = "/erp/general_pummokSearch";
-	PageBar pb = new PageBar(numPerPage,getInvenGroupTotal,nowPage,pagePath);
-	String pagination = null;//1 2 3 4 5 6 7 8 9 10 ->
-	pagination = pb.getPageBar();
-/*  	out.print("numPerPage="+numPerPage);
-	out.print("getTotal="+getInvenGroupTotal);
-	out.print("nowPage=??"+nowPage);
-	out.print("pagePath="+pagePath);  */
-	out.print(pagination);
-	    //out.print("<a href=test.mo?crud=boardList&nowPage=0>1</a> <b>2</b>");
-%>          	 
- 	</ul>
- 	</td>
- 	</tr>
- </table> 
-</div>     
-<!-- =======================페이지 네이션 끝====================== -->         
-          
+         </table> 
       </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
   
-        <button type="button" class="btn btn-dark" 
-        		onclick="javascript:selectBtn('register')" 
-        		>적용</button>
+        <button type="button" class="btn btn-dark" onClick="javascript:selectBtn('update')">적용</button>
         <button type="button" class="btn btn-dark" data-dismiss="modal">취소</button>
 <%
 }

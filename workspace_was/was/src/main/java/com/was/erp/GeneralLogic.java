@@ -1,5 +1,6 @@
 package com.was.erp;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,17 +14,18 @@ public class GeneralLogic {
 	Logger logger = LoggerFactory.getLogger(GeneralController.class);	
 	@Autowired(required=false)
 	GeneralDao generalDao = null;
-	public List<Map<String, Object>> invenList() {
+	public List<Map<String, Object>> invenList(Map<String,Object> pMap, int getInvenTotal) {
+		logger.info("invenList: String 호출");
 		List<Map<String,Object>> invenList = null;
-		invenList = generalDao.invenList();
+		invenList = generalDao.invenList(pMap);
 		return invenList;
 	}
 	public void invenAdd(Map<String,Object> pMap) {
 		generalDao.invenAdd(pMap);
 	}
-	public int getInvenTotal() {
-		int totalrow = generalDao.getInvenTotal();
-		return totalrow;
+	public int getInvenTotal(Map<String, Object> pMap) {
+		int getInvenTotal = generalDao.getInvenTotal(pMap);
+		return getInvenTotal;
 	}
 	
 	public int getInvenGroupTotal() {
@@ -59,6 +61,14 @@ public class GeneralLogic {
 	}
 	public void pummokadd(Map<String, Object> pMap) {
 		generalDao.pummokadd(pMap);
+	}
+	public void invenUpdate(Map<String, Object> pMap) {
+		generalDao.invenUpdate(pMap);
+		
+	}
+	public String jungbokAlert(String pid_code) {
+		String result = generalDao.jungbokAlert(pid_code);
+		return result;
 	}
 
 }

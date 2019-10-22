@@ -125,8 +125,7 @@ function Attendance(){
             <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major" style="width:100%;text-align: center;font-size: large;">생산/품질관리</button>
                <div id="major" class="collapse">         
                   <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">품목조회</a>
-                  <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">재고등록</a>
-                  <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">재고조회</a>
+                  <a href="general_invenList" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">자산구매신청/조회</a>
                   <a href="javascript:f_ProductListSend()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">생산품등록/조회</a>
                   <a href="registerCustomer.jsp" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">거래처등록/조회</a>
                   <a href="delivery_List" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">배송처조회</a>
@@ -144,7 +143,13 @@ function Attendance(){
                   <a href="javascript:f_empAdd()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">사원등록/조회</a>
                   <a href="javascript:f_empStatus()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">근태/일정관리</a>
                   <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">휴가</a>
-               </div>   
+               </div>
+            <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major4" style="width:100%;text-align: center;font-size: large;">전자결재</button>
+               <div id="major4" class="collapse">
+                  <a href="/erp/draftMain" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">기안서 작성</a>
+                  <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">임시저장문서</a>
+                  <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">문서보관함</a>
+               </div>     
             </div>
          </ul> 
     </div>

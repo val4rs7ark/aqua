@@ -1,34 +1,62 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="java.util.HashMap,java.util.Map,java.util.List"%>
-<!--========================메인페이지 관련 로직 시작===========================-->
+<%@ page import="com.util.PageBar" %> 
 <%  
-	double numberperpage = 10;
+/* <!--========================메인페이지 관련 로직 시작===========================--> */
 	List<Map<String,Object>> invenList = (List<Map<String,Object>>)request.getAttribute("invenList");
 	String getInvenTotal = request.getAttribute("getInvenTotal").toString();
 	out.print("getInvenTotal="+getInvenTotal+"&nbsp");
 	int getTotal = Integer.parseInt(getInvenTotal);
 	out.print("getTotal="+getTotal+"&nbsp");
-	int pageSize = (int)Math.ceil(getTotal/numberperpage);
 	out.print("invenList.size():"+invenList.size());
+/* <!--========================메인페이지 관련 로직 끝===========================--> */
+///////////////////////페이지 네이션 로직 /////////////////////////////
+	//총 레코드 갯수
+	int tot = 0;
+	if(session.getAttribute("s_tot")!=null){
+		tot = Integer.parseInt(session.getAttribute("s_tot").toString());
+	}
+	out.print("tot:"+tot);
+	int size = 0;
+	if(invenList !=null && invenList.size()>0){
+		size = invenList.size();//전체 레코드 수(*맵은 컬럼의 수이지 로우의 수가 아님.)
+	}
+	/////////////페이지 네비게이션 추가분////////////////
+	int numPerPage = 5; //몇개로우를 뿌려줄것인지
+	int nowPage = 0;
+	if(request.getParameter("nowPage")!=null){
+		nowPage = Integer.parseInt(request.getParameter("nowPage"));
+	}
 %>           
-<!--========================메인페이지 관련 로직 끝===========================-->
+
 <!--========================모달로직 (메인 - 신규 등록 -품목검색) 관련 로직 시작===========================-->
 <%
 	
 %>		
 <!--========================모달로직 (메인 - 신규 등록 -품목검색) 관련 로직 끝===========================-->
 
-<%="pageSize="+pageSize%>
-<%double t = 10;
-  int r = 1;
-  int k = (int)Math.ceil(r/t);
-  out.print("k="+k);%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-   <%@ include file="/common/bootStrap4.jsp" %>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+	  integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+	  crossorigin="anonymous">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"/></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"/></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment-with-locales.min.js"/></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js"/></script>
+<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"/></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"/></script>
+<script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"/></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <title>자산 구매 신청/사용 내역</title>
 <meta http-equiv="Content-Type" content="text/html;">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -59,17 +87,17 @@
 				checkedbox.each(function(i){
 					var tr = checkedbox.parent().parent().eq(i);
 					var td = tr.children();	
-					order_writers = order_writers+td.eq(10).text()+",";
+					order_writers = order_writers+td.eq(8).text()+",";
 				});
-	     			 /* alert("order_writers="+order_writers);  */
+	     			 /* alert("order_writers="+order_writers); */
 	     			order_writers = order_writers.substring(0,order_writers.lastIndexOf(","));
-	     			 /* alert("order_writers="+order_writers); */ 
+	     			 /* alert("order_writers="+order_writers); */
 	     			var order_writer = new Array();
 	     			order_writer = order_writers.split(",");
-	     			 /* alert("order_writer="+order_writer[0]); */
-	     			/* alert("order_writer.length="+order_writer.length);  */
+	     			 /* alert("order_writer="+order_writer[0]);
+	     			 alert("order_writer.length="+order_writer.length); */
 	     			for(var i=0;i<order_writer.length;i++){
-	     				 /* alert("s_emp_name="+s_emp_name); */ 
+	     				/* alert("s_emp_name="+s_emp_name); */
 	     				if(order_writer[i] !== s_emp_name){
 	     				$("#notOrderWriter").modal();
 	     				return false;
@@ -86,20 +114,32 @@
 				  });
 			  var lastindex = order_no.lastIndexOf(",");
 			  order_no = order_no.substring(0,lastindex);
-			  alert(order_no);
 			  location.href="/erp/general_invenDel?order_no="+order_no;
 		  });
 		  
 		});//end of document ready 함수
 
 	//메인-구매/사용신청-품목검색 아작스
- 	function pummoksearch(gubun){
-			alert("gubun="+gubun);
+ 	function pummoksearch(){
+			//alert("신규등록 품목검색 메소드 호출 성공");
 		$.ajax({
-			url:"/erp/general_pummokSearch?gubun="+gubun
+			url:"/erp/general_pummokSearch"
 			,method:"get"
 			,success:function(data){
-				$("#pummoksearch").html(data);
+				$("#pummoksearch_register").html(data);
+			}
+			,error:function(e){
+				alert(e.responseText);
+			}
+		});	
+	} 
+ 	function pummoksearch2(){
+			//alert("수정- 품목검색 메소드 호출 성공");
+		$.ajax({
+			url:"/erp/general_pummokSearch2"
+			,method:"get"
+			,success:function(data){
+				$("#pummoksearch_register").html(data);
 			}
 			,error:function(e){
 				alert(e.responseText);
@@ -147,7 +187,7 @@
 
 	//재고 사용/등록 모달 공백 체크	
  	function check(){
-		alert("체크");
+		//alert("체크");
 		var ivgroup_code = document.getElementById('ivgroup_code');
 		var order_count = document.getElementById('order_count');
 		var order_unitprice = document.getElementById('order_unitprice');
@@ -185,13 +225,18 @@
 			tdArr.push(name);
 			tdArr.push(size);
 		});
-		$("#ex3_Result1").html(" * 체크된 Row의 모든 데이터 = "+rowData);	
-		$("#ex3_Result2").html(tdArr);
-		//location.href="/erp/general_invenList?tdArr="+tdArr
+/* 		$("#ex3_Result1").html(" * 체크된 Row의 모든 데이터 = "+rowData);	
+		$("#ex3_Result2").html(tdArr); */
+ 		if(tdArr==null||tdArr==""){
+			alert("품목이 선택되지 않았습니다.");
+			$("#pummoksearch_alert").modal();			
+		}else{
+			alert("모달이 꺼집니다.");
+			$("#pummoksearch_register").modal('hide');
 		if(gubun=='update'){
-			alert("성공");
+			/* alert("성공"); */
 			$.ajax({
-				url:"/erp/general_newresister?tdArr="+tdArr
+				url:"/erp/general_newresister?tdArr="+tdArr+"&gubun2="+gubun
 				,method:"get"
 				,success:function(data){
 					$("#resister_update").html(data);
@@ -201,8 +246,9 @@
 				}
 			});
 			}else{
+				/* alert("else"); */
 				$.ajax({
-					url:"/erp/general_newresister?tdArr="+tdArr
+					url:"/erp/general_newresister?tdArr="+tdArr+"&gubun2="+gubun
 					,method:"get"
 					,success:function(data){
 						$("#register").html(data);
@@ -212,6 +258,7 @@
 					}
 				});
 			} 	
+		}
 	};
 	//신규등록화면 취소시, 모달창 초기화(새 모달창 불러오기)-아작스가 안됨.. 그냥 페이지 이동 처리.
 	function cancel(){
@@ -267,10 +314,60 @@
 	}
 		/* location.href = "general_invendetail?checkRow="+checkRow; */
 
-	//수정
-	function update(imsi){
+	//수정버튼 클릭 이벤트
+	function btn_update(imsi){
 		$("#inven_update_"+imsi).modal();	
 	}
+	//수정화면에서 적용시 update 이벤트
+	function update(){
+		//alert("update호출");
+		$("#f_invenUpdate").attr('action','/erp/general_invenUpdate');
+		$("#f_invenUpdate").attr('method','post');
+		$("#f_invenUpdate").submit();
+	}
+	function invenSearch(){
+		alert("invenSearch 호출");
+		$("#f_searchBar").attr('action','/erp/general_invenList');
+		$("#f_searchBar").attr('method','get');
+		$("#f_searchBar").submit();
+	}
+	function nowSearch(){
+			alert("nowSearch 호출 성공");
+		$("#nowSearch").modal();	
+		$.ajax({
+			url:"/erp/general_nowSearch"
+			,method:"post"
+			,success:function(data){
+				$("#nowSearch").html(data);
+			}
+			,error:function(e){
+				alert(e.responseText);
+			}
+		});			
+	}
+	//품목 추가 품목코드 중복 확인
+	function jungbokCheck(){
+		alert("중복확인");
+		var pid_code = $("#pid_code").val();
+		if(pid_code==null||pid_code==""){
+	 		alert("품목코드 입력후 확인해주세요.");
+		}else{
+			alert("입력은ok");
+			$("#jungbokAlert").modal();
+			$.ajax({
+			url:"/erp/general_jungbokAlert?pid_code="+pid_code
+			,method:"get"
+			,success:function(data){
+				$("#jungbokAlert").html(data);
+			}
+			,error:function(e){
+				alert(e.responseText);
+			}			
+		});
+		}
+	}
+		
+	
 </script> 
 </head>
 <body>
@@ -312,6 +409,7 @@
 
        
 </script>	
+<div class="container-fluid">
 <div class="row"  >
    <div style="width:20%">
       <%@ include file="/common/MenuCommon.jsp" %>
@@ -333,40 +431,47 @@
        </div>
    </div>
 <!--=====================================상단바===========================================-->
-  <div class="row"> 
-  <table class="table table-hover" style="margin-bottom: 5px; background-color:#F1F1F1">
+<!--=====================================검색바 시작========================================-->
+  <div class="row" style="margin-bottom: -25;width:1345px">
+  <form id ="f_searchBar">
+  <table class="table table-hover" style="margin-bottom: 5px; background-color:#F1F1F1;width:1340px">
     <thead>
       <tr>
         <th style="border-top-width: 10px;border-top-color: white;">
-   			<select class="btn btn-dark" style="height:38px;border-radius:5%;padding-right:3px">
-    			<option>구분
-    			<option>구매
-    			<option>사용
+   			<select name="s_gubun" class="btn btn-dark" style="height:38px;border-radius:5%;padding-right:3px">
+    			<option value="">구분
+    			<option value="s__gubun_buy">구매
+    			<option value="s__gubun_use">사용
    			</select>
-   			<select class="btn btn-dark" style="height:38px;border-radius:5%;">
-    			<option>품목명
-    			<option>품목코드
+   			<select name="s_pummok" class="btn btn-dark" style="height:38px;border-radius:5%;">
+    			<option value="">선택
+    			<option value="s_pummok_name">품목명
+    			<option value="s_pummok_code">품목코드
+    			<option value="s_order_writer">작성자
    			</select>
         </th>        
         <th style="border-top-width:10px;border-top-color: white;">
-          <input type="text" class="form-control" name="companyname" placeholder="&nbsp;&nbsp;품목명 또는 재고코드를 입력하세요."  size="33" style="height:38px;width:100%;min-width:100px; font-size: 13px;padding-left:0px">
+          <input type="text" class="form-control" name="s_keyword" placeholder="&nbsp;&nbsp;품목명 또는 재고코드를 입력하세요."
+            size="33" style="height:38px;width:100%;min-width:100px; font-size: 13px;padding-left:0px">
         </th>
         <th style="border-top-width:10px;border-top-color: white;padding-left:0px;padding-right:1px">
-         <input type="date" class="form-control" style="padding-right:0px">
+         <input name="s_start_date" type="date" class="form-control" style="padding-right:0px">
 	    </th>
 	    <th style="border-top-width:10px;border-top-color: white;padding-left:0px;padding-right:0px">
 	       <i class='fas fa-minus-square' style="font-size:36px;margin-left: 20px;"></i>
 	    </th>
 	    <th style="border-top-width:10px;border-top-color: white;padding-left:1px;padding-right:0px">
-	       <input type="date" class="form-control">
+	       <input name="s_end_date" type="date" class="form-control">
 	    </th>
 	    <th style="border-top-width:10px;border-top-color: white;">
-	       <button onclick="location.href='#'" class="btn btn-dark" style="float: right; width:60px;padding:6px 5px 6px 5px">조회</button>
+	       <button onclick="javascript:invenSearch()" class="btn btn-dark" style="float: right; width:60px;padding:6px 5px 6px 5px">조회</button>
 	    </th>
       </tr>
     </thead>
   </table>
+  </form> 
   </div> 
+<!--=====================================검색바 끝========================================-->
   <div style="margin-left:0px;">
   <div style="margin:12px 0px -4px 0px">
 	  <button type="button" class="btn btn-dark" style="padding:6px 5px 6px 5px" 
@@ -375,35 +480,36 @@
 	  data-toggle="modal" data-target="#inven_update">수정</button> -->
 	  <input id="delete" type="button" class="btn btn-dark" style="width:60px;padding:6px 5px 6px 5px" value="삭제">
 	  <button type="button" class="btn btn-dark" style="padding:6px 5px 6px 5px"
-	  data-toggle="modal" data-target="#nowsearch">현재재고조회</button>
+	  onclick="javascript:nowSearch()">현재재고조회</button>
 	  <!-- <button type="button" class="btn btn-dark" style="float:right;padding:6px 5px 6px 5px;margin-right:7px" onClick="javascript:confirm()">선택승인</button> -->
   </div>
-  
      <div class="row" style="margin-top:15px;width:1350px">
         <div class="col-sm-12" style="padding-left: 0px;padding-right: 0px;">
            <table class="table table-striped" style="border-top-style:solid; border-bottom-style:solid;width:100%;border-top-width:2px;border-bottom-width:2px;" > 
               <thead style="text-align:center;">
-                 <tr style="width:10%">
+                 <tr style="width:10%;background-color:#efefef">
                     <th style="width:4%;padding-bottom: 17px;">
                        <div><input name="th_checkAll" id="th_checkAll" type="checkbox" onclick="checkAll()"></div> 
                     </th>
-                    <th style="width:7%;">구분</th>
-                    <th style="width:16%;">품목명</th>
-                    <th style="width:8%;">규격</th>
+                    <th style="width:5%;">구분</th>
+                    <th style="width:14%;">품목명</th>
+                    <th style="width:9%;">규격</th>
                     <th style="width:7%;">수량</th>
-                    <th style="width:7%;">단가</th>
-                    <th style="width:8%;">총액</th>
-                    <th style="width:9%;">구매일</th>
-                    <th style="width:9%;">소모일</th>
+                    <th style="width:8%;">단가</th>
+                    <th style="width:9%;">총액</th>
+                    <!-- <th style="width:9%;">소모일</th> -->
                     <th style="width:9%;">신청일</th>
-                    <th style="width:7%;">작성자</th>
+                    <!-- <th style="width:9%;">승인일</th> -->
+                    <th style="width:9%;">작성자</th>
                     <th style="width:9%;">상태</th>
                  </tr>
               <tbody style="text-align:center;font-size:13px;">
               
 <% 	
 	if(getTotal>0){
-	for(int i=0;i<invenList.size();i++){
+//	for(int i=nowPage*numPerPage;i<(nowPage*numPerPage)+numPerPage;i++){
+	for(int i=0;i<size;i++){
+		if(size == i) break;
 		Map<String,Object> kMap = new HashMap<>();
 		kMap = invenList.get(i);
 		String order_enddate = "";
@@ -418,45 +524,45 @@
 <!--               	 <tr id="mainRow" onclick="javascript:clickTrEvent(this)"
 					 onmouseover="javascript:changeTrColor(this, '#FFFFFF', '#F4FFFD')"
 					 style="cursor:hand"> -->
-              	 <tr>
+              	 <tr style="background-color:white">
               		<td style="padding-top:18px;">
               		<input id="checkRow" name="checkRow" type="checkbox" value="<%=kMap.get("ORDER_NO")%>">
               		</td>     		
               		<td onclick="javascript:clickTrEvent(<%=i%>)" 
-					    style="cursor:hand"><%=kMap.get("ORDER_GUBUN")%>
+					    style="cursor:hand;font-size:15px"><%=kMap.get("ORDER_GUBUN")%>
 					</td>
               		<td onclick="javascript:clickTrEvent(<%=i%>)"
-					 	style="cursor:hand"><%=kMap.get("IVGROUP_NAME")%>
+					 	style="cursor:hand;font-size:15px"><%=kMap.get("IVGROUP_NAME")%>
               		</td>
               		<td onclick="javascript:clickTrEvent(<%=i%>)" 
-              			style="cursor:hand"><%=kMap.get("IVGROUP_SIZE")%>
+              			style="cursor:hand;font-size:15px"><%=kMap.get("IVGROUP_SIZE")%>
            			</td>
               		<td onclick="javascript:clickTrEvent(<%=i%>)" 
-              			style="cursor:hand"><%=kMap.get("ORDER_COUNT")%>
+              			style="cursor:hand;font-size:15px"><%=kMap.get("ORDER_COUNT")%>
            			</td>
               		<td onclick="javascript:clickTrEvent(<%=i%>)" 
-              			style="cursor:hand"><%=kMap.get("ORDER_UNITPRICE")%>
+              			style="cursor:hand;font-size:15px"><%=kMap.get("ORDER_UNITPRICE")%>
            			</td>
               		<td onclick="javascript:clickTrEvent(<%=i%>)" 
-              			style="cursor:hand"><%=kMap.get("TOTALPRICE")%>
+              			style="cursor:hand;font-size:15px"><%=kMap.get("TOTALPRICE")%>
               		</td>
-              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
-              			style="cursor:hand"><%=order_startdate%>
-              		</td>
-              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
+<%--               		<td onclick="javascript:clickTrEvent(<%=i%>)" 
               			style="cursor:hand"><%=order_enddate%>
+              		</td> --%>
+              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
+              			style="cursor:hand;font-size:15px"><%=kMap.get("ORDER_INDATE")%>
+              		</td>
+<%--               		<td onclick="javascript:clickTrEvent(<%=i%>)" 
+              			style="cursor:hand;font-size:15px"><%=order_startdate%> --%>
               		</td>
               		<td onclick="javascript:clickTrEvent(<%=i%>)" 
-              			style="cursor:hand"><%=kMap.get("ORDER_INDATE")%>
-              		</td>
-              		<td onclick="javascript:clickTrEvent(<%=i%>)" 
-              			style="cursor:hand"><%=kMap.get("ORDER_WRITER")%></td>
+              			style="cursor:hand;font-size:15px"><%=kMap.get("ORDER_WRITER")%></td>
 <%
 	if(kMap.get("DELIVERY_STATE")!=null && kMap.get("DELIVERY_STATE").toString().equals("11")){
 %>		
               		<td onclick="javascript:clickTrEvent(<%=i%>)" 
               			style="cursor:hand">
-              			<div style="background-color:Green;color:#fff;padding-top:5px;padding-bottom:5px;">
+              			<div style="width:100;display:inline-block;background-color:Green;color:#fff;padding-top:5px;padding-bottom:5px;">
               			승인대기
               			</div>
            			</td>
@@ -465,7 +571,7 @@
 %>              		
               		<td onclick="javascript:clickTrEvent(<%=i%>)" 
               			style="cursor:hand">
-              			<div style="background-color:#343a40;color:#fff;padding-top:5px;padding-bottom:5px;"><%=kMap.get("DELIVERY_STATE")%>
+              			<div style="width:100;display:inline-block;background-color:#343a40;color:#fff;padding-top:5px;padding-bottom:5px;"><%=kMap.get("DELIVERY_STATE")%>
               			</div>
               		</td>
               		
@@ -483,16 +589,50 @@
      </div>
 </div>
   </div>
-     <div class="container" style="margin-left: 0px;">
-  <ul class="pagination" id="bs_pagenation" style="justify-content: center;">
-    <li class="page-item" style="width:130px; text-align: center;"><a class="page-link" style="color:#6C757D; border: thick;" href="#">Previous</a></li>
-<% for(int i=1;i<(pageSize+1);i++){ %>  
-    <li class="page-item" style="width:42px; text-align: center;"><a class="page-link " style="color:#6C757D; border: thick;" href="/sample/was/invenList"><%=i%></a></li>
-<% } %>    
-    <li class="page-item" style="width:120px; text-align: center;"><a class="page-link " style="color:#6C757D; border: thick;" href="#">Next</a></li>
-  </ul>
-
-  </div>
+ <!-- =========================[[페이지 네이션 추가]]===================== -->
+  <table style="width:950px;height:20px;">
+ 	<tr>
+ 	<td align="center" >
+ 	<ul class="pagination" style="justify-content: center;"> 
+<%
+	Map<String,Object> rMap = (Map<String,Object>)request.getAttribute("rMap");
+	String s_keyword = null; 
+	String s_start_date = null; 
+	String s_end_date = null; 
+	String s_gubun = null; 
+	String s_pummok = null; 
+	if(rMap.get("s_keyword")!=null){
+		s_keyword = rMap.get("s_keyword").toString();
+	}
+	out.print("s_keyword:"+s_keyword);
+	if(rMap.get("s_start_date")!=null){
+		s_start_date = rMap.get("s_start_date").toString();
+	}
+	if(rMap.get("s_end_date")!=null){
+		s_end_date = rMap.get("s_end_date").toString();
+	}
+	if(rMap.get("s_gubun")!=null){
+		s_gubun = rMap.get("s_gubun").toString();
+	}
+	if(rMap.get("s_pummok")!=null){
+		s_pummok = rMap.get("s_pummok").toString();
+	}
+	String pagePath = "general_invenList?s_keyword="
+	+s_keyword+"&s_start_date="+s_start_date+"&s_end_date="+s_end_date+"&s_gubun="+s_gubun+"&s_pummok="+s_pummok;
+	PageBar pb = new PageBar(numPerPage,getTotal,nowPage,pagePath);
+	String pagination = null;//1 2 3 4 5 6 7 8 9 10 ->
+	pagination = pb.getPageBar();
+	out.print("numPerPage="+numPerPage);
+	out.print("getTotal="+getTotal);
+	out.print("nowPage=??"+nowPage);
+	out.print("pagePath="+pagePath);
+	out.print(pagination);
+	    //out.print("<a href=test.mo?crud=boardList&nowPage=0>1</a> <b>2</b>");
+%>   
+ 	</ul>
+ 	</td>
+ 	</tr>
+ </table> 
   <!-- ====================================여기서 테이블 끝======================================= -->
 </div>
 </div>
@@ -538,7 +678,9 @@
 		           	 </td>
 		        	 <td style="padding-top:7px; padding-bottom:7px;width:auto" colspan="3">
 		           		<input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" 
-		           			   style="height:26px;margin-right:0px" onClick="javascript:pummoksearch('resister')" data-toggle="modal" data-target="#pummoksearch" value="검색" >
+		           			   style="height:26px;margin-right:0px" 
+		           			   onclick="javascript:pummoksearch()" data-toggle="modal" 
+		           			   data-target="#pummoksearch_register" value="검색" >
 		           		<input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" style="height:26px;width:auto" data-toggle="modal" data-target="#itemadd" value="품목추가">
 		           	 </td>
 		          </tr>
@@ -558,7 +700,7 @@
 		          </tr>
 	          </tbody>
           </table>
-          <table id="register" class="table" style="border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 2px;"> 
+          <table id="register2" class="table" style="border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 2px;"> 
       		<tbody style="text-align: left;">          
 		          <tr>
 		             <td class="bi_table_insert" style="width:25%;padding-top: 7px; padding-bottom: 7px;" >수량</td>
@@ -626,13 +768,13 @@
       </div>
       <!-- Modal body -->
       <div class="modal-body" style="padding-bottom: 0px;">
-      	<form id = "invenAdd">
+      	<form id = "invenDetail">
         <table class="table" style="border-top-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 0px;margin-bottom: 0px;"> 
       		<tbody style="text-align: left;">
 		          <tr>
 		             <td class="bi_table_insert" style="width:25%; padding-top:7px; padding-bottom: 7px;">구분</td>
 		             <td style="width:30%;padding-top: 5px; padding-bottom: 5px;">
-	   		              <input id="ivgroup_name" name="ivgroup_name" type="text" class="form-control" 
+	   		              <input id="order_gubun" name="order_gubun" type="text" class="form-control" 
 	   		              		 style="height: 28px;font-size: 13px;text-align:right" readonly
 	   		              		 value="<%=pMap.get("ORDER_GUBUN")%>">
 <!-- 		              <select id="order_gubun" name="order_gubun">
@@ -647,7 +789,7 @@
 		          </tr>
 	          </tbody>
           </table>
-          <table id="register" class="table" style="margin-bottom: 0px;border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 0px;"> 
+          <table id="register3" class="table" style="margin-bottom: 0px;border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 0px;"> 
       		<tbody style="text-align: left;">
 		          <tr>
 		             <td class="bi_table_insert" style="width:25%;padding-top:9px; padding-bottom: 0px;">품목코드</td>
@@ -683,7 +825,7 @@
 		          </tr>
 	          </tbody>
           </table>
-          <table id="register" class="table" style="border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 2px;"> 
+          <table id="register4" class="table" style="border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 2px;"> 
       		<tbody style="text-align: left;">          
 		          <tr>
 		             <td class="bi_table_insert" style="width:25%;padding-top: 7px; padding-bottom: 7px;" >수량</td>
@@ -735,7 +877,7 @@
 		       <input id="b_confirm" class="btn btn-dark" type="button" value="승인" onClick='javascript:confirm()'>
 	      </div>
 	      <div style="display:table-cell;float:right;vertical-align:middle">
-	       	   <input id="b_update" class="btn btn-dark" type="button" value="수정" onClick='javascript:update(<%=i %>)'>
+	       	   <input id="b_update" class="btn btn-dark" type="button" value="수정" onClick='javascript:btn_update(<%=i %>)'>
 	           <button type="button" class="btn btn-dark" data-dismiss="modal" onclick="cancel()">닫기</button>
 	      </div>	
       </div>
@@ -763,12 +905,13 @@
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">자산 구매/사용 상세조회</h4>
+        <h4 class="modal-title">수정</h4>
         <button type="button" class="close" data-dismiss="modal" onclick="cancel()">&times;</button>
       </div>
       <!-- Modal body -->
       <div class="modal-body" style="padding-bottom: 0px;">
-      	<form id = "invenAdd">
+      	<form id = "f_invenUpdate">
+      	<input id="order_no" name="order_no" type="hidden" value="<%=pMap.get("ORDER_NO")%>">
         <table class="table" style="border-top-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 0px;margin-bottom: 0px;"> 
       		<tbody style="text-align: left;">
 		          <tr>
@@ -781,7 +924,7 @@
 		              	<option value="구매">구매
 		              	<option value="사용">사용
 		              </select> 
-		              <input value="(기존값:<%=pMap.get("ORDER_GUBUN")%>)" readonly style="border:none">
+		              <%-- <input value="(기존값:<%=pMap.get("ORDER_GUBUN")%>)" readonly style="border:none"> --%>
 		           	 </td>
 		        	 <td style="width:10%;padding-top:7px; padding-bottom: 7px;">
 		           	 </td>
@@ -801,7 +944,7 @@
 		           	 </td>
 		        	 <td style="padding-top:7px; padding-bottom:7px;width:auto" colspan="3">
 		           		<input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" 
-		           			   style="height:26px;margin-right:0px" onClick="javascript:pummoksearch('update')" data-toggle="modal" data-target="#pummoksearch" value="검색" >
+		           			   style="height:26px;margin-right:0px" onClick="javascript:pummoksearch2()" data-toggle="modal" data-target="#pummoksearch_register" value="검색" >
 		           		<!-- <input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" style="height:26px;width:auto" data-toggle="modal" data-target="#itemadd" value="품목추가"> -->
 		           	 </td>
 		          </tr>
@@ -826,7 +969,7 @@
 		          </tr>
 	          </tbody>
           </table>
-          <table id="register" class="table" style="border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 2px;"> 
+          <table id="register5" class="table" style="border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 2px;"> 
       		<tbody style="text-align: left;">          
 		          <tr>
 		             <td class="bi_table_insert" style="width:25%;padding-top: 7px; padding-bottom: 7px;" >수량</td>
@@ -874,11 +1017,8 @@
 
       <!-- Modal footer -->
       <div style="display:table;text-align:center;margin:15px">
-	      <div style="display:table-cell;float:left;vertical-align:middle">
-		       <input id="b_confirm" class="btn btn-dark" type="button" value="승인" onClick='javascript:confirm()'>
-	      </div>
 	      <div style="display:table-cell;float:right;vertical-align:middle">
-	       	   <input id="b_update" class="btn btn-dark" type="button" value="적용" onClick='javascript:update()'>
+	       	   <input id="b_update" class="btn btn-dark" type="button" value="저장" onClick='javascript:update()'>
 	           <button type="button" class="btn btn-dark" data-dismiss="modal" onclick="cancel()">닫기</button>
 	      </div>	
       </div>
@@ -890,7 +1030,7 @@
 %>
 <!-- ===================================모달뷰 수정(메인 - 상세조회- 수정) 끝===================================== -->
 <!-- ===================================모달뷰 (메인 - 현재재고조회) 시작===================================== -->
-<div class="modal" id="nowsearch">
+<div class="modal" id="nowSearch">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <!-- Modal Header -->
@@ -923,7 +1063,6 @@
               <thead style="text-align:center;">
                  <tr style="width:10%">
                     <th style="width:">구분</th>
-                    <th style="width:">분류</th>
                     <th style="width:">코드</th>
                     <th style="width:">품목명</th>
                     <th style="width:">규격</th>
@@ -931,24 +1070,21 @@
                  </tr>
               <tbody style="text-align:center;font-size:13px;">
               	 <tr>
-              		<td>구매</td>
-              		<td>사무</td>
+              		<td>자산</td>
               		<td>a001</td>
               		<td>사무용 모니터</td>
               		<td>17"</td>
               		<td>100</td>
               	 </tr>
               	 <tr>
-              		<td>구매</td>
-              		<td>생산</td>
+              		<td>자산</td>
               		<td>a0022</td>
               		<td>사무용 책상</td>
               		<td>30*30*30</td>
               		<td>5</td>
               	 </tr>
               	 <tr>
-              		<td>소모</td>
-              		<td>사무</td>
+              		<td>자산</td>
               		<td>a0023</td>
               		<td>사무용 의자</td>
               		<td>30*20*15</td>
@@ -969,17 +1105,17 @@
 </div>
 <!-- ===================================모달뷰 (메인 - 현재재고조회) 끝===================================== -->
 <!-- ===================================모달뷰 (메인 - 신규 등록 -품목검색) 시작===================================== -->
-<div class="modal" id="pummoksearch" style="border:1px solid black">
+<div class="modal" id="pummoksearch_register" style="border:1px solid black">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
 
-      <!-- Modal Header -->
+<!--       Modal Header
       <div class="modal-header">
         <h5 class="modal-title">품목검색</h5>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
-      <!-- Modal body -->
+      Modal body
       <div class="modal-body">
         <table class="table" style="border-top-style: solid; border-bottom-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 2px;"> 
       		<tbody style="text-align: left;">
@@ -1021,7 +1157,7 @@
              	             	             	             	 
               </tbody>
          </table> 
-      </div>
+      </div> -->
 
       <!-- Modal footer -->
       <div class="modal-footer">
@@ -1055,7 +1191,9 @@
 		              <input id="pid_code" name="p_code" type="text" class="form-control" style="height: 28px;font-size: 13px;text-align:right">
 		           	 </td>
 		        	 <td style="padding-top:7px; padding-bottom:7px;" colspan="3">
-		           		<button class="btn btn-secondary btn_firstrow btn_tableRow" type="submit" style="width:auto;height:26px;margin-right:0px" data-toggle="modal" data-target="#search">중복확인</button>
+		           		<input type="button" class="btn btn-secondary btn_firstrow" 
+		           			   style="width:auto;height:26px;margin-right:0px" value="중복확인"
+		           			   onclick="javascript:jungbokCheck()">
 		           	 </td>
 		          </tr>
 		          <tr>
@@ -1091,14 +1229,14 @@
 <div class="modal" id="alert" data-backdrop="static" data-keyboard="true">
   <div class="modal-dialog modal-dialog-centered" style="text-align:center">
     <div class="modal-content" style="height:120px;width:90%;margin-left:5%;margin-right:5%;">
-      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:center;" >
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:center;" >
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
-      <div style="height:50%;background-color:rgba(0,0,0,.05);color:black;width:100%;text-align:center;display:table;">
+      <div style="height:50%;background-color:rgba(0,0,0,0);color:black;width:100%;text-align:center;display:table;">
         <h6 style="display:table-cell;vertical-align:middle;font-weight: bold;
     	           font-size: large;">품목코드,수량,단가는 <br>필수  입력 사항입니다.</h6>
       </div>
-      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:right;display:table">
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:right;display:table">
       	<button style="width: 13%;height: 100%;border-top-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;
     					margin-right: 3px;padding-top: 0px;border-left-width: 0px;padding-right: 0px;padding-left: 0px;
     border-right-width: 0px;display:table-cell;font-size:14px" type="button" class="btn btn-dark" data-dismiss="modal">닫기</button>
@@ -1111,16 +1249,16 @@
 <div class="modal" id="deletealert" data-backdrop="static" data-keyboard="true">
   <div class="modal-dialog modal-dialog-centered" style="text-align:center">
     <div class="modal-content" style="height:120px;width:90%;margin-left:5%;margin-right:5%;">
-      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:center;" >
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:center;" >
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
-      <div style="display:table;height:50%;background-color:rgba(0,0,0,.05);color:black;width:100%;">
+      <div style="display:table;height:50%;background-color:rgba(0,0,0,0);color:black;width:100%;">
       	<div style="display:table-cell;vertical-align:middle;text-align:center;">
-      		<img style="heigth:20px;width:20px"src="/erp/images/warning-black.png" alt="주의:">
+      		<img style="heigth:20px;width:20px;margin-bottom: 8x"src="/erp/images/warning-black.png" alt="주의:">
         	<h6 style="display:inline;font-weight:bold;font-size:large">삭제 하시겠습니까?</h6>
       	</div>	
       </div>
-      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:right;display:table">
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:right;display:table">
       	<input id="realdel" style="width: 13%;height: 100%;border-top-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;
     					margin-right: 3px;padding-top: 0px;border-left-width: 0px;padding-right: 0px;padding-left: 0px;
     border-right-width: 0px;display:table-cell;font-size:14px" type="button" class="btn btn-dark" data-dismiss="modal" value="삭제">
@@ -1136,16 +1274,16 @@
 <div class="modal" id="deleteempty" data-backdrop="static" data-keyboard="true">
   <div class="modal-dialog modal-dialog-centered" style="text-align:center">
     <div class="modal-content" style="height:120px;width:90%;margin-left:5%;margin-right:5%;">
-      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:center;" >
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:center;" >
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
-      <div style="display:table;height:50%;background-color:rgba(0,0,0,.05);color:black;width:100%;">
+      <div style="display:table;height:50%;background-color:rgba(0,0,0,0);color:black;width:100%;">
       	<div style="display:table-cell;vertical-align:middle;text-align:center;">
-      		<img style="heigth:20px;width:20px"src="/erp/images/warning-black.png" alt="주의:">
+      		<img style="heigth:20px;width:20px;margin-bottom: 8x"src="/erp/images/warning-black.png" alt="주의:">
         	<h6 style="display:inline;font-weight:bold;font-size:large">삭제할 대상을 선택하세요.</h6>
       	</div>	
       </div>
-      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:right;display:table">
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:right;display:table">
       	<button style="width: 13%;height: 100%;border-top-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;
     					margin-right: 3px;padding-top: 0px;border-left-width: 0px;padding-right: 0px;padding-left: 0px;
     border-right-width: 0px;display:table-cell;font-size:14px" type="button" class="btn btn-dark" data-dismiss="modal">닫기</button>
@@ -1158,16 +1296,16 @@
 <div class="modal" id="notOrderWriter" data-backdrop="static" data-keyboard="true">
   <div class="modal-dialog modal-dialog-centered" style="text-align:center">
     <div class="modal-content" style="height:120px;width:90%;margin-left:5%;margin-right:5%;">
-      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:center;" >
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:center;" >
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
-      <div style="display:table;height:50%;background-color:rgba(0,0,0,.05);color:black;width:100%;">
+      <div style="display:table;height:50%;background-color:rgba(0,0,0,0);color:black;width:100%;">
       	<div style="display:table-cell;vertical-align:middle;text-align:center;">
-      		<img style="heigth:20px;width:20px"src="/erp/images/warning-black.png" alt="주의:">
+      		<img style="heigth:20px;width:20px;margin-bottom: 8x"src="/erp/images/warning-black.png" alt="주의:">
         	<h6 style="display:inline;font-weight:bold;font-size:large">작성자만 삭제할 수 있습니다.</h6>
       	</div>	
       </div>
-      <div style="background-color:rgba(0,0,0,.05);height:25%;width:100%;text-align:right;display:table">
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:right;display:table">
       	<button style="width: 13%;height: 100%;border-top-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;
     					margin-right: 3px;padding-top: 0px;border-left-width: 0px;padding-right: 0px;padding-left: 0px;
     border-right-width: 0px;display:table-cell;font-size:14px" type="button" class="btn btn-dark" data-dismiss="modal">닫기</button>
@@ -1176,5 +1314,33 @@
   </div>
 </div>
 <!-- ===================================모달뷰(메인 - 삭제- alert-작성자만 삭제) 끝=========================================== -->
+<!-- ===================================모달뷰 (품목미선택- alert) 시작=========================================== -->
+<div class="modal" id="pummoksearch_alert" data-backdrop="static" data-keyboard="true">
+  <div class="modal-dialog modal-dialog-centered" style="text-align:center">
+    <div class="modal-content" style="height:120px;width:90%;margin-left:5%;margin-right:5%;">
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:center;" >
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div style="display:table;height:50%;background-color:rgba(0,0,0,0);color:black;width:100%;">
+      	<div style="display:table-cell;vertical-align:middle;text-align:center;">
+      		<img style="heigth:20px;width:20px;margin-bottom: 8x"src="/erp/images/warning-black.png" alt="주의:">
+        	<h6 style="display:inline;font-weight:bold;font-size:large">품목이 선택되지 않았습니다.</h6>
+      	</div>	
+      </div>
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:right;display:table">
+      	<button style="width: 13%;height: 100%;border-top-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;
+    					margin-right: 3px;padding-top: 0px;border-left-width: 0px;padding-right: 0px;padding-left: 0px;
+    border-right-width: 0px;display:table-cell;font-size:14px" type="button" class="btn btn-dark" data-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ===================================모달뷰(품목미선택- alert) 끝=========================================== -->
+<!-- ===================================모달뷰 (품목코드 중복체크- alert) 시작=========================================== -->
+<div class="modal" id="jungbokAlert" data-backdrop="static" data-keyboard="true">
+공백
+</div>
+<!-- ===================================모달뷰(품목코드 중복체크- alert) 끝=========================================== -->
+</div>
 </body>
 </html>
