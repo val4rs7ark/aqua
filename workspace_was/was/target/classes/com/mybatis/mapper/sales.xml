@@ -14,6 +14,7 @@
             where order_gubun = '생산'
       group by order_enddate )
       where grdate is not null
+        and money is not null
       group by grdate
       order by grdate  
 	</select>
