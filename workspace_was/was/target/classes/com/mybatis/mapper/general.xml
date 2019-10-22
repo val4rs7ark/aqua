@@ -6,44 +6,154 @@
 		<result jdbcType="VARCHAR" javaType="java.lang.String" property="mem_id"/>
 	</resultMap> -->
 	<select id="invenList" parameterType="map" resultType="map">
-	select INVEN_NO,INVEN_COUNT,USE_DATE,INVEN_REGDATE,BUY_UNITPRICE,BUY_DATE        
-           ,iv.IVGROUP_CODE IVGROUP_CODE,IVG.IVGROUP_NAME IVGROUP_NAME,IVG.IVGROUP_BUNRYU IVGROUP_BUNRYU
-           ,IVG.IVGROUP_SIZE IVGROUP_SIZE,iv.DEPT_CODE DEPT_CODE,BUY_TOTALPRICE,iv.EMPNO
-           ,emp.emp_name emp_name,INVEN_GUBUN,inven_status  
-	  from inventory iv,invengroup ivg,emp
-	  where iv.ivgroup_code=ivg.ivgroup_code
-	    and iv.empno = emp.empno           
+        select rno, order_no,order_gubun,order_count,order_startdate,order_indate,order_unitprice,order_enddate        
+	           ,ivgroup_code, ivgroup_name, ivgroup_gubun
+	           ,ivgroup_size,totalprice,empno_r
+	           ,order_writer,delivery_state, order_memo  
+        from(select rownum rno, order_no,order_gubun,order_count,order_startdate,order_indate,order_unitprice,order_enddate        
+		           ,ivgroup_code, ivgroup_name, ivgroup_gubun
+		           ,ivgroup_size,totalprice,empno_r
+		           ,order_writer,delivery_state, order_memo  
+		       from(select order_no,order_gubun,order_count,order_startdate,order_indate,order_unitprice,order_enddate        
+				           ,ivg.ivgroup_code ivgroup_code,ivg.ivgroup_name ivgroup_name,ivg.ivgroup_gubun ivgroup_gubun
+				           ,ivg.ivgroup_size ivgroup_size,order_unitprice*order_count totalprice,orde.order_writer empno_r
+				           ,emp.emp_name order_writer,delivery_state, order_memo  
+				      from order_deli orde,invengroup ivg,emp
+				     where orde.ivgroup_code=ivg.ivgroup_code
+				       and orde.order_writer = emp.empno
+				       and order_gubun in('구매','사용')
+				 	 order by order_no desc) a
+	  			where 1=1
+			 <if test="s_gubun!=null and s_gubun.equals('s__gubun_buy')">
+			 		and order_gubun = '구매'
+			 </if> 
+			 <if test="s_gubun!=null and s_gubun.equals('s__gubun_use')">
+			 		and order_gubun = '사용'
+			 </if>
+			 <!-- 품목명검색 -->
+			 <if test="s_pummok!=null and s_pummok.equals('s_pummok_name')">
+			 		and ivgroup_name like '%'||#{s_keyword}||'%'
+			 </if>
+			 <!-- 품목코드검색 -->
+			 <if test="s_pummok!=null and s_pummok.equals('s_pummok_code')">
+			 		and ivgroup_code like '%'||#{s_keyword}||'%'
+			 </if>
+			 <!-- 작성자검색 -->
+			 <if test="s_pummok!=null and s_pummok.equals('s_order_writer')">
+			 		and order_writer like '%'||#{s_keyword}||'%'
+			 </if>
+			 <!-- 날짜검색 -->
+			 <if test="s_start_date_ud!=null and s_end_date_ud!=null">
+			 		and order_indate between #{s_start_date_ud} and #{s_end_date_ud}
+			 </if>
+			 <if test="s_start_date_ud!=null and s_end_date_ud==null">
+			 		and order_indate between #{s_start_date_ud} and (select max(order_indate) from order_deli)
+			 </if>
+			 <if test="s_start_date_ud==null and s_end_date_ud!=null">
+			 		and order_indate between (select min(order_indate) from order_deli) and #{s_end_date_ud}
+			 </if>
+			  ) b
+			  where 1=1
+	 <if test="start>0 and end>0">
+ 		   		and rno between #{start} and #{end} 
+	 </if>
 	</select>
+	<insert id="invenAdd" parameterType="map">
+	insert into order_deli(inven_no,inven_count,use_date,inven_regdate,buy_unitprice,buy_date,ivgroup_code,dept_code,buy_totalprice,empno,inven_gubun,inven_status)
+	values (#{inven_no},#{inven_count},#{use_date},to_char(sysdate,'yyyy-mm-dd'),#{buy_unitprice},#{buy_date},'i001','d001_1',#{buy_totalprice},'a1234','구매','승인대기')
+	</insert>
+	<insert id="invenAdd2" parameterType="map" statementType="CALLABLE">
+	{call proc_invenadd(#{order_count,mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
+	  				   ,#{order_enddate,mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+	  				   ,#{order_unitprice,mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
+	  				   ,#{order_startdate,mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+	  				   ,#{ivgroup_code,mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+	  				   ,#{order_gubun,mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+	  				   ,#{s_emp_no,mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+	  				   ,#{order_memo,mode=IN, jdbcType=VARCHAR, javaType=java.lang.String})} 
+	</insert>
+	<select id="getInven_no" parameterType="map" resultType="int">
+	select nvl(max(order_no),0)+1 from order_deli
+	where order_gubun in('구매','사용')
+	</select>
+	<!--select일때 파라미터가 실제로는 없지만 default로 map을 넣어줘야함. -->
+	<select id="getInvenTotal" parameterType="map" resultType="int">
+	select count(order_no) 
+      from order_deli orde,invengroup ivg,emp	
+	 where order_gubun in('구매','사용')
+	   and orde.ivgroup_code=ivg.ivgroup_code
+	   and orde.order_writer = emp.empno
+			 <if test="s_gubun!=null and s_gubun.equals('s__gubun_buy')">
+			 		and orde.order_gubun = '구매'
+			 </if> 
+			 <if test="s_gubun!=null and s_gubun.equals('s__gubun_use')">
+			 		and orde.order_gubun = '사용'
+			 </if>
+			 <!-- 품목명검색 -->
+			 <if test="s_pummok!=null and s_pummok.equals('s_pummok_name')">
+			 		and ivg.ivgroup_name like '%'||#{s_keyword}||'%'
+			 </if>
+			 <!-- 품목코드검색 -->
+			 <if test="s_pummok!=null and s_pummok.equals('s_pummok_code')">
+			 		and ivg.ivgroup_code like '%'||#{s_keyword}||'%'
+			 </if>
+			 <!-- 작성자검색 -->
+			 <if test="s_pummok!=null and s_pummok.equals('s_order_writer')">
+			 		and emp.emp_name like '%'||#{s_keyword}||'%'
+			 </if>
+			 <!-- 날짜검색 -->
+			 <if test="s_start_date_ud!=null and s_end_date_ud!=null">
+			 		and orde.order_indate between #{s_start_date_ud} and #{s_end_date_ud}
+			 </if>
+			 <if test="s_start_date_ud!=null and s_end_date_ud==null">
+			 		and orde.order_indate between #{s_start_date_ud} and (select max(order_indate) from order_deli)
+			 </if>
+			 <if test="s_start_date_ud==null and s_end_date_ud!=null">
+			 		and orde.order_indate between (select min(order_indate) from order_deli) and #{s_end_date_ud}
+			 </if>	
+	</select>
+	<select id="getInvenGroupTotal" parameterType="map" resultType="int">
+	select count(ivgroup_code) from invengroup
+	where ivgroup_gubun = '자산'
+	</select>
+	<select id="invengroupList" parameterType="map" resultType="map">
+	select ivgroup_code,ivgroup_name,ivgroup_size,ivgroup_gubun,ivgroup_count 
+	  from invengroup
+	 where ivgroup_gubun = '자산'
+	</select>
+	<delete id="invenDel" parameterType="list">
+		delete from order_deli 
+		 where order_no in
+		<foreach item="item" index="index" collection="list"
+				 open="(" separator="," close=")">
+				 #{item}
+		</foreach>
+	</delete>	
+	
+	<insert id="pummokadd" parameterType="map">
+		insert into invengroup(ivgroup_code,ivgroup_name,ivgroup_size,ivgroup_gubun)
+			values(#{p_code},#{p_name},#{p_size},'자산')
+	</insert>
+	<update id="invenUpdate" parameterType="map">
+		update order_deli set order_gubun = #{order_gubun}
+							,ivgroup_code = #{ivgroup_code}
+							,order_count = #{order_count2}
+							,order_unitprice = #{order_unitprice2}
+							,order_memo = #{order_memo}
+			where order_no = #{order_no}
+	</update>
+	<select id="jungbokAlert" parameterType="String" resultType="String">
+		select ivgroup_code from invengroup
+		where ivgroup_code = #{pid_code}
+	</select>
+	
+	
 <!-- 	<insert id="invenAdd" parameterType="map">
 	insert into inventory(inven_no,inven_count,use_date,inven_regdate,buy_unitprice,buy_date,ivgroup_code,dept_code,buy_totalprice,empno,inven_gubun,inven_status)
 	values ((select max(inven_no)+1 from inventory),#{inven_count},
 		#{use_date},to_char(sysdate,'yyyy-mm-dd'),#{buy_unitprice},#{buy_date},
 		'i001','d001_1',#{buy_totalprice},'a1234','구매','승인대기')
 	</insert> -->
-	<insert id="invenAdd" parameterType="map">
-	insert into inventory(inven_no,inven_count,use_date,inven_regdate,buy_unitprice,buy_date,ivgroup_code,dept_code,buy_totalprice,empno,inven_gubun,inven_status)
-	values (#{inven_no},#{inven_count},#{use_date},to_char(sysdate,'yyyy-mm-dd'),#{buy_unitprice},#{buy_date},'i001','d001_1',#{buy_totalprice},'a1234','구매','승인대기')
-	</insert>
-	<insert id="invenAdd2" parameterType="map" statementType="CALLABLE">
-	{call proc_invenadd(#{inven_count,mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
-	  				  ,#{use_date,mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
-	  				  ,#{buy_unitprice,mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
-	  				  ,#{buy_date,mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
-	  				  ,#{buy_totalprice,mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer})} 
-	</insert>
-	<select id="getInven_no" parameterType="map" resultType="int">
-	select nvl(max(inven_no),0)+1 from inventory
-	</select>
-	<select id="getInvenTotal" parameterType="map" resultType="int">
-	select count(inven_no) from inventory	
-	</select>
-	<select id="getInvenGroupTotal" parameterType="map" resultType="int">
-	select count(ivgroup_code) from invengroup
-	</select>
-	<select id="invengroupList" parameterType="map" resultType="map">
-	select IVGROUP_CODE,IVGROUP_NAME,IVGROUP_SIZE,IVGROUP_BUNRYU 
-	  from invengroup
-	</select>
 	
 <!-- 	<insert id="invenAdd" parameterType="map"> =====>#{use_date,jdbcType=VARCHAR},to_char(#{buy_date,jdbcType=VARCHAR},'yyyy.mm.dd')
 	insert into inventory(inven_no,inven_count,use_date,inven_regdate,buy_unitprice,buy_date,ivgroup_code,dept_code,buy_totalprice,empno,inven_gubun)
@@ -51,6 +161,6 @@
 		#{use_date},to_char(sysdate,'yyyy.mm.dd'),#{buy_unitprice},#{buy_date},
 		#{ivgroup_code},#{dept_code},#{buy_totalprice},#{empno},
 		#{inven_gubun})
-	</insert> -->
+	</insert> -->	
 
 </mapper>

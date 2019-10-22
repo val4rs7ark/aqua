@@ -15,9 +15,9 @@ public class GeneralDao {
 	@Autowired(required=false)
 	SqlSessionTemplate sqlSessionTemplate = null;
 	
-	public List<Map<String, Object>> invenList() {
+	public List<Map<String, Object>> invenList(Map<String,Object> pMap) {
 		List<Map<String,Object>> invenList = null;
-		invenList = sqlSessionTemplate.selectList("invenList");
+		invenList = sqlSessionTemplate.selectList("invenList",pMap);
 		return invenList;
 	}
 
@@ -25,8 +25,8 @@ public class GeneralDao {
 		sqlSessionTemplate.insert("invenAdd",pMap);
 	}
 
-	public int getInvenTotal() {
-		int getInvenTotal= sqlSessionTemplate.selectOne("getInvenTotal");
+	public int getInvenTotal(Map<String, Object> pMap) {
+		int getInvenTotal= sqlSessionTemplate.selectOne("getInvenTotal",pMap);
 		logger.info("getInvenTotal 호출 성공");
 		return getInvenTotal;
 	}
@@ -71,6 +71,17 @@ public class GeneralDao {
 	public void pummokadd(Map<String, Object> pMap) {
 		logger.info("GeneralDao pummokadd 호출 성공");
 		sqlSessionTemplate.insert("pummokadd", pMap);
+	}
+
+	public void invenUpdate(Map<String, Object> pMap) {
+		sqlSessionTemplate.update("invenUpdate", pMap);
+	}
+
+	public String jungbokAlert(String pid_code) {
+		String result = "";
+		result = sqlSessionTemplate.selectOne("jungbokAlert", pid_code);
+		logger.info("result="+result);
+		return result;
 	}
 
 }

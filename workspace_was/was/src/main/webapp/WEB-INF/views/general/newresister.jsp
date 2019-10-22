@@ -8,6 +8,7 @@
 //////////////////세션에 담긴 아디와 비번 담을 변수////////////
 	String order_writer = session.getAttribute("s_emp_no").toString();
 	out.print("order_writer"+order_writer);
+	String gubun2 = pMap.get("gubun2").toString();
 %>   
       		<tbody style="text-align: left;">
 		          <tr>
@@ -16,8 +17,22 @@
 		              <input id="ivgroup_code" name="ivgroup_code" type="text" class="form-control" style="height:auto;font-size: 13px;text-align:right" value="<%=pMap.get("code")%>" required>
 		           	 </td>
 		        	 <td style="padding-top:7px; padding-bottom:7px;width:auto" colspan="3">
+<%
+	if(gubun2.equals("register")){
+%>     	 
 		           		<input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" 
-		           			   style="height:26px;margin-right:0px" onClick="javascript:pummoksearch('ajax')" data-toggle="modal" data-target="#pummoksearch" value="검색" >
+		           			   style="height:26px;margin-right:0px" onClick="javascript:pummoksearch()" 
+		           			   data-toggle="modal" data-target="#pummoksearch_register" value="검색" >
+<%
+	} else{
+%>		         
+		           		<input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" 
+		           			   style="height:26px;margin-right:0px" onClick="javascript:pummoksearch2()" 
+		           			   data-toggle="modal" data-target="#pummoksearch_register" value="검색" >
+<%
+
+	}
+%>  			   
 		           		<input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" style="height:26px;width:auto" data-toggle="modal" data-target="#itemadd" value="품목추가">
 		           	 </td>
 		          </tr>
