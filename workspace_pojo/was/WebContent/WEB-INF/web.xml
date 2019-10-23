@@ -10,6 +10,7 @@
      <listener>
      	<listener-class>com.util.SessionUpdate</listener-class>
      </listener>
+
   	 <servlet>
   		<servlet-name>POJO_WAS</servlet-name>
   		<servlet-class>com.was.erp.ErpServlet</servlet-class>	

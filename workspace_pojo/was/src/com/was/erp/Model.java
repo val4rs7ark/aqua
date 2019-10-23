@@ -11,6 +11,7 @@ public class Model {
 	private String viewPath =null;
 	private String viewExtension =null;
 	private String listName = null;
+	private String method = "forward";
 	private List<Map<String,Object>> addAttribute =null;
 	
 	public void setViewPath(String viewPath) {
@@ -54,5 +55,11 @@ public class Model {
 	}
 	public void setListName(String listName) {
 		this.listName = listName;
+	}
+	public String getMethod() {
+		return method;
+	}
+	public void setMethod(String method) {
+		this.method = method;
 	}
 }
