@@ -61,7 +61,7 @@ public class ResultView {
 	////////////////////////////응답화면 method/////////////////////////
 	public RequestDispatcher resultView() {
 		RequestDispatcher view = null;
-		if("wasEmpAttendance".equals(mapping)) {
+		if("forward".equals(model.getMethod())) {
 			view = req.getRequestDispatcher(model.getFullView());
 			try {
 				view.forward(req, res);
@@ -70,67 +70,9 @@ public class ResultView {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-		else if("wasEmpStatusNoteInsert".equals(mapping)) {
-			view = req.getRequestDispatcher(model.getFullView());
-			try {
-				view.forward(req, res);
-			} catch (ServletException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		else if("wasEmpStatusNoteDetail".equals(mapping)) {
-			view = req.getRequestDispatcher(model.getFullView());
-			try {
-				view.forward(req, res);
-			} catch (ServletException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		else if("wasEmpStatus".equals(mapping)) {
-				view = req.getRequestDispatcher(model.getFullView());
-				try {
-					view.forward(req, res);
-				} catch (ServletException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		else if("wasLogin".equals(mapping)) {
-			view = req.getRequestDispatcher(model.getFullView());
-			try {
-				view.forward(req, res);
-			} catch (ServletException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		else if("empSignUp".equals(mapping)) {
+		}else {
 			try {
 				res.sendRedirect(model.getFullView());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		else if("productInsert".equals(mapping)) {
-			try {
-				res.sendRedirect(model.getFullView());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		else if("productList".equals(mapping)) {
-			view = req.getRequestDispatcher(model.getFullView());
-			try {
-				view.forward(req, res);
-			} catch (ServletException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

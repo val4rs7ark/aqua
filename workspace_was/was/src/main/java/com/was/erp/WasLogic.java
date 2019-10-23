@@ -1,4 +1,4 @@
-package com.was.erp;
+﻿package com.was.erp;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -335,5 +335,5 @@ public class WasLogic {
 		List<Map<String,Object>> result = wasDao.wasMainChart(pMap);
 		return result;
 	}
-	
+
 }
