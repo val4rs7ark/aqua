@@ -120,6 +120,7 @@
 	select ivgroup_code,ivgroup_name,ivgroup_size,ivgroup_gubun,ivgroup_count 
 	  from invengroup
 	 where ivgroup_gubun = '자산'
+	   and ivgroup_code between 'I00001' and 'I00050'
 	</select>
 	<delete id="invenDel" parameterType="list">
 		delete from order_deli 
@@ -146,6 +147,10 @@
 		select ivgroup_code from invengroup
 		where ivgroup_code = #{pid_code}
 	</select>
+	<update id="confirm" parameterType="Integer">
+		update order_deli set delivery_state = 22
+		 where order_no = #{order_no}
+	</update>
 	
 	
 <!-- 	<insert id="invenAdd" parameterType="map">
