@@ -78,7 +78,7 @@ public class GeneralController {
 		if(pMap.get("nowPage")!=null) {
 			nowPage = Integer.parseInt(pMap.get("nowPage").toString())+1;
 		}
-		int pagePer_Num = 5;//한페이지에 뿌려질 로우수
+		int pagePer_Num = 10;//한페이지에 뿌려질 로우수
 		int start = 0;
 		int end = 0;
 		if(nowPage>0) {
@@ -228,6 +228,13 @@ public class GeneralController {
 		mod.addAttribute("result",result);
 		mod.addAttribute("pid_code",pid_code);
 		return "general/jungbokAlert";
+	}
+	
+	@PostMapping("/general_confirm")
+	public String confirm(@RequestParam int order_no,String r_order_no,Model mod) {
+		logger.info("order_no:"+order_no);
+		generalLogic.confirm(order_no);
+		return "redirect:general_invenList";
 	}
 	
 //	@PostMapping("/general_invenAdd")

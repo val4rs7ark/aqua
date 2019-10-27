@@ -17,7 +17,8 @@ var barData = new Array();
 var barLabel= new Array();
 $(document).ready(function() {
 	 $.ajax({
-			type : "POST"
+		 	async: false
+		   ,type : "POST"
 		   ,url : "/erp/wasMainChart.was"
 		   ,data : "gap=1"
 		   ,success:function(data){

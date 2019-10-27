@@ -27,6 +27,7 @@ public class AjaxRestController {
 	
 	@GetMapping(value="wasEmpAttendance.was",produces="application/json;charset=UTF-8")
 	public String wasEmpAttendance(@RequestParam Map<String,Object> pMap) {
+		logger.info("android 테스트 ::::::::::::::::::::::::::");
 		String gson = null;
 		List<Map<String,Object>> rList = wasLogic.wasEmpAttendance(pMap);
 		Gson g = new Gson();
@@ -36,6 +37,7 @@ public class AjaxRestController {
 	}
 	@GetMapping(value="wasEmpStatusNoteDelete.was")
 	public String wasEmpStatusNoteDelete(@RequestParam Map<String,Object> pMap) {
+		logger.info("noteNO :"+pMap.get("note_no"));
 		String result = null;
 		result = wasLogic.wasEmpStatusNoteDelete(pMap);
 		return result;

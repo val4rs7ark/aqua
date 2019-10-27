@@ -29,6 +29,7 @@ tmp/**/*
 .classpath
 .settings/
 .loadpath
+.class
 /src/main/resources/rebel.xml
 # External tool builders
 .externalToolBuilders/

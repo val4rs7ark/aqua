@@ -20,7 +20,7 @@ if(noteAjaxList!=null && noteAjaxList.size()>0){
         <%
         	for(int i=0;i<noteAjaxList.size();i++){
         		Map<String,Object> rMap = noteAjaxList.get(i);
-        		out.print("<a href='javascript:deleteSelect("+rMap.get("NOTE_NO")+")'>"+(i+1)+"</a> :"+rMap.get("NOTE_CONTENT"));
+        		out.print("<input type='checkbox' id='noteNO' value='"+rMap.get("NOTE_NO")+"'> &nbsp;&nbsp;"+rMap.get("NOTE_CONTENT"));
         		out.print("<br>");
         	}
         %>
@@ -28,6 +28,7 @@ if(noteAjaxList!=null && noteAjaxList.size()>0){
 
       <!-- Modal footer -->
       <div class="modal-footer">
+      	<button type="button" class="btn btn-danger" onClick="noteDelete()" data-dismiss="modal">삭제하기</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
       </div>
 

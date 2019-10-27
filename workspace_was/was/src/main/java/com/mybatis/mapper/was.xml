@@ -1,6 +1,61 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mybatis.mapper.WasMapper">
+	<select id="androidDelivery" parameterType="map" resultType="map">
+		select ivgroup_name, order_count, cus_addr, cus_name, order_startdate, cus_man, cus_manhp, order_no
+     		  from(select rownum rno, order_no, order_gubun, cus_name, business_no, cus_ceoname,order_indate, 
+	     			      cus_hp, cus_busikind, cus_addr, cus_man, cus_manhp, ivgroup_code,
+	                      delivery_date,order_count, order_memo, delivery_state, 
+	                      delivery_info, order_startdate,order_enddate, ivgroup_name, emp_name, emp_hp, team_name
+                     from(select ordr.order_gubun order_gubun, ordr.order_no, cus.cus_name, 
+		            			 cus.business_no, cus.cus_ceoname, cus.cus_hp, cus.cus_busikind, cus.cus_addr, 
+		            			 ordr.cus_man, ordr.cus_manhp, inven.ivgroup_code,inven.ivgroup_name, ordr.order_count, 
+		            			 ordr.order_memo, ordr.delivery_state,ordr.order_indate, ordr.delivery_info, 
+		            			 ordr.order_startdate, ordr.delivery_date, ordr.order_enddate, em.emp_name emp_name, em.emp_hp emp_hp,
+		            			 em.team_name team_name
+		                    from customer cus, order_deli ordr , INVENGROUP inven, emp em
+		                   where cus.cus_code = ordr.cus_code and ordr.ivgroup_code = inven.ivgroup_code and em.empno = ordr.order_writer
+						 	 and order_gubun = '생산'
+						 <!-- 물품검색 -->
+						 <if test="cb_search!=null and cb_search.equals('fish_code')">
+						 		and inven.ivgroup_name like '%'||#{keyword}||'%'
+						 </if>
+						 <!-- 거래처검색 -->
+						 <if test="cb_search!=null and cb_search.equals('comp_name')">
+						 		and cus.cus_name like '%'||#{keyword}||'%'
+						 </if>
+						 <!-- 주소검색 -->
+						 <if test="cb_search!=null and cb_search.equals('comp_addr')">
+						 		and cus.cus_addr like '%'||#{keyword}||'%'
+						 </if>
+						 <!-- 담당자검색 -->
+						 <if test="cb_search!=null and cb_search.equals('comp_man')">
+						 		and ordr.cus_man like '%'||#{keyword}||'%'
+						 </if>
+						 <!-- 작성자검색 -->
+						 <if test="cb_search!=null and cb_search.equals('bs_writer')">
+						 		and em.emp_name like '%'||#{keyword}||'%'
+						 </if>
+						 <!-- 진행상황 검색 -->
+						 <if test="cb_situation!=null and !cb_situation.equals('null')">
+						 		and ordr.delivery_state = #{cb_situation}
+						 </if>
+						 <!-- 날짜검색 -->
+						 <if test="before_date_ud!=null and after_date_ud!=null">
+						 		and ordr.delivery_date between #{before_date_ud} and #{after_date_ud}
+						 </if>
+						 <if test="before_date_ud!=null and after_date_ud==null">
+						 		and ordr.delivery_date between #{before_date_ud} and (select max(ordr.delivery_date) from order_deli)
+						 </if>
+						 <if test="before_date_ud==null and after_date_ud!=null">
+						 		and ordr.delivery_date between (select min(ordr.delivery_date) from order_deli) and #{after_date_ud}
+						 </if>
+						  order by ordr.delivery_state asc, ordr.delivery_date asc ) a ) b
+						  where 1=1
+				 <if test="start>0 and end>0">
+		  		   		and rno between #{start} and #{end} 
+				 </if>
+	</select>
 	<select id="wasMainChart" parameterType="map" resultType="map">
 		select sum(touch) as touch, mcmonth  from(select   sum(order_unitprice*order_count) as touch  
 		   ,CASE WHEN '${mcYear}-${mcMonth}-01' <![CDATA[ <= ]]> order_enddate and '${mcYear}-${mcMonth}-31' <![CDATA[ >= ]]> order_enddate THEN '${mcMonth}'
@@ -22,7 +77,17 @@
 	</select>
 	<update id="wasEmpStatusNoteDelete" parameterType="map">
 		delete from notepad
-        where note_no = #{note_no} 
+        where note_no IN
+         <choose>
+         	<when test="note_no!=null">
+         			#{note_no}
+         	</when>
+         	<otherwise>
+         		<foreach collection="note_nos" item="nums" index="index"  open="(" close=")" separator=",">
+            				#{nums}
+        		</foreach>
+         	</otherwise>
+        </choose>
 	</update>
 	<update id="wasEmpStatusNoteInsert" parameterType="map">
 		insert into notepad(note_no,empno,note_content,note_write_date)

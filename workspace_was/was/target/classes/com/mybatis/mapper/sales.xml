@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mybatis.mapper.SalesMapper">
@@ -74,4 +75,26 @@
       group by grdate
       order by grdate 
 	</select>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.mapper.SalesMapper">
+	<select id="salesMainSelect" parameterType="map" resultType="map">
+      select sum(money) as money, grdate  from(select   sum(order_unitprice*order_count) as money  
+		   ,CASE WHEN '${gYear0}-${gMonth0}-01' <![CDATA[ <= ]]> order_enddate and '${gYear0}-${gMonth0}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth0}'
+            WHEN '${gYear1}-${gMonth1}-01' <![CDATA[ <= ]]> order_enddate and '${gYear1}-${gMonth1}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth1}'
+            WHEN '${gYear2}-${gMonth2}-01' <![CDATA[ <= ]]> order_enddate and '${gYear2}-${gMonth2}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth2}'
+            WHEN '${gYear3}-${gMonth3}-01' <![CDATA[ <= ]]> order_enddate and '${gYear3}-${gMonth3}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth3}'
+            WHEN '${gYear4}-${gMonth4}-01' <![CDATA[ <= ]]> order_enddate and '${gYear4}-${gMonth4}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth4}'
+            WHEN '${gYear5}-${gMonth5}-01' <![CDATA[ <= ]]> order_enddate and '${gYear5}-${gMonth5}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth5}'
+            end as grdate
+            from order_deli
+            where order_gubun = '생산'
+      group by order_enddate )
+      where grdate is not null
+        and money is not null
+      group by grdate
+      order by grdate  
+	</select>
+>>>>>>> origin/master
 </mapper>

@@ -12,8 +12,8 @@
 %>   
       		<tbody style="text-align: left;">
 		          <tr>
-		             <td class="bi_table_insert" style="width:25%;padding-top:9px; padding-bottom: 0px;">품목코드</td>
-		             <td style="width:30%;padding-top: 5px; padding-bottom: 5px;">
+		             <td class="bi_table_insert" style="width:20%;padding-top:9px; padding-bottom: 0px;">품목코드</td>
+		             <td style="width:45%;padding-top: 5px; padding-bottom: 5px;">
 		              <input id="ivgroup_code" name="ivgroup_code" type="text" class="form-control" style="height:auto;font-size: 13px;text-align:right" value="<%=pMap.get("code")%>" required>
 		           	 </td>
 		        	 <td style="padding-top:7px; padding-bottom:7px;width:auto" colspan="3">
@@ -41,14 +41,14 @@
 		             <td style="padding-top: 5px; padding-bottom: 5px;">
 		              <input id="ivgroup_name" name="ivgroup_name" type="text" class="form-control" style="height: 28px;font-size: 13px;text-align:right" readonly value="<%=pMap.get("name")%>">
 		           	 </td>
-		           	 <td colspan="3" style="font-size:12px">※  품목 검색창에서 선택하세요.</td>
+		           	 <td colspan="3" style="font-size:12px"></td>
 		          </tr>
 		          <tr>
 		             <td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;" >규격</td>
 		             <td style="padding-top: 5px; padding-bottom: 5px;">
 		              <input id="ivgroup_size" name="ivgroup_size" type="text" class="form-control" style="height:28px;font-size:13px;text-align:right" readonly value="<%=pMap.get("size")%>">
 		           	 </td>
-		             <td colspan="3" style="font-size:12px">※  아작스 newresister.jsp</td>
+		             <td colspan="3" style="font-size:12px"></td>
 		          </tr>
        		</tbody>
        		

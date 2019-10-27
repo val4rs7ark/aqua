@@ -24,24 +24,37 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
   		var v_mm;
   		var v_dd;
   		function noteDelete(){
-  			$.ajax({
-  				type : "get"
-  			   ,url : "/erp/wasEmpStatusNoteDelete.was"
-  			   ,data : "note_no="+v_note_no
-  			   ,success:function(data){
-	  					   //alert를 대신하여 썼다.
-	  					   $("#d_insertResultModal").text(data);
-	  					   $("#insertResultModal").modal();
-	  				//이 메소드를 타면 2.5초 뒤 location.reload();를 실행한다.
-				 	setTimeout(function() {
+  			var selectCount = $(":checkbox[id='noteNO']:checked").length;
+			if(selectCount == 0){
+					$("#m_h4tag").text("창창창");
+					$("#d_insertResultModal").text("삭제할 메모를 선택하세요.");
+				   	$("#insertResultModal").modal();
+					 setTimeout(function() {
 				 		location.reload();
 					}, 2500);
-  			   }
-  			});
-  		}
-  		function deleteSelect(note_no){
-  			v_note_no = note_no;
-  			$("#deleteSelect").modal();
+			}else{
+				  var selectNO = "";
+				   $(":checkbox[id='noteNO']:checked").each(function(i,e){
+				       if(selectNO == ""){
+				    	   selectNO = e.value;
+				        }else{
+				        	selectNO += "^"+e.value;
+				        }
+				   });
+				$.ajax({
+	  				type : "get"
+	  			   ,url : "/erp/wasEmpStatusNoteDelete.was"
+	  			   ,data : "note_no="+encodeURI(selectNO)
+	  			   ,success:function(data){
+		  					   //alert를 대신하여 썼다.
+		  					   $("#d_insertResultModal").text(data);
+		  					   $("#insertResultModal").modal();
+			  					 setTimeout(function() {
+			 				 		location.reload();
+			 					}, 2500);
+	  			   }
+	  			});
+			}
   		}
   		function memoForm(yyyy,mm,dd){
   				v_yyyy = yyyy;
@@ -318,7 +331,7 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
       <div class="modal-content">
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">등록결과</h4>
+          <h4 id="m_h4tag" class="modal-title">등록결과</h4>
         </div>
         <!-- Modal body -->
         <div class="modal-body">
