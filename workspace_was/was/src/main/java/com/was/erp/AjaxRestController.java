@@ -35,6 +35,7 @@ public class AjaxRestController {
 	}
 	@GetMapping(value="wasEmpStatusNoteDelete.was")
 	public String wasEmpStatusNoteDelete(@RequestParam Map<String,Object> pMap) {
+		logger.info("noteNO :"+pMap.get("note_no"));
 		String result = null;
 		result = wasLogic.wasEmpStatusNoteDelete(pMap);
 		return result;

@@ -132,6 +132,7 @@ public class DeliveryController {
 		}
 		return path;
 	}
+	//////////////////////////////////////ghjfjghfguhghjghjgjhg
 	@RequestMapping(value="/delivery_commit.was", method=RequestMethod.GET)
 	public String deli_commit(@RequestParam Map<String,Object> pMap, Model mod) {
 		logger.info("Controller //////////////// deli_commit 호출성공");

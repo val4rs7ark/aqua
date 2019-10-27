@@ -286,9 +286,30 @@ public class WasLogic {
 
 	public String wasEmpStatusNoteDelete(Map<String, Object> pMap) {
 		logger.info("wasEmpStatusNoteDelete Logic타는중~~~~~~~~~~~~~~~~~~~~~");
+		if(pMap.get("note_no").toString().contains("^")) {
+			logger.info("^를 찾음 ㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ");
+			String param = pMap.get("note_no").toString();
+			String params[] = null;
+			pMap.remove("note_no");
+			StringTokenizer st = new StringTokenizer(param,"^");
+			params = new String[st.countTokens()];
+			int count = 0;
+			String token = "";
+			while(st.hasMoreTokens()) {
+				token = st.nextToken();
+				if(!"".equals(token)) {
+				params[count] = token;
+				count++;
+				}
+				token = "";
+			}
+			pMap.put("note_nos", params);
+		}
+		String[] ckeck = (String[])pMap.get("note_nos");
+		logger.info("note_nos 확인 :"+ckeck[0]);
 		String result = null;
 		int rint = wasDao.wasEmpStatusNoteDelete(pMap);
-		if(rint==1) {
+		if(rint!=0) {
 			result = "삭제되었습니다.";
 		}else {
 			result = "다시시도하세요.";

@@ -28,8 +28,8 @@ if(noteAjaxList!=null && noteAjaxList.size()>0){
 
       <!-- Modal footer -->
       <div class="modal-footer">
-      	<button type="button" class="btn btn-danger" onClick="noteDelete()" data-dismiss="modal">삭제하기</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      	<button type="button" class="btn btn-danger" onClick="noteDelete()" data-dismiss="modal">확인</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
       </div>
 
     </div>

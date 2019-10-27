@@ -32,4 +32,23 @@ public class AndroidDao {
 		}
 		return deliveryList;
 	}
+
+	public void DeliveryCommitState(Map<String, Object> pMap) {
+		try {
+				sqlSessionTemplate.update("commit_state",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public String deliveryCommit(Map<String, Object> pMap) {
+		String deli_afterTime = null;
+		try {
+			sqlSessionTemplate.selectOne("deli_afterTime",pMap);
+			deli_afterTime = pMap.get("r_end_date").toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return deli_afterTime;
+	}
 }
