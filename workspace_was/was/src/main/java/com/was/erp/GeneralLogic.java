@@ -70,5 +70,9 @@ public class GeneralLogic {
 		String result = generalDao.jungbokAlert(pid_code);
 		return result;
 	}
+	public void confirm(int order_no) {
+		generalDao.confirm(order_no);
+		
+	}
 
 }
