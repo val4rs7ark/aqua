@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,5 +49,15 @@ public class AndroidRestController {
 		gson = g.toJson(rList);
 		logger.info(gson);
 		return gson;
+	}
+	@PostMapping(value="/wasAndroidDeliveryCommit.was")
+	public String deli_commit(@RequestParam Map<String,Object> pMap, Model mod) {
+		logger.info("Controller //////////////// deli_commit 호출성공");
+		String deli_no= (String)pMap.get("deli_no");
+		pMap.put("deli_no",Integer.parseInt(pMap.get("deli_no").toString()));
+		androidLogic.DeliveryCommitState(pMap);
+		String deli_afterTime = androidLogic.deliveryCommit(pMap);
+		String result = deli_afterTime+"^"+"배송완료 되었습니다.";
+		return result;
 	}
 }

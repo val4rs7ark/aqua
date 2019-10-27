@@ -24,4 +24,15 @@ public class AndroidLogic {
 		List<Map<String, Object>> deliveryList = androidDao.deliveryList(pMap);
 		return deliveryList;
 	}
+
+	public void DeliveryCommitState(Map<String, Object> pMap) {
+		androidDao.DeliveryCommitState(pMap);
+		
+	}
+
+	public String deliveryCommit(Map<String, Object> pMap) {
+		pMap.put("r_end_date", "");
+		String deli_afterTime = androidDao.deliveryCommit(pMap);
+		return deli_afterTime;
+	}
 }
