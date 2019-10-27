@@ -22,6 +22,8 @@ public class AjaxRestController {
 	private static final Logger logger = LoggerFactory.getLogger(AjaxRestController.class);
 	@Autowired
 	WasLogic wasLogic;
+	@Autowired
+	SalesGraphLogic salesGraphLogic;
 	
 	@GetMapping(value="wasEmpAttendance.was",produces="application/json;charset=UTF-8")
 	public String wasEmpAttendance(@RequestParam Map<String,Object> pMap) {
@@ -47,4 +49,6 @@ public class AjaxRestController {
 		gson = g.toJson(resultList);
 		return gson;
 	}
-}
+
+
+}          

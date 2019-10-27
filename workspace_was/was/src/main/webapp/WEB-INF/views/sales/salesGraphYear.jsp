@@ -25,7 +25,6 @@
 var thisDate = new Date();
 var thisYear = thisDate.getFullYear();
 var thisMonth = thisDate.getMonth()+1;
-
 //기간 선택 후 담을 변수
 var selectDate_1;
 var selectDate_2;
@@ -54,7 +53,7 @@ $(document).ready(function(){
 %>
 var ctx = document.getElementById("grChart"); 
 var graphChart = new Chart(ctx, {
-	   type: 'bar', //그래프 형태 지정하기
+	   type: 'line', //그래프 형태 지정하기
 	    data: {
 	        labels: barLabel,
 	        datasets: [{
@@ -100,8 +99,8 @@ var graphChart = new Chart(ctx, {
 	        	//바의 크기를 조절한다.
 	        	xAxes: [{
 	        		 barPercentage: 0.5,
-	                 barThickness: 50,
-	                 maxBarThickness: 50,
+	                 barThickness: 20,
+	                 maxBarThickness: 20,
 	                 minBarLength: 4
 	        	}]
 	           ,yAxes: [{
@@ -114,25 +113,23 @@ var graphChart = new Chart(ctx, {
 });
 });
 
-	///////////////////////// 매출현황 종류 - 년도별 매출현황  //////////////////////
-	function selectYear(){
-		alert(change_year);
-		location.href="/erp/salesYear.was?today_year="+change_year
-		    
+	///////////////////////// 매출현황 종류 - 년/월 //////////////////////
+	function selectMonth(){
+		location.href="/erp/salesMainSelect.was"
 	}
-	
-	
-	
+
+
 	///////////////////////// 년도  //////////////////////////
 	// (금년) < 버튼 클릭시 
 	function preYear(){
 		change_year = change_year-1;
+		alert(change_year);
 		$.ajax({
 			method:"get"
-			,url:"/erp/salesSelectMonth.was?today_year="+change_year+"&today_month="+change_month
+			,url:"/erp/salesSelectYear.was?today_year="+change_year
 		    ,success:function(data){
 		    	$("#div_chart").html(data);
-		    	$("#d_day").text(change_year+"년  "+change_month+"월");
+		    	$("#d_day").text(change_year+"년  ");
 			
 					   }
 		}); 
@@ -140,12 +137,13 @@ var graphChart = new Chart(ctx, {
 	// (금년) > 버튼 클릭시 
 	function nextYear(){
 		change_year = change_year+1;
+		alert(change_year);
 		$.ajax({
 			method:"get"
-			,url:"/erp/salesSelectMonth.was?today_year="+change_year+"&today_month="+change_month
+			,url:"/erp/salesSelectYear.was?today_year="+change_year
 		    ,success:function(data){
 		    	$("#div_chart").html(data);
-		    	$("#d_day").text(change_year+"년  "+change_month+"월");
+		    	$("#d_day").text(change_year+"년  ");
 			
 					   }
 		}); 
@@ -153,84 +151,20 @@ var graphChart = new Chart(ctx, {
 	// 금년 버튼 클릭시 
 	function todayYear() {
 		change_year = thisYear;
+		alert(change_year);
 		$.ajax({
 			method:"get"
-			,url:"/erp/salesSelectMonth.was?today_year="+change_year+"&today_month="+change_month
+			,url:"/erp/salesSelectYear.was?today_year="+change_year
 		    ,success:function(data){
 		    	$("#div_chart").html(data);
-		    	$("#d_day").text(change_year+"년  "+change_month+"월");
+		    	$("#d_day").text(change_year+"년  ");
 			
 					   }
 		}); 
 	}
-	///////////////////////// 월별  //////////////////////////
-	// 금월 버튼 클릭시 
-	function todayMonth() {
-		if(thisMonth>10){
-			thisMonth = '0'+thisMonth;
-		}
-		change_month = thisMonth;
-		location.href="salesMainSelect.was";
-	}
-	// (금월) < 버튼 클릭시 
-	function preMonth(){
-		if(change_month<2){
-			change_year = change_year-1;
-			alert(change_month);
-			change_month = 12;
-		}
-		else{ 
-			change_month = change_month-1;
-		}
-		alert(change_year+"-"+change_month);
-		$.ajax({
-			method:"get"
-			,url:"/erp/salesSelectMonth.was?today_year="+change_year+"&today_month="+change_month
-		    ,success:function(data){
-		    	$("#div_chart").html(data);
-		    	$("#d_day").text(change_year+"년  "+change_month+"월");
-			
-					   }
-		}); 
-	}
-	// (금월) > 버튼 클릭시 
-	function nextMonth(){
-		if(change_month>11){
-			change_year = change_year+1;
-			change_month = 1;
-			if(change_month>10){
-				change_month = '0'+change_month;
-			}
-		}
-		else{change_month = change_month+1;}
-		
-		alert(change_year+"-"+change_month);
-		$.ajax({
-			method:"get"
-			,url:"/erp/salesSelectMonth.was?today_year="+change_year+"&today_month="+change_month
-		    ,success:function(data){
-		    	$("#div_chart").html(data);
-		    	$("#d_day").text(change_year+"년  "+change_month+"월");
-			
-					   }
-		}); 
-	}
-	///////////////////////// 기간선택  //////////////////////////
-	function selectDate(){
-		selectDate_1 = $("#sales_date_1").val();
-		selectDate_2 = $("#sales_date_2").val();
-		alert(selectDate_1+" - "+selectDate_2);
-		$.ajax({
-			method:"get"
-			,url:"/erp/salesTwoSelect.was?today_1="+selectDate_1+"&today_2="+selectDate_2
-		    ,success:function(data){
-		    	$("#div_chart").html(data);
-		    	$("#d_day").text(selectDate_1+" - "+selectDate_2);
-			
-					   }
-		}); 
-	}
+
 	
+
 </script>
 <style type="text/css">
 	input[id=btn_search] {
@@ -244,18 +178,19 @@ var graphChart = new Chart(ctx, {
 	  padding: 9px;
 	  width: 55px
 	}
+
 </style>
 </head>
 <body>
 <div class="container-fluid">
 <div class="row">
-<div style="width:20%; height:1050px;">
+<div style="width:20%; height:1000px;">
 	 <%@ include file="/common/MenuCommon.jsp" %>
 </div>
 <!-- ==================================================  본 화면 78% ================================================== -->
 <div style="width:78%">
   <div class="card bg-dark text-white" style="height:50px;width:95%;margin-top:50px;margin-bottom:15px;margin-left:20px;">
-  <div class="card-body" style="height:30px;">매출현황</div>
+  <div class="card-body" style="height:30px;">연도별 매출현황</div>
   </div>
 	    <!-- ========================================검색창 ================================ -->
   <div class="w3-container" style="margin-top: 5px;margin-bottom:25px; height: 80px;width:100%">
@@ -263,52 +198,29 @@ var graphChart = new Chart(ctx, {
   <div id="box">
   <table>
      <thead>
-      <th>
-        	<td>
-        		<i class='fas fa-calendar-check' style='font-size:30px'></i>
-        	</td>
-        </th>
         <th>
-           <td>
-             <td style="width:15%"> 
-				<div class="btn-group">
+			<td style="padding-right: 4px;">
+        		<i class='fas fa-calendar-check' style='font-size:40px'></i>
+        	</td>
+             <td> 
+				<div class="btn-group btn-group-lg">
 				    <button type="button" class="btn btn-dark" onClick="javascript:preYear()"><</button>
 				    <button type="button" class="btn btn-dark" onClick="javascript:todayYear()">금년</button>
 				    <button type="button" class="btn btn-dark" onClick="javascript:nextYear()">></button>
 				</div>
  			</td>
-           </td>
-           <td>
-              <td style="width:15%;margin-right:4px;"> 
-				<div class="btn-group">
-				    <button type="button" class="btn btn-dark" onClick="javascript:preMonth()"><</button>
-				    <button type="button" class="btn btn-dark" onClick="javascript:todayMonth()">금월</button>
-				    <button type="button" class="btn btn-dark" onClick="javascript:nextMonth()">></button>
-				</div>
- 			</td>
-           </td>
         </th>
-        <th style="padding-right: 5px;">
+        <th style="padding-right: 1px;">
         	<td>
-        		<i class='fas fa-calendar-check' style='font-size:30px'></i>
+        		<i class='fas fa-calendar-check' style='font-size:40px'></i>
         	</td>
-        </th>
-        <th>
-           <td>
-              <input type="month" id="sales_date_1" class="form-control">
-           </td>
-           <td style="padding-left:5px;padding-right:5px;"><i class="fas fa-minus-square" style="font-size:36px" valign="center"></i></td>
-           <td>
-              <input type="month" id="sales_date_2" class="form-control">
-           </td>
-           <td style="padding-left:5px;"><input id="btn_search" type="submit" value="조회" onClick="javascript:selectDate()"></td>
         </th>
      </thead>
   </div>
   </div>
   </table>
   <div style="margin-top:8px;">
-  <button type="button" class="btn btn-light" onClick="javascript:selectYear()">년별 매출 보기</button>
+          <button type="button" class="btn btn-light" onClick="javascript:selectMonth()">월별 매출 보기</button>
   </div>
   </div>
   </div>
@@ -316,7 +228,7 @@ var graphChart = new Chart(ctx, {
     <!-- ========================================검색창 끝================================ -->
     <div id="d_day" style="font-size:24px;text-align:center;"></div>
     <script type="text/javascript">
-    	$("#d_day").text(change_year+"년  "+change_month+"월");
+    	$("#d_day").text(change_year+"년  ");
     </script>
  <div id="div_chart">
 	<!-- html의 canvas태그는 애니메이션을 지원하는 태그이다. 즉 차트를 그릴 위치를 선언. -->

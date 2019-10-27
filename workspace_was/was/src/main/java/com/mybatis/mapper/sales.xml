@@ -2,13 +2,69 @@
 <!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mybatis.mapper.SalesMapper">
 	<select id="salesMainSelect" parameterType="map" resultType="map">
-      select sum(money) as money, grdate  from(select   sum(order_unitprice*order_count) as money  
-		   ,CASE WHEN '${gYear0}-${gMonth0}-01' <![CDATA[ <= ]]> order_enddate and '${gYear0}-${gMonth0}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth0}'
-            WHEN '${gYear1}-${gMonth1}-01' <![CDATA[ <= ]]> order_enddate and '${gYear1}-${gMonth1}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth1}'
-            WHEN '${gYear2}-${gMonth2}-01' <![CDATA[ <= ]]> order_enddate and '${gYear2}-${gMonth2}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth2}'
-            WHEN '${gYear3}-${gMonth3}-01' <![CDATA[ <= ]]> order_enddate and '${gYear3}-${gMonth3}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth3}'
-            WHEN '${gYear4}-${gMonth4}-01' <![CDATA[ <= ]]> order_enddate and '${gYear4}-${gMonth4}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth4}'
-            WHEN '${gYear5}-${gMonth5}-01' <![CDATA[ <= ]]> order_enddate and '${gYear5}-${gMonth5}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth5}'
+	select sum(money) as money, grdate  from(select   sum(order_unitprice*order_count) as money  
+				   ,CASE WHEN '${gYear0}-${gMonth0}-01' <![CDATA[ <= ]]> order_enddate and '${gYear0}-${gMonth0}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth0}'
+		            WHEN '${gYear1}-${gMonth1}-01' <![CDATA[ <= ]]> order_enddate and '${gYear1}-${gMonth1}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth1}'
+		            WHEN '${gYear2}-${gMonth2}-01' <![CDATA[ <= ]]> order_enddate and '${gYear2}-${gMonth2}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth2}'
+		            WHEN '${gYear3}-${gMonth3}-01' <![CDATA[ <= ]]> order_enddate and '${gYear3}-${gMonth3}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth3}'
+		            WHEN '${gYear4}-${gMonth4}-01' <![CDATA[ <= ]]> order_enddate and '${gYear4}-${gMonth4}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth4}'
+		            WHEN '${gYear5}-${gMonth5}-01' <![CDATA[ <= ]]> order_enddate and '${gYear5}-${gMonth5}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth5}'
+		            end as grdate
+		            from order_deli
+		            where order_gubun = '생산'
+		      group by order_enddate )
+		      where grdate is not null
+		        and money is not null
+		      group by grdate
+		      order by grdate  
+	</select>
+	<select id="salesSelect_month" parameterType="map" resultType="map">
+	select sum(money) as money, grdate  from(select   sum(order_unitprice*order_count) as money  
+				   ,CASE WHEN '${gYear0}-${gMonth0}-01' <![CDATA[ <= ]]> order_enddate and '${gYear0}-${gMonth0}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth0}'
+		            WHEN '${gYear1}-${gMonth1}-01' <![CDATA[ <= ]]> order_enddate and '${gYear1}-${gMonth1}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth1}'
+		            WHEN '${gYear2}-${gMonth2}-01' <![CDATA[ <= ]]> order_enddate and '${gYear2}-${gMonth2}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth2}'
+		            WHEN '${gYear3}-${gMonth3}-01' <![CDATA[ <= ]]> order_enddate and '${gYear3}-${gMonth3}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth3}'
+		            WHEN '${gYear4}-${gMonth4}-01' <![CDATA[ <= ]]> order_enddate and '${gYear4}-${gMonth4}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth4}'
+		            WHEN '${gYear5}-${gMonth5}-01' <![CDATA[ <= ]]> order_enddate and '${gYear5}-${gMonth5}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth5}'
+		            end as grdate
+		            from order_deli
+		            where order_gubun = '생산'
+		      group by order_enddate )
+		      where grdate is not null
+		        and money is not null
+		      group by grdate
+		      order by grdate  
+	</select>
+		<select id="salesSelectTwomonth" parameterType="map" resultType="map">
+					select sum(money) as money, grdate  from(select   sum(order_unitprice*order_count) as money  
+				   ,CASE WHEN '${syear_first}-${smonth_first}-01' <![CDATA[ <= ]]> order_enddate and '${syear_first}-${smonth_first}-31' <![CDATA[ >= ]]> order_enddate THEN '${smonth_first}'
+				   <foreach collection="${monthList}" item="month" index="index">
+		            WHEN '${syear_first}-#{month}-01' <![CDATA[ <= ]]> order_enddate and '${syear_first}-#{month}-31' <![CDATA[ >= ]]> order_enddate THEN '#{month}'
+		            </foreach>
+		            WHEN '${syear_end}-${smonth_end}-01' <![CDATA[ <= ]]> order_enddate and '${syear_end}-${smonth_end}-31' <![CDATA[ >= ]]> order_enddate THEN '${smonth_end}'
+		            end as grdate
+		            from order_deli
+		            where order_gubun = '생산'
+		      group by order_enddate )
+		      where grdate is not null
+		        and money is not null
+		      group by grdate
+		      order by grdate  
+	</select>
+	<select id="salesSelect_year" parameterType="map" resultType="map">
+	 select sum(money) as money, grdate  from(select   sum(order_unitprice*order_count) as money  
+		   ,CASE WHEN '${today_year}-0${gMonth1}-01' <![CDATA[ <= ]]> order_enddate and '${today_year}-0${gMonth1}-31' <![CDATA[ >= ]]> order_enddate THEN '0${gMonth1}'
+	             WHEN '${today_year}-0${gMonth2}-01' <![CDATA[ <= ]]> order_enddate and '${today_year}-0${gMonth2}-31' <![CDATA[ >= ]]> order_enddate THEN '0${gMonth2}'
+	             WHEN '${today_year}-0${gMonth3}-01' <![CDATA[ <= ]]> order_enddate and '${today_year}-0${gMonth3}-31' <![CDATA[ >= ]]> order_enddate THEN '0${gMonth3}'
+	             WHEN '${today_year}-0${gMonth4}-01' <![CDATA[ <= ]]> order_enddate and '${today_year}-0${gMonth4}-31' <![CDATA[ >= ]]> order_enddate THEN '0${gMonth4}'
+	             WHEN '${today_year}-0${gMonth5}-01' <![CDATA[ <= ]]> order_enddate and '${today_year}-0${gMonth5}-31' <![CDATA[ >= ]]> order_enddate THEN '0${gMonth5}'
+	             WHEN '${today_year}-0${gMonth6}-01' <![CDATA[ <= ]]> order_enddate and '${today_year}-0${gMonth6}-31' <![CDATA[ >= ]]> order_enddate THEN '0${gMonth6}'
+	             WHEN '${today_year}-0${gMonth7}-01' <![CDATA[ <= ]]> order_enddate and '${today_year}-0${gMonth7}-31' <![CDATA[ >= ]]> order_enddate THEN '0${gMonth7}'
+	             WHEN '${today_year}-0${gMonth8}-01' <![CDATA[ <= ]]> order_enddate and '${today_year}-0${gMonth8}-31' <![CDATA[ >= ]]> order_enddate THEN '0${gMonth8}'
+	             WHEN '${today_year}-0${gMonth9}-01' <![CDATA[ <= ]]> order_enddate and '${today_year}-0${gMonth9}-31' <![CDATA[ >= ]]> order_enddate THEN '0${gMonth9}'
+	             WHEN '${today_year}-${gMonth10}-01' <![CDATA[ <= ]]> order_enddate and '${today_year}-${gMonth10}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth10}'
+	             WHEN '${today_year}-${gMonth11}-01' <![CDATA[ <= ]]> order_enddate and '${today_year}-${gMonth11}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth11}'
+	             WHEN '${today_year}-${gMonth12}-01' <![CDATA[ <= ]]> order_enddate and '${today_year}-${gMonth12}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth12}'
             end as grdate
             from order_deli
             where order_gubun = '생산'
@@ -16,6 +72,6 @@
       where grdate is not null
         and money is not null
       group by grdate
-      order by grdate  
+      order by grdate 
 	</select>
 </mapper>

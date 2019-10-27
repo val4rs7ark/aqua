@@ -201,7 +201,7 @@
 <body>
 <div class="container-fluid">
 <div class="row">
-<div style="width:20%">
+<div style="width:20%; height:1050px;">
 	 <%@ include file="/common/MenuCommon.jsp" %>
 </div>
 <div style="width:75%">

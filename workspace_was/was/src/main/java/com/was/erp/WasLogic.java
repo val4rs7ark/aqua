@@ -335,5 +335,6 @@ public class WasLogic {
 		List<Map<String,Object>> result = wasDao.wasMainChart(pMap);
 		return result;
 	}
+
 	
 }
