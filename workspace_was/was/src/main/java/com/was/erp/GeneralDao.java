@@ -84,6 +84,10 @@ public class GeneralDao {
 		return result;
 	}
 
+	public void confirm(int order_no) {
+		sqlSessionTemplate.update("confirm",order_no);
+	}
+
 }
 
 

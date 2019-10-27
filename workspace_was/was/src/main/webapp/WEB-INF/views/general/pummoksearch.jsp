@@ -34,13 +34,13 @@
         <table class="table" style="border-top-style: solid; border-bottom-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 2px;"> 
       		<tbody style="text-align: left;">
 		          <tr>
-		             <td class="bi_table_insert" style="padding-top:7px; padding-bottom: 7px;width:25%">
+		             <td class="bi_table_insert" style="padding-top:7px; padding-bottom: 7px;width:20%">
            	   			<select class="btn btn-dark" style="height:38px;">
 			    			<option>품목명
 			    			<option>품목코드
 			   			</select>
 		             </td>
-		             <td style="padding-top: 5px; padding-bottom: 5px;width:45%">
+		             <td style="padding-top: 5px; padding-bottom: 5px;width:50%">
 		             	<input type="text" class="form-control">
 		           	 </td>
 		        	 <td style="padding-top:7px; padding-bottom: 7px;width:25%">
