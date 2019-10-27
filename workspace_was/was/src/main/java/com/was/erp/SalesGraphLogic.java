@@ -94,6 +94,11 @@ public class SalesGraphLogic {
 	}
 	///////////////////////////////////   매출현황 그래프 선택 조회 (< 금월  >)        ////////////////////////////////
 	public List<Map<String, Object>> salesSelectMonth(Map<String, Object> pMap) {
+		int imsiMonth = Integer.parseInt(pMap.get("today_month").toString());
+		if(imsiMonth<10) {
+			String stringMonth = "0"+imsiMonth;
+			pMap.put("today_month", stringMonth);
+		}
 		logger.info("salesSelectMonth ============  매출현황 월별 그래프 선택 조회 (< 금월  >)");
 		logger.info("가져온 값들 : today_year : "+ pMap.get("today_year").toString());
 		logger.info("가져온 값들은 : today_month : "+pMap.get("today_month").toString());

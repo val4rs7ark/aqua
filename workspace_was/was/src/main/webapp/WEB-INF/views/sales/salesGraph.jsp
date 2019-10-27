@@ -179,7 +179,10 @@ var graphChart = new Chart(ctx, {
 			alert(change_month);
 			change_month = 12;
 		}
-		else{ 
+		else{
+			if(change_month<10){
+				change_month = "0"+change_month;
+			}
 			change_month = change_month-1;
 		}
 		alert(change_year+"-"+change_month);
