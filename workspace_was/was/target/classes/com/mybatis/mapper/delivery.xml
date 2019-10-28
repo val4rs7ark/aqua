@@ -108,6 +108,7 @@
                 ,#{cus_man, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
                 ,#{deli_when, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
                 ,#{deli_no, mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
+                ,#{order_unitprice, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
                 )
         }
 	</select>
@@ -181,7 +182,7 @@
     		   cus.cus_zipcode cus_zipcode, cus.cus_addr cus_addr, cus.cus_code cus_code,
     		   deli.cus_man cus_man, deli.cus_manhp cus_manhp, fish.ivgroup_name ivgroup_name, 
     		   fish.ivgroup_code ivgroup_code, deli.order_count order_count, deli.delivery_date delivery_date, 
-    		   deli.order_memo order_memo, deli.order_indate order_indate
+    		   deli.order_memo order_memo, deli.order_indate order_indate, deli.order_unitprice order_unitprice
     	  from customer cus, order_deli deli, invengroup fish, emp em
     	 where deli.order_no = #{deli_no}
 		   and deli.cus_code = cus.cus_code
@@ -198,6 +199,7 @@
                 ,#{cus_man, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
                 ,#{deli_when, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
                 ,#{order_writer_no, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}                
+                ,#{order_unitprice, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}                
                 ,#{msg, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
                 )
         }
@@ -214,6 +216,7 @@
 		update order_deli
 		   set delivery_state = 44,
 		   	   order_memo = #{deli_memo},
+		   	   order_unitprice = 0,
 		   	   order_indate = to_char(sysdate,'yyyy-mm-dd/hh24:mi')
 		 where order_no = #{deli_no}
 	</update>

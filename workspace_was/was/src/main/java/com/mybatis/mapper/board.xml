@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mybatis.mapper.BoardMapper">
+    <select id="boardTotal" parameterType="map" resultType="int">
+       select count(bo_no) bo_no
+         from board_notice
+    </select>
+    
+    <select id="boardList_ghost" parameterType="map" resultType="map">
+      SELECT bo_no,bo_title,bo_content,emp.emp_name,bo_date,bo_hit
+          FROM board_notice bn,emp emp
+         WHERE bn.empno = emp.empno
+         ORDER BY bo_date
+    </select>
+    <select id="boardList" parameterType="map" resultType="map">
+      SELECT bo_no,bo_title,bo_content,emp.emp_name,bo_date,bo_hit
+          FROM board_notice bn,emp emp
+         WHERE bn.empno = emp.empno
+       <if test="start>0 and end>0">       
+          and bo_no between #{start} and #{end}
+       </if>
+    </select>
+    <insert id="boardMADD" parameterType="map">
+      INSERT INTO BOARD_NOTICE(bo_no,bo_title,bo_writer,bo_content,
+                        ,bo_date,bo_group,bo_pos,bo_step)
+                    VALUES(#{bo_no},#{bo_title},#{bo_writer},#{bo_content}
+                          ,to_char(sysdate,'YYYY-MM-DD'),#{bo_group},#{bo_pos},#{bo_step})
+   </insert>
+   <insert id="boardSAdd" parameterType="map">
+      INSERT INTO BOARD_NOTICE_SUB(bo_no,bs_seq,bs_file,bs_size)
+                         VALUES(#{bm_no},1,#{bs_file},#{bs_size})
+   </insert>
+      <!-- 
+      글번호 채번하기
+      시퀀스에 문제점 - 번호를 채번하고 마스터 테이블에 추가한 후 서브 테이블에 추가할 때 그 번호를 유지할 수 있는
+      방법이 없다
+      왜냐하면 채번한 후에 현재 시퀀스 값을 확인할 수가 있는데 마스터 테이블에 insert하는 문장과 서브 테이블에 
+      insert하는 문장이 같은 쿼리문에 있지 않으므로 시퀀스를 사용하는 것이 불가함.
+      따라서 글 번호를 mex값을 이용해서 채번하고 1을 더하여 다음 번호를 채번하도록 한다. 
+      만일 프로시저를 사용한 다면 한 프로시저에서 처리하면 되니까 사용할 수 있을 것이다. 
+      두번째 
+      글 그룹번호도 글번호와 같은 상황 일 것이다. 
+      시퀀스를 채번하여 사용하는 것이 아니라 원글에 대한 글 그룹번호를 가져와서 사용해야 하는데 
+      채번하는 경우에는 에러가 발생하더라도 시퀀스 값은 무조건 새로운 값으로 채번이 일어나서 연속되는 번호를 
+      가질 수 없게 될 것이다. 
+      물론 연속값을 꼭 가져야 하는 것은 아니지만 여기서는 일반 컬럼에 인덱스를 생성할 수 있다는 것을 
+      활용해서 처리해 본다. 
+    -->
+    <select id="getBono" parameterType="int" resultType="int">
+       select nvl((SELECT/*+index_desc(board_notice board_pk) */ bo_no 
+                     FROM board_notice
+                  WHERE rownum=1),0)+1 bo_no
+        from dual
+    </select>
+    <select id="getBogroup" parameterType="int" resultType="int">
+       select nvl((select/*+index_desc(board_notice i_group) */ bo_group 
+                     from board_notice
+                    where rownum=1
+                      and bo_group>0 
+                   ),0)+1 bo_group
+            from dual
+    </select>
+</mapper>

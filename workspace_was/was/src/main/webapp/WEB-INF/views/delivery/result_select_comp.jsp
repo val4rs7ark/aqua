@@ -107,6 +107,14 @@
 		<td colspan="2"></td>
 	</tr>
 	<tr>
+		<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">단가</td>
+		<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; padding-right: 5px;">
+			<input type="text" class="form-control" name="order_unitprice"  size="27" style="height: 28px;width:80px; font-size: 13px;">
+		</td>
+		<td colspan="1" class="bi_table_insert" style="font-size:13px; padding-top: 11px; padding-bottom: 3px; padding-left: 5px;">(만원)</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr>
 		<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">배송일</td>
 		<td colspan="3" style="padding-top: 7px; padding-bottom: 7px; padding-right: 0px;">
 			<input name="deli_when_date" type="date" class="form-control" style="height:30px;width:160px;">
@@ -117,7 +125,7 @@
 	</tr>
 	<tr>
 		<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">비고</td>
-		<td colspan="5" style="height:165px;pxpadding-top: 7px; padding-bottom: 7px;">
+		<td colspan="5" style="height:123px;pxpadding-top: 7px; padding-bottom: 7px;">
 			<textarea name="deli_memo" style="height:95%; width:95%;"placeholder="&nbsp;&nbsp;내용을 입력하세요." ></textarea>
 		</td>
 	</tr>

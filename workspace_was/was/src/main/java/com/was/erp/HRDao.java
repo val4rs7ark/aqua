@@ -62,4 +62,74 @@ public class HRDao {
 		}
 		return msg;
 	}
+
+	public Map<String, Object> HRsalary_change_account(Map<String, Object> pMap) {
+		logger.info("HRsalary_change_account//////////////////Dao");
+		pMap.put("empno","");
+		pMap.put("emp_name","");
+		pMap.put("resident_no","");
+		pMap.put("emp_hp","");
+		pMap.put("emp_indate","");
+		pMap.put("emp_sosoc","");
+		pMap.put("emp_level","");
+		try {
+			sqlSessionTemplate.selectOne("HRsalary_change_account",pMap);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return pMap;
+	}
+
+	public List<Map<String, Object>> HRseach_emp_name(Map<String, Object> pMap) {
+		logger.info("HRSalery_insert//////////////////Dao");
+		List<Map<String, Object>> r_list = null;
+		try {
+			r_list = sqlSessionTemplate.selectList("HRSalery_insert",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return r_list;
+	}
+
+	public String HRcatch_Access(String empno) {
+		logger.info("HRcatch_Access//////////////////Dao");
+		String dept_name = null;
+		try {
+			dept_name = sqlSessionTemplate.selectOne("HRcatch_Access",empno);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dept_name;
+	}
+
+	public List<Map<String, Object>> HRsal_select(Map<String, Object> pMap) {
+		List<Map<String,Object>> r_list = null;
+		try {
+			r_list = sqlSessionTemplate.selectList("HRsal_empselect",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return r_list;
+	}
+
+	public List<Map<String, Object>> HRsal_year(Map<String, Object> pMap) {
+		List<Map<String,Object>> r_list = null;
+		try {
+			r_list = sqlSessionTemplate.selectList("HRsal_year",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return r_list;
+	}
+
+	public List<Map<String, Object>> HRsal_select_f(Map<String, Object> pMap) {
+		List<Map<String,Object>> r_list = null;
+		try {
+			r_list = sqlSessionTemplate.selectList("HRsal_select_f",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return r_list;
+	}
 }
