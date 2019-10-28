@@ -18,6 +18,19 @@
 		      group by grdate
 		      order by grdate  
 	</select>
+	<select id="salesStartEndMonth" parameterType="map" resultType="map">
+	select sum(money) as money, grdate  from(select   sum(order_unitprice*order_count) as money  
+				   ,CASE WHEN '${gYear0}-${gMonth0}-01' <![CDATA[ <= ]]> order_enddate and '${gYear0}-${gMonth0}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth0}'
+		            WHEN '${gYear1}-${gMonth1}-01' <![CDATA[ <= ]]> order_enddate and '${gYear1}-${gMonth1}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth1}'
+		            end as grdate
+		            from order_deli
+		            where order_gubun = '생산'
+		      group by order_enddate )
+		      where grdate is not null
+		        and money is not null
+		      group by grdate
+		      order by grdate  
+	</select>
 	<select id="salesSelect_month" parameterType="map" resultType="map">
 	select sum(money) as money, grdate  from(select   sum(order_unitprice*order_count) as money  
 				   ,CASE WHEN '${gYear0}-${gMonth0}-01' <![CDATA[ <= ]]> order_enddate and '${gYear0}-${gMonth0}-31' <![CDATA[ >= ]]> order_enddate THEN '${gMonth0}'

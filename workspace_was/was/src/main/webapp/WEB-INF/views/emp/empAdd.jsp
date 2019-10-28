@@ -260,7 +260,7 @@
 -->
 <div class="col-sm-6">
  <div class="card bg-dark text-white" style="height:50px;margin-top: 5px;">
-  <div class="card-body" style="height:30px;">사원목록</div>
+  <div class="card-body" style="height:30px;">인사관리>사원목록</div>
   </div>
   <table id="t_empList" class="table table-striped">
     <thead>
@@ -472,13 +472,11 @@
  			</select>
  		</td>
 	</tr>
-	<tr>
-		<td colspan="4" align="right">
+  </table>
+  <div align="right">
 			<input id="btn_cancel" type="button" value="취소" onclick="javascript:cancel()"> 
 			<input id="btn_save" type="submit" value="저장">
-		</td>
-	</tr>
-  </table>
+  </div>
   </form>
 </div>
 <!-- 

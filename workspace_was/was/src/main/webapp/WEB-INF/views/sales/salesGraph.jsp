@@ -50,8 +50,12 @@ $(document).ready(function(){
 		console.log(barLabel);
 		console.log(barData);
 <%		
-	}
+	}else{
 %>
+	alert("데이터가 없습니다.");
+<%		
+	}
+%>	
 var ctx = document.getElementById("grChart"); 
 var graphChart = new Chart(ctx, {
 	   type: 'bar', //그래프 형태 지정하기
@@ -258,7 +262,7 @@ var graphChart = new Chart(ctx, {
 <!-- ==================================================  본 화면 78% ================================================== -->
 <div style="width:78%">
   <div class="card bg-dark text-white" style="height:50px;width:95%;margin-top:50px;margin-bottom:15px;margin-left:20px;">
-  <div class="card-body" style="height:30px;">매출현황</div>
+  <div class="card-body" style="height:30px;">영업/매출관리>매출현황</div>
   </div>
 	    <!-- ========================================검색창 ================================ -->
   <div class="w3-container" style="margin-top: 5px;margin-bottom:25px; height: 80px;width:100%">

@@ -150,11 +150,11 @@ public class SalesGraphLogic {
 		int todays2 = Integer.parseInt(today2[1]);
 		String sMonth[] = null;
 		Map<String,Object> countMap = new HashMap<>();
+	
 		if(today1[0]==today2[0]) {// 가져온 두 기간의 년도가 같으면
 			for(int i=todays1+1;i<todays2;i++) {
 				sMonth[i] = Integer.toString(i);
 			}
-			
 		}else {// 가져온 기간의 년도가 다르면
 			int first_count = 0;
 			int second_count = 0;
@@ -201,17 +201,13 @@ public class SalesGraphLogic {
 			pMap.put("yearList", yearList);
 			pMap.put("monthList", monthList);
 			
-			
 		}
 		List<Map<String,Object>> sList = salesDao.salesTwoSelect(pMap);
 		return sList;
 	}
+	public List<Map<String, Object>> salesStartEndMonth(Map<String, Object> pMap) {
+		logger.info("Logic=========salesStartEndMonth ============  연속적인 달");
+		List<Map<String,Object>> sList = salesDao.salesStartEndMonth(pMap);
+		return sList;
+	}
 }
-
-
-
-
-
-
-
- 
