@@ -47,7 +47,7 @@ public class DeliveryLogic {
 		if(pMap.get("nowPage")!=null) {
 			nowPage = Integer.parseInt(pMap.get("nowPage").toString())+1;
 		}
-		int pagePer_Num = 18;//한페이지에 뿌려질 로우수
+		int pagePer_Num = 15;//한페이지에 뿌려질 로우수
 		int start = 0;
 		int end = 0;
 		if(nowPage>0) {
@@ -166,5 +166,9 @@ public class DeliveryLogic {
 	public void delivery_cancle_pix(Map<String, Object> pMap) {
 		logger.info("DeliveryLogic////////////delivery_cancle_pix호출성공");
 		deliveryDao.delivery_cancle_pix(pMap);
+	}
+	public List<Map<String, Object>> delivery_excel(Map<String, Object> pMap, int tot) {
+		List<Map<String, Object>> r_list = deliveryDao.delivery_excel(pMap);
+		return r_list;
 	}
 }

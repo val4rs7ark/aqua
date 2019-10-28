@@ -2,6 +2,7 @@ package com.was.erp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -174,6 +175,20 @@ public class DeliveryController {
 		mod.addAttribute("r_deli_start",r_deli_start);
 		return "delivery/result_save";
 	}
+	//excel 잠시 대기
+	@RequestMapping(value="/delivery_excel", method=RequestMethod.POST)
+	public String delivery_excel(@RequestParam Map<String,Object> pMap, Model mod) {
+		logger.info("Controller //////////////// delivery_excel 호출성공");
+		pMap.put("keyword",pMap.get("excel_keyword").toString());
+		pMap.put("before_date",pMap.get("excel_before_date").toString());
+		pMap.put("after_date",pMap.get("excel_after_date").toString());
+		pMap.put("cb_situation",pMap.get("excel_cb_situation").toString());
+		pMap.put("cb_search",pMap.get("excel_cb_search").toString());
+		int tot = get_total(pMap);
+		List<Map<String,Object>> excel_list = deliveryLogic.delivery_excel(pMap,tot);
+		mod.addAttribute("excel_list", excel_list);
+		return "HR/excelPrint";
+	}
 	
 	
 	
@@ -189,7 +204,12 @@ public class DeliveryController {
 		Map<String,Object> pl_Map = new HashMap<>(); //조건검색 유지 Map
 ////////////////////////삭제 실패시///////////////////////////////////////////
 		if(pMap.get("fm")!=null) { 
-			model.addAttribute("fail_msg", "배송중인 내역이 있습니다.");
+			model.addAttribute("fail_msg", "취소 또는 배송을 출발한 내역이 있습니다.");
+		}
+///////////////////////////////////////////////////////////////////////////
+////////////////////////삭제 실패시///////////////////////////////////////////
+		if(pMap.get("sm")!=null) { 
+			model.addAttribute("success_msg", "삭제를 성공하였습니다.");
 		}
 ///////////////////////////////////////////////////////////////////////////
 ////////////////////////등록 입력후 메세지//////////////////////////////////////
@@ -254,12 +274,13 @@ public class DeliveryController {
 		model.addAttribute("pl_Map",pl_Map); //조건검색을 유지하기 위해 Map에 담아서 뷰로 보낸다.
 		return "delivery/baesong_insert";
 	}
-
+	//배송 등록에서 등록버튼 눌렀을때
 	@RequestMapping("/deliveryInsert_List")
 	public String deliveryInsert_List(@RequestParam Map<String,Object> pMap, Model mod) {
 		logger.info("controller////////////deliveryInsert_List호출성공");
 		String cus_manhp = pMap.get("cus_manhp_a").toString()+"-"+pMap.get("cus_manhp_b").toString()+"-"+pMap.get("cus_manhp_c").toString();
 		String deli_when = pMap.get("deli_when_date").toString()+"/"+pMap.get("deli_when_time").toString();
+		pMap.put("order_unitprice",pMap.get("order_unitprice").toString()+"0000"); //단가 만원단위로 올리기
 		pMap.put("deli_weight",Integer.parseInt((pMap.get("deli_weight").toString())));
 		pMap.put("deli_when",deli_when);
 		pMap.put("cus_manhp",cus_manhp);
@@ -272,6 +293,7 @@ public class DeliveryController {
 		logger.info("controller////////////delivery_Update_Insert호출성공");
 		String cus_manhp = pMap.get("cus_manhp_a").toString()+"-"+pMap.get("cus_manhp_b").toString()+"-"+pMap.get("cus_manhp_c").toString();
 		String deli_when = pMap.get("deli_when_date").toString()+"/"+pMap.get("deli_when_time").toString();
+		pMap.put("order_unitprice",pMap.get("order_unitprice").toString()+"0000"); //단가 만원단위로 올리기
 		pMap.put("deli_when",deli_when);
 		pMap.put("cus_manhp",cus_manhp);
 		//=====================================================
@@ -309,6 +331,7 @@ public class DeliveryController {
 		logger.info("BUSINESS_NO :"+r_Map.get("BUSINESS_NO").toString());
 		logger.info("CUS_CEONAME :"+r_Map.get("CUS_CEONAME").toString());
 		logger.info("CUS_HP :"+r_Map.get("CUS_HP").toString());
+		logger.info("ORDER_UNITPRICE :"+r_Map.get("ORDER_UNITPRICE").toString());
 		logger.info("no:"+pMap.get("deli_no").toString());
 		r_Map.put("deli_no",pMap.get("deli_no"));
 		mod.addAttribute("delivery_selectInfo", r_Map);
@@ -323,6 +346,7 @@ public class DeliveryController {
 	public String deli_delete_insert(@RequestParam Map<String,Object> pMap) {
 		logger.info("Controller //////////////// delivery_delete_insert 호출성공");
 		String rowid = null;
+		String succes_msg = null;
 		if(pMap.get("rowid").toString()!=null) {
 			rowid= pMap.get("rowid").toString();
 			String r_rowid[] = rowid.split(",");
@@ -343,8 +367,9 @@ public class DeliveryController {
 			}//for문이 끝남 삭제할 것이 배열에 다 담김
 			//삭제 시작
 			deliveryLogic.deli_delete(c_rowid);
+			succes_msg = "k9z16"; //무의미 전달
 		}
-		return "redirect:deliveryInsert_ListF";
+		return "redirect:deliveryInsert_ListF?sm="+succes_msg;
 	}
 
 /*

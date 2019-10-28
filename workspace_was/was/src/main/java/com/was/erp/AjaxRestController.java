@@ -1,5 +1,7 @@
 package com.was.erp;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +27,7 @@ public class AjaxRestController {
 	
 	@GetMapping(value="wasEmpAttendance.was",produces="application/json;charset=UTF-8")
 	public String wasEmpAttendance(@RequestParam Map<String,Object> pMap) {
-		logger.info("android 테스트 ::::::::::::::::::::::::::");
+		logger.info("android �뀒�뒪�듃 ::::::::::::::::::::::::::");
 		String gson = null;
 		List<Map<String,Object>> rList = wasLogic.wasEmpAttendance(pMap);
 		Gson g = new Gson();
@@ -47,5 +49,64 @@ public class AjaxRestController {
 		Gson g = new Gson();
 		gson = g.toJson(resultList);
 		return gson;
+	}
+
+	//퇴직금 : 직근 3개월 평균 비용 구하기
+	@GetMapping(value="wasAvgofSal")
+	public String wasAvgofSal(@RequestParam Map<String,Object> pMap,Model model) {
+		pMap.put("g_empno", pMap.get("empno").toString());
+		String result = null;
+		result = wasLogic.wasAvgofSal(pMap);
+		return result;
+	}
+	// 재직일자 구하는 메소드
+	@GetMapping(value="wasCountWork")
+	public String countWork(@RequestParam Map<String,Object> pMap)
+	{
+	    String date1 = pMap.get("start_date").toString();
+	    String date2 = pMap.get("end_date").toString();
+	    
+	    String result_date = "";
+	    try{ // String Type을 Date Type으로 캐스팅하면서 생기는 예외로 인해 여기서 예외처리 해주지 않으면 컴파일러에서 에러가 발생해서 컴파일을 할 수 없다.
+	        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+	        // date1, date2 두 날짜를 parse()를 통해 Date형으로 변환.
+	        Date FirstDate = format.parse(date1);
+	        Date SecondDate = format.parse(date2);
+	        
+	        // Date로 변환된 두 날짜를 계산한 뒤 그 리턴값으로 long type 변수를 초기화 하고 있다.
+	        // 연산결과 -950400000. long type 으로 return 된다.
+	        long calDate = FirstDate.getTime() - SecondDate.getTime(); 
+	        
+	        // Date.getTime() 은 해당날짜를 기준으로1970년 00:00:00 부터 몇 초가 흘렀는지를 반환해준다. 
+	        // 이제 24*60*60*1000(각 시간값에 따른 차이점) 을 나눠주면 일수가 나온다.
+	        long calDateDays = calDate / ( 24*60*60*1000); 
+	 
+	        calDateDays = Math.abs(calDateDays);
+	        result_date = String.valueOf(calDateDays); //재직일 변수
+	        
+	        logger.info("두 날짜의 날짜 차이: "+result_date);
+	        }
+	        catch(Exception e)
+	        {
+	            e.printStackTrace();
+	        }
+	    return result_date;
+	}   
+	//생일자 구하는 로직
+	@GetMapping(value="wasEmp_birth")
+	public String wasEmp_birth() {
+		String result = null;
+		String gubun = "birth";
+		result = wasLogic.wasEmp_birth(gubun);
+		return result;
+	}
+	//오늘날짜 구하는 로직
+	@GetMapping(value="wasTo_day")
+	public String wasTo_day() {
+		String result = null;
+		String gubun = "to_day";
+		result = wasLogic.wasEmp_birth(gubun);
+		
+		return result;
 	}
 }

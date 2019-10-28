@@ -15,8 +15,12 @@
 	Map<String,Object> pl_Map = (Map<String,Object>)request.getAttribute("pl_Map");
  	int tot = (int)request.getAttribute("tot");
  	String fail_msg = null;
+ 	String success_msg = null;
  	if(request.getAttribute("fail_msg")!=null){
 		fail_msg = request.getAttribute("fail_msg").toString();
+	}
+ 	if(request.getAttribute("success_msg")!=null){
+ 		success_msg = request.getAttribute("success_msg").toString();
 	}
  	String insert_msg = null;
  	if(request.getAttribute("insert_msg")!=null){
@@ -26,7 +30,7 @@
 		size=deliveryInsert_ListS.size();
 	}
 	//////////페이지 네비게이션 추가분////////////
-	int numPerPage = 18;
+	int numPerPage = 15;
 	int nowPage = 0;
 	if(request.getParameter("nowPage")!=null){
 		nowPage = Integer.parseInt(request.getParameter("nowPage"));
@@ -43,6 +47,7 @@
 <meta charset="UTF-8" />
 	<%@ include file="/common/bootStrap4.jsp" %>
 	<%@ include file="/common/styles.jsp" %>
+	
 <title>배송조회</title>
 <meta http-equiv="Content-Type" content="text/html;">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -50,6 +55,9 @@
 <title>Insert title here</title>
 	<%@ include file="/common/bs_css.jsp" %>
 <script type="text/javascript">
+	function hide_modal(modal_name){
+			$("#"+modal_name+"").hide();
+	}
 	function bs_ins_search(){
 		$("#f_bs_search").attr("method","post");
 		$("#f_bs_search").attr("action","deliveryInsert_ListF");
@@ -207,6 +215,16 @@
 				}
 			});
 		});
+		if('<%=fail_msg%>'!='null'){ 
+			  $("#stop_update").show();	
+		}else{
+			  $("#stop_update").hide();	
+		}
+		if('<%=success_msg%>'!='null'){ 
+			  $("#play_delete").show();	
+		}else{
+			  $("#play_delete").hide();	
+		}
 	});
 </script>
 
@@ -219,81 +237,79 @@
 	 <!-- ======================================================================================================================================================================= -->
   </div>
 <div style="width:80%" >
-<div class="container" style="margin-left: 0px;">
-<div class="base_table_div" style="width: 1350px;height: 900px; ">
-
+<div class="container" style="margin-left: 20px;">
+<div class="base_table_div" style="width: 1350px; height: 872px; ">
+<!--================================공통코드로 추가할 추가 상단바===========================================-->
+	<div style="margin-top:45px;font-size: 17px; font-weight: 900; padding-left: 26px">
+  	</div>
+<!--================================공통코드로 추가할 추가 상단바===========================================-->
 <!--================================상단바===========================================-->
-	<div class="card bg-dark text-white" style="height:50px; margin-top:70px">
-    	<div class="card-body">배송처 등록</div>
+	<div class="card bg-dark text-white" style="height:50px;margin-top: 7px;">
+    	<div class="card-body" style="font-size: 17px; font-weight: 900;">생산/품질관리 > 배송처 등록</div>
   	</div>
   	<div class="row">
 	</div>
 <!--================================상단바===========================================-->
 
 <form id="f_bs_search"><!-- ============================================================================form================================ -->
-  <table class="table table-hover" style="margin-bottom: 5px; background-color:#F1F1F1">
-    <thead>
-      <tr>
-<!--<th style="width:10%">-->
-        <th style="width: 322.5px;border-top-width: 10px;border-top-color: white;">
-        	<button type="button" onclick="javascript:bs_delete()" class="btn btn-dark" style="width:54.5px">삭제</button>
-		</th>
-        
-        <th style="border-top-width: 10px; border-top-color: white;">
-	        <div class="dropdown" style="width: 130px;">
-				<select class="btn btn-dark dropdown_bs" name="cb_search" style="color:white; width:120px; height:35.75px; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px;">
-					<option value="">선택</option>
-					<option value="comp_name">업체</option>
-					<option value="bs_writer">작성자</option>
-				</select>
-			</div>
-        </th>  
-        <th style="border-top-width: 10px;border-top-color: white;">
-			 <input type="text" class="form-control" name="keyword" placeholder=" 내용을 입력하세요."  size="27" style="height: 35.75px;width:100%;min-width:140px; font-size: 13px;">
-        </th>
-        <th style="border-top-width: 10px;border-top-color: white;">
-			<input type="date" class="form-control" name="before_date">
-		</th>
-		<th style="border-top-width: 10px;border-top-color: white;">
-			<i class='fas fa-minus-square' style='font-size:36px'/>
-		</th>
-		<th style="border-top-width: 10px;border-top-color: white;">
-			<input type="date" class="form-control" name="after_date">
-		</th>
-		<th style="border-top-width: 10px;border-top-color: white;">
-			<button onclick="javascript:bs_ins_search()" class="btn btn-dark" style="float: right; width:54.5px">조회</button>
-		</th>
-      </tr>
-    </thead>
-  </table>
+  
+  
+  <table class="table table-hover" style="margin-bottom: 5px;margin-top: 5px; background-color:#F1F1F1">
+	    <thead>
+	     <tr style="background:white;border-top:2px solid #dee2e6;">
+      
+	<!--<th style="width:10%">-->
+	        <th style="width: 250px;">
+	        		<button type="button" class="btn btn-dark" onclick="javascript:bs_delete()" style=" width:60px;padding:6px 5px 6px 5px;background: #efefef;padding: 3px 3px 3px 3px;color:black; border-color: #6c757d;font-size:15px;font-weight:900;margin-right: 10px;height: 33px;">삭제</button>
+			</th>
+	        <th style="padding-left:2px; padding-right:2px;">
+		        <div class="dropdown" style="width: 125px;">
+					<select id="cb_search" name="cb_search" class="btn btn-dark dropdown_bs" style="background: #efefef;padding: 3px 3px 3px 7px;color:black;border-color: #6c757d;font-size:15px;font-weight:900;margin-right: 10px;height: 33px;">
+						<option value="">선택</option>
+						<option value="comp_name">업체</option>
+						<option value="bs_writer">작성자</option>
+					</select>
+				</div>
+	        </th>
+	        <th>
+				<input id="keyword" name="keyword" type="text" class="form-control" placeholder=" 내용을 입력하세요."  size="27" style="height: 35.75px;width:100%;min-width:140px; font-size: 13px;">
+	        </th>
+	        <th>
+				<input id="before_date" name="before_date" type="date" class="form-control">
+			</th>
+			<th>
+				<i class='fas fa-minus-square' style='font-size:36px'/>
+			</th>
+			<th>
+				<input id="after_date" name="after_date" type="date" class="form-control">
+			</th>
+			<th>
+		   <!-- <button class="btn btn-dark" onclick="javascript:bs_search()" style="float: right; width:54.5px">조회</button> -->
+				<button class="btn btn-dark" type="button" onclick="javascript:bs_ins_search()" style="float:right; width:60px;padding:6px 5px 6px 5px;background: #efefef;padding: 3px 3px 3px 3px;color:black; border-color: #6c757d;font-size:15px;font-weight:900;margin-right: 10px;height: 33px;">조회</button>
+			</th>
+	      </tr>
+	    </thead>
+	  </table>
+  
 </form><!-- ============================================================================form============================================= -->
   <div class="container" style="margin-left: 0px; margin-right: 0px;">
 	  <div class="row" style="margin-top:15px; width:1340px;">
 	  	<div style="width:40%;">
 			<h5 style="display:inline;">배송목록</h5>
-			<%
-				if(fail_msg!=null){ 
-			%>
-				<div style="display:inline;">
-					<input type="text" value="&nbsp;&nbsp;&nbsp;&nbsp;<%=fail_msg %>" style="border:none; font-size: smaller; width: 170px; color:red;" readonly>
-				</div>
-			<%
-				}
-			%>
 			<!-- 오와열 코드 -->
 			<div style="display:inline;">
-				<input type="text" style="border:none; width:1px; height:32px;" readonly>
+				<input type="text" style="border:none; width:2px; height:32px;" readonly>
 			</div>
-	  		<table class="table table-striped" style="border-top-style: solid; border-bottom-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 2px;margin-bottom: 0px;" > 
+	  		<table class="table" style="border-top-style: solid; border-bottom-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 2px; margin-bottom: 0px;" > 
 	  			<thead style="text-align: center;">
 	  				<tr >
-	  					<td>
+	  					<td style="border-bottom: 2px solid #dee2e6;">
 	  						<div style="float:left"><input type="checkbox" id="checkall"></div>
 	  					</td>
-	  					<th>업체</th>
-	  					<th>작성자</th>
-	  					<th>등록일</th>
-	  					<th>상태</th>
+	  					<th style="color: #555555;font-family: Dotum, 돋움;">업체</th>
+	  					<th style="color: #555555;font-family: Dotum, 돋움;">작성자</th>
+	  					<th style="color: #555555;font-family: Dotum, 돋움;">등록일</th>
+	  					<th style="color: #555555;font-family: Dotum, 돋움;">상태</th>
 	  				</tr>
 	  			</thead>
 	  			<tbody id="bs_list">
@@ -308,36 +324,36 @@
 			String cus_name[] = sMap.get("CUS_NAME").toString().split("\\(");
 %>
 			  			<tr id="<%=sMap.get("ORDER_NO")%>">
-		  					<td style="padding-top: 5px; padding-bottom: 5px;"><div><input type="checkbox" name="chk" value="<%=sMap.get("ORDER_NO")%>"><input type="hidden" name="r_delivery_state" value="<%=sMap.get("DELIVERY_STATE")%>"></div></td>
+		  					<td style="padding-top: 5px; padding-bottom: 5px;vertical-align: middle;"><div><input type="checkbox" name="chk" value="<%=sMap.get("ORDER_NO")%>"><input type="hidden" name="r_delivery_state" value="<%=sMap.get("DELIVERY_STATE")%>"></div></td>
 						<%--<td><input type="hidden" id="deli_no_<%=sMap.get("DELI_NO")%>" name="deli_no_<%=sMap.get("DELI_NO")%>" value="<%=sMap.get("DELI_NO")%>"></td>--%>		  					
-							<td class="bs_table_when_ins" style="padding-top: 5px; padding-bottom: 5px;"><%=sMap.get("CUS_NAME")%></td>
-		  					<td class="bs_table_when_ins" style="text-align: center; padding-top: 5px; padding-bottom: 5px;"><%=sMap.get("EMP_NAME")%></td>
-		  					<td class="bs_table_when_ins" style="text-align: center;padding-top: 5px; padding-bottom: 5px;"><%=deli_date = sMap.get("ORDER_INDATE").toString()%></td>
+							<td class="bs_table_when_ins" style="vertical-align: middle; height:40px; text-align: center;padding-top: 5px; padding-bottom: 5px; font-size: 14px;font-family: -webkit-pictograph;color: #666666;"><%=cus_name[0]%></td>
+		  					<td class="bs_table_when_ins" style="vertical-align: middle; height:40px; text-align: center;padding-top: 5px; padding-bottom: 5px; font-size: 14px;font-family: -webkit-pictograph;color: #666666;"><%=sMap.get("EMP_NAME")%></td>
+		  					<td class="bs_table_when_ins" style="vertical-align: middle; height:40px; text-align: center;padding-top: 5px; padding-bottom: 5px; font-size: 14px;font-family: -webkit-pictograph;color: #666666;"><%=deli_date = sMap.get("ORDER_INDATE").toString()%></td>
 		  						<%
 									if("1".equals(sMap.get("DELIVERY_STATE").toString())){
 								%>
-		  					<td class="bs_table_when_ins" style="text-align: center; padding-top: 5px; padding-bottom: 5px;">준비중</td>
+		  					<td class="bs_table_when_ins" style="vertical-align: middle; height:40px; text-align: center; padding-top: 5px; padding-bottom: 5px;font-family: -webkit-pictograph;color: #666666;">준비중</td>
 								<%
 									}
 								%>
 								<%
 									if("2".equals(sMap.get("DELIVERY_STATE").toString())){
 								%>
-		  					<td class="bs_table_when_ins" style="text-align: center; padding-top: 5px; padding-bottom: 5px;">배송중</td>
+		  					<td class="bs_table_when_ins" style="vertical-align: middle; height:40px; text-align: center; padding-top: 5px; padding-bottom: 5px;font-family: -webkit-pictograph;color: #666666;">배송중</td>
 								<%
 									}
 								%>
 								<%
 									if("3".equals(sMap.get("DELIVERY_STATE").toString())){
 								%>
-		  					<td class="bs_table_when_ins" style="text-align: center; padding-top: 5px; padding-bottom: 5px;">완료</td>
+		  					<td class="bs_table_when_ins" style="vertical-align: middle; height:40px; text-align: center; padding-top: 5px; padding-bottom: 5px;font-family: -webkit-pictograph;color: #666666;">완료</td>
 								<%
 									}
 								%>
 								<%
 									if("44".equals(sMap.get("DELIVERY_STATE").toString())){
 								%>
-		  					<td class="bs_table_when_ins" style="text-align: center; padding-top: 5px; padding-bottom: 5px; color: red;">취소</td>
+		  					<td class="bs_table_when_ins" style="vertical-align: middle; height:40px; text-align: center; padding-top: 5px; padding-bottom: 5px; color: red;font-family: -webkit-pictograph;">취소</td>
 								<%
 									}
 								%>
@@ -477,6 +493,14 @@
 		  					<td colspan="2"></td>
 		  				</tr>
 		  				<tr>
+		  					<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">단가</td>
+		  					<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; padding-right: 5px;">
+								<input type="text" class="form-control" name="order_unitprice"  size="27" style="height: 28px;width:80px; font-size: 13px;">
+							</td>
+		  					<td colspan="1" class="bi_table_insert" style="font-size:13px; padding-top: 11px; padding-bottom: 3px; padding-left: 5px;">(만원)</td>
+		  					<td colspan="2"></td>
+		  				</tr>
+		  				<tr>
 		  					<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">배송일</td>
 		  					<td colspan="3" style="padding-top: 7px; padding-bottom: 7px; padding-right: 0px;">
 								<input name="deli_when_date" type="date" class="form-control" style="height:30px;width:160px;">
@@ -487,7 +511,7 @@
 		  				</tr>
 		  				<tr>
 		  					<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px; ">비고</td>
-		  					<td colspan="5" style="height:165px;pxpadding-top: 7px; padding-bottom: 7px;" >
+		  					<td colspan="5" style="height:123px;pxpadding-top: 7px; padding-bottom: 7px;" >
 		  						<textarea name="deli_memo" style="height:95%; width:95%;" placeholder="&nbsp;&nbsp;내용을 입력하세요." ></textarea>
 		  					</td>
 		  				</tr>
@@ -498,8 +522,8 @@
 	  </div>
 </div>
   </div>
-	<div class="container" style="margin-left: 0px;">
-		<ul class="pagination" id="bs_pagenation" style="justify-content: center;">
+	<div class="container">
+		<ul class="pagination" id="bs_pagenation" style="justify-content: center; width: 1350px;margin-bottom: 44px; margin-top: 20px;">
 			<%		
 				String keyword = null; 
 				String before_date = null; 
@@ -548,11 +572,10 @@
 			
 				<!-- 조회버튼 -->
 				<div class="modal-header">
-					<div class="modal-title">
+					<div class="modal-title" style="font-size: x-large; font-weight: 800;">
 					<!--var companyname = $("#밑에놈 아이디").text(); search.do?compay  -->
-						<input type="text" class="form-control" name="companyname" placeholder="업체명을 입력하세요."  size="27" style="height: 27px; width:200px; min-width:140px; font-size: 13px; margin-left:50px; margin-right: 10px;">
+					업체정보
 					</div>
-					<zealot class="btn btn-secondary btn_firstrow btn_tableRow" style="height:26px; width:45px; cursor:pointer;'" data-toggle="modal" data-target="#comp_name" >검색</zealot>
 					<button type="button" class="close" data-dismiss="modal">×</button>
 				</div>
 				
@@ -644,5 +667,57 @@
 <!-- ===============================================================품목등록창================================================================= -->
 <!-- ============================================================================================================================================= -->
 
+<!-- ============================================================================================================================================= -->
+<!-- ===============================================================삭제완료 모달창================================================================= -->
+<!-- ============================================================================================================================================= -->
+<div class="modal" id="play_delete" data-backdrop="static"data-keyboard="true" >
+  <div class="modal-dialog modal-dialog-centered" style="text-align:center">
+    <div class="modal-content" style="height:120px;width:90%;margin-left:5%;margin-right:5%;">
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:center;" >
+      </div>
+      <div style="display:table;height:50%;background-color:rgba(0,0,0,0);color:black;width:100%;">
+         <div style="display:table-cell;vertical-align:middle;text-align:center;">
+           <img style="heigth:20px;width:20px;padding-bottom: 3px;"src="/erp/images/error.png" alt="주의:">
+           <h6 style="display:inline;font-weight:bold;font-size:large;"><%=success_msg%></h6>
+         </div>   
+      </div>
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:right;display:table">
+         <button style="width: 42px;height: 25px;border-top-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;
+                   margin-right: 3px;padding-top: 0px;border-left-width: 0px;padding-right: 0px;padding-left: 0px;
+    			border-right-width: 0px;display:table-cell;font-size:14px" type="button" class="btn btn-dark" onclick="javascript:hide_modal('play_delete')" >닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ============================================================================================================================================= -->
+<!-- ===============================================================삭제완료 모달창================================================================= -->
+<!-- ============================================================================================================================================= -->
+	
+<!-- ============================================================================================================================================= -->
+<!-- ===============================================================경고 모달창================================================================= -->
+<!-- ============================================================================================================================================= -->
+<div class="modal" id="stop_update" data-backdrop="static"data-keyboard="true" >
+  <div class="modal-dialog modal-dialog-centered" style="text-align:center">
+    <div class="modal-content" style="height:120px;width:90%;margin-left:5%;margin-right:5%;">
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:center;" >
+      </div>
+      <div style="display:table;height:50%;background-color:rgba(0,0,0,0);color:black;width:100%;">
+         <div style="display:table-cell;vertical-align:middle;text-align:center;">
+           <img style="heigth:20px;width:20px;padding-bottom: 3px;"src="/erp/images/error.png" alt="주의:">
+           <h6 style="display:inline;font-weight:bold;font-size:large; color:red;"><%=fail_msg%></h6>
+         </div>   
+      </div>
+      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:right;display:table">
+         <button style="width: 42px;height: 25px;border-top-width: 0px;border-bottom-width: 0px;padding-bottom: 0px;
+                   margin-right: 3px;padding-top: 0px;border-left-width: 0px;padding-right: 0px;padding-left: 0px;
+    			border-right-width: 0px;display:table-cell;font-size:14px" type="button" class="btn btn-dark" onclick="javascript:hide_modal('stop_update')" >닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ============================================================================================================================================= -->
+<!-- ===============================================================경고 모달창================================================================= -->
+<!-- ============================================================================================================================================= -->
+	
 </body>
 </html>
