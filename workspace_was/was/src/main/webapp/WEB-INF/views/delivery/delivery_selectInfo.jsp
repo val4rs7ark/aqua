@@ -6,6 +6,10 @@
 	List<Map<String, Object>> f_list = (List<Map<String, Object>>)cMap.get("f_list");
 	String insert_gubun = null;
 	String deli_no = null;
+	String r_order_unitprice = "0";
+	if(!"0".equals(cMap.get("ORDER_UNITPRICE").toString())){
+		r_order_unitprice = cMap.get("ORDER_UNITPRICE").toString().substring(0, cMap.get("ORDER_UNITPRICE").toString().length()-4);
+	}
 	if(cMap.get("insert_gubun")!=null){
 		insert_gubun = cMap.get("insert_gubun").toString();
 	}
@@ -64,7 +68,7 @@
 						<tr>
 							<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">주소</td>
 							<td colspan="5" style="padding-top: 5px; padding-bottom: 5px;">
-								<input type="text" class="form-control" name="cus_addr" value="<%=cMap.get("CUS_ADDR")%>" size="27" style="height: 28px;width:200px; font-size: 13px;" readonly>
+								<input type="text" class="form-control" name="cus_addr" value="<%=cMap.get("CUS_ADDR")%>" size="27" style="height: 28px;width:250px; font-size: 13px;" readonly>
 							</td>
 						</tr>
 						<tr>
@@ -101,6 +105,7 @@
 							<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">품목</td>
 							<td style="padding-top: 7px; padding-bottom: 7px;" colspan="5">
 								<input type="text" class="form-control" name="cus_hp" value="<%=cMap.get("IVGROUP_NAME")%>" size="27" style="height: 28px;width:100px; font-size: 13px; " readonly>
+								<input type="hidden"  name="order_unitprice"  value="0">
 							</td>
 						</tr>
 						<tr>
@@ -243,6 +248,14 @@
 							<td colspan="3"></td>
 						</tr>
 						<tr>
+		  					<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">단가</td>
+		  					<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; padding-right: 5px;">
+								<input type="text" class="form-control" name="order_unitprice" value="<%=r_order_unitprice%>"  size="27" style="height: 28px;width:80px; font-size: 13px;">
+							</td>
+		  					<td colspan="1" class="bi_table_insert" style="font-size:13px; padding-top: 11px; padding-bottom: 3px; padding-left: 5px;">(만원)</td>
+		  					<td colspan="2"></td>
+		  				</tr>
+						<tr>
 							<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">배송기한</td>
 							<%
 								String deli_when = cMap.get("DELIVERY_DATE").toString();
@@ -257,7 +270,7 @@
 						</tr>
 						<tr>
 							<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">비고</td>
-							<td colspan="5" style="height:165px;pxpadding-top: 7px; padding-bottom: 7px;">
+							<td colspan="5" style="height:123px;pxpadding-top: 7px; padding-bottom: 7px;">
 								<textarea name="deli_memo" style="height:95%; width:95%; padding-left: 6px; padding-top: 6px; padding-right: 6px; padding-bottom: 6px; font-family: 바탕체;"><%=cMap.get("ORDER_MEMO")%></textarea>
 							</td>
 						</tr>
@@ -486,6 +499,14 @@
 							<td colspan="2"></td>
 						</tr>
 						<tr>
+		  					<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">단가</td>
+		  					<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; padding-right: 5px;">
+								<input type="text" class="form-control" name="order_unitprice" value="<%=r_order_unitprice%>&nbsp;&nbsp;만원" size="27" style="height: 28px;width:130px; font-size: 13px;" readonly>
+							</td>
+		  					<td colspan="1" class="bi_table_insert" style="font-size:13px; padding-top: 11px; padding-bottom: 3px; padding-left: 5px;"></td>
+		  					<td colspan="2"></td>
+		  				</tr>
+						<tr>
 							<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">접수날짜</td>
 							<td colspan="2" style="padding-top: 7px; padding-bottom: 7px;">
 								<input type="text" class="form-control" name="deli_date" value="<%=cMap.get("ORDER_INDATE")%>" size="27" style="height: 28px;width:140px; font-size: 13px; " readonly>
@@ -537,7 +558,7 @@
 						</tr>
 						<tr>
 							<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">비고</td>
-							<td colspan="5" style="height: 199.25px; pxpadding-top: 7px; padding-bottom: 7px;">
+							<td colspan="5" style="height: 157.25px; pxpadding-top: 7px; padding-bottom: 7px;">
 								<textarea name="deli_memo" style="height:95%; width:95%; background-color: #e9ecef; padding-left: 6px; padding-top: 6px; padding-right: 6px; padding-bottom: 6px; font-family: 바탕체;" readonly ><%=cMap.get("ORDER_MEMO")%></textarea>
 							</td>
 						</tr>

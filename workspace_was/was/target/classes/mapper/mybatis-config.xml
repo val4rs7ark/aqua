@@ -11,5 +11,6 @@
 		<mapper resource="com/mybatis/mapper/delivery.xml" />
 		<mapper resource="com/mybatis/mapper/HR.xml" />
 		<mapper resource="com/mybatis/mapper/sales.xml"/>
+		<mapper resource="com/mybatis/mapper/board.xml"/>
 	</mappers>
 </configuration>

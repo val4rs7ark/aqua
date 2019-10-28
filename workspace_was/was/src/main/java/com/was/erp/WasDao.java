@@ -97,4 +97,58 @@ public class WasDao {
 		List<Map<String,Object>> resultList = sqlSessionTemplate.selectList("wasMainChart",pMap);
 		return resultList;
 	}
+	//급여화면 직근 3개월 급여 구하는 코드
+	public String wasAvgofSal(Map<String, Object> pMap) {
+		String avgofSal = "";
+		pMap.put("avgofSal","");
+		try {
+			sqlSessionTemplate.selectOne("wasAvgofSal", pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		avgofSal = pMap.get("avgofSal").toString();
+		return avgofSal;
+	}
+	//생일 구하는 코드
+	public List<Map<String, Object>> wasEmp_birth() {
+		List<Map<String,Object>> resultList = null;
+		try {
+			resultList = sqlSessionTemplate.selectList("Emp_birth");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return resultList;
+	}
+	// 오늘날짜 구하는 코드
+	public String wasTo_day() {
+		String result_st = "";
+		try {
+			result_st = sqlSessionTemplate.selectOne("wasTo_day");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result_st;
+	}
+	//스케줄 가져오는 코드
+	public List<Map<String, Object>> wasMain_schedule(Map<String,Object> pMap) {
+		List<Map<String,Object>> resultList = null;
+		try {
+			resultList = sqlSessionTemplate.selectList("Main_schedule",pMap);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return resultList;
+	}
+	//스케줄 메모 추가
+	public void wasMain_schedule_Memo(Map<String, Object> pMap) {
+		try {
+			sqlSessionTemplate.insert("wasMain_schedule_Memo",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

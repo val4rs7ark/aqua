@@ -1,42 +1,88 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mybatis.mapper.ProductMapper">
+   <select id="currentTime" parameterType="int" resultType="java.lang.String">
+       select TO_CHAR(sysdate,'YYYY-MM-DD') from dual
+    </select>
+    
     <select id="get_Total" parameterType="map" resultType="int">
-	   	select count(s.supso_no) supso_no
-	      from supplyandsobi s
+       select count(s.supso_no) supso_no
+         from supplyandsobi s
     </select>
+    
     <select id="productList" parameterType="map" resultType="map">
-    	select 
-			   row_number() over(order by supso_no) as supso_no
-		      ,s.ivgroup_code,i.ivgroup_name,s.empno
-		      ,s.supso_startdate,s.supso_enddate,s.supso_count
-		      ,s.supso_date,s.ship_code
-		  from supplyandsobi s, invengroup i
-		 where s.ivgroup_code = i.ivgroup_code 
-		 <if test="start>0 and end>0">		 
- 			and rownum between #{start} and #{end}
-		 </if>
+      select supso_no_r,ivgroup_name,empno,supso_startdate,supso_enddate,supso_count,supso_date
+          from( select row_number() over(order by supso_no) as supso_no_r
+                      ,i.ivgroup_name,s.empno,s.supso_startdate,s.supso_enddate,s.supso_count,s.supso_date
+                  from supplyandsobi s, invengroup i
+                where s.ivgroup_code = i.ivgroup_code
+       <if test="ivgroup_search!=null and !ivgroup_search.equals('null')">
+             and s.ivgroup_code = #{ivgroup_search}
+       </if>
+       <if test="ship_search!=null and !ship_search.equals('null')">
+             and s.ship_code = #{ship_search}
+       </if>
+        <!-- 날짜검색 -->
+       <if test="before_date_ud!=null and after_date_ud!=null">
+             and s.supso_date between #{before_date_ud} and #{after_date_ud}
+       </if>
+       <if test="before_date_ud!=null and after_date_ud==null">
+             and s.supso_date between #{before_date_ud} and (select max(s.supso_date) from supplyandsobi)
+       </if>
+       <if test="before_date_ud==null and after_date_ud!=null">
+             and s.supso_date between (select min(s.supso_date) from supplyandsobi) and #{after_date_ud}
+       </if>
+               ) a
+          where 1=1
+       <if test="start>0 and end>0">       
+          and supso_no_r between #{start} and #{end}
+       </if>
+       
     </select>
-	<select id="supplyInsert" parameterType="map" resultType="map">
-	    INSERT INTO SUPPLYANDSOBI (ivgroup_code, empno
-	                              ,supso_no, supso_startdate
-	                              ,supso_enddate, supso_count
-	                              ,supso_gubun, supso_date, ship_code)
-	                       VALUES (#{ivgroup_code},#{empno}
-		                          ,nvl((select (max (supso_no) + 1) supso_no from supplyandsobi),1)
-		                          ,#{supso_startdate}
-		                          ,#{supso_enddate},#{supso_count}
-		                          ,'A',to_char(sysdate,'YYYY-MM-DD'),#{ship_code})
+    
+    <select id="supplyInsert" parameterType="map" resultType="map">
+       INSERT INTO SUPPLYANDSOBI (ivgroup_code, empno
+                                 ,supso_no, supso_startdate
+                                 ,supso_enddate, supso_count
+                                 ,supso_gubun, supso_date, ship_code)
+                          VALUES (#{ivgroup_code},#{empno}
+                                ,nvl((select (max (supso_no) + 1) supso_no from supplyandsobi),1)
+                                ,#{supso_startdate}
+                                ,#{supso_enddate},#{supso_count}
+                                ,'A',to_char(sysdate,'YYYY-MM-DD'),#{ship_code})
     </select>
-      <select id="productDetail" parameterType="map" resultType="map">
-    	
+    
+    <select id="productsDetail" parameterType="map" resultType="map">
+      SELECT supso_no_r,ivgroup_code,
+               ivgroup_name,empno,
+               supso_startdate,supso_enddate,
+               supso_count,supso_date,
+               ship_code
+          FROM (SELECT ROWNUM supso_no_r,ivgroup_code,
+                       ivgroup_name,empno,
+                       supso_startdate,supso_enddate,
+                       supso_count,supso_date,
+                       ship_code
+                  FROM (  SELECT s.ivgroup_code AS ivgroup_code,
+                                 i.ivgroup_name AS ivgroup_name,
+                                 s.empno AS empno,                                
+                                 s.supso_startdate AS supso_startdate,
+                                 s.supso_enddate AS supso_enddate,
+                                 s.supso_count AS supso_count,
+                                 s.supso_date AS supso_date,
+                                 s.ship_code AS ship_code
+                            FROM supplyandsobi s, invengroup i
+                           WHERE s.ivgroup_code = i.ivgroup_code
+                        ORDER BY supso_no asc))
+         WHERE supso_no_r = #{supso_no_r}
     </select>
+    
     <delete id="productDelete" parameterType="list">
-    	delete from supplyandsobi
- 		 where supso_no in
- 		 <foreach item="item" index="index" collection="list"
-				  open="(" separator="," close=")"><!-- where ivgroup_code in (2,3,5) -->
-				  #{item}
-		</foreach>
+       delete from supplyandsobi
+        where supso_no in
+        <foreach item="item" index="index" collection="list"
+              open="(" separator="," close=")"><!-- where ivgroup_code in (2,3,5) -->
+              #{item}
+      </foreach>
     </delete>
 </mapper> 
