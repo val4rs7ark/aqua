@@ -25,14 +25,14 @@
 var thisDate = new Date();
 var thisYear = thisDate.getFullYear();
 var thisMonth = thisDate.getMonth()+1;
+
 //기간 선택 후 담을 변수
 var selectDate_1;
 var selectDate_2;
 //날짜 이동
-var pre_year;
-var next_year
-var pre_month;
-var next_month;
+var change_year = thisYear;
+var change_month = thisMonth;
+
 //첫화면에 뿌릴 그래프 값 담을 변수
 var barLabel = new Array();
 var barData  = new Array();
@@ -50,8 +50,12 @@ $(document).ready(function(){
 		console.log(barLabel);
 		console.log(barData);
 <%		
-	}
+	}else{
 %>
+	alert("데이터가 없습니다.");
+<%		
+	}
+%>	
 var ctx = document.getElementById("grChart"); 
 var graphChart = new Chart(ctx, {
 	   type: 'bar', //그래프 형태 지정하기
@@ -66,9 +70,21 @@ var graphChart = new Chart(ctx, {
 	                'rgba(255, 206, 86, 0.2)',   //3번째 그래프의 바탕색
 	                'rgba(75, 192, 192, 0.2)',   //4번째 그래프의 바탕색
 	                'rgba(153, 102, 255, 0.2)',  //5번째 그래프의 바탕색
+	                'rgba(255, 159, 64, 0.2)',    //6번째 그래프의 바탕색
+	                'rgba(255, 99, 132, 0.2)',   //1번째 그래프의 바탕색
+	                'rgba(54, 162, 235, 0.2)',   //2번째 그래프의 바탕색
+	                'rgba(255, 206, 86, 0.2)',   //3번째 그래프의 바탕색
+	                'rgba(75, 192, 192, 0.2)',   //4번째 그래프의 바탕색
+	                'rgba(153, 102, 255, 0.2)',  //5번째 그래프의 바탕색
 	                'rgba(255, 159, 64, 0.2)'    //6번째 그래프의 바탕색
 	            ],   
 	             borderColor: [  
+	                'rgba(255,99,132,1)',        //1번째 그래프의 선색
+	                'rgba(54, 162, 235, 1)',     //2번째 그래프의 선색
+	                'rgba(255, 206, 86, 1)',     //3번째 그래프의 선색
+	                'rgba(75, 192, 192, 1)',     //4번째 그래프의 선색
+	                'rgba(153, 102, 255, 1)',    //5번째 그래프의 선색
+	                'rgba(255, 159, 64, 1)',      //6번째 그래프의 선색
 	                'rgba(255,99,132,1)',        //1번째 그래프의 선색
 	                'rgba(54, 162, 235, 1)',     //2번째 그래프의 선색
 	                'rgba(255, 206, 86, 1)',     //3번째 그래프의 선색
@@ -88,8 +104,8 @@ var graphChart = new Chart(ctx, {
 	        	//바의 크기를 조절한다.
 	        	xAxes: [{
 	        		 barPercentage: 0.5,
-	                 barThickness: 20,
-	                 maxBarThickness: 20,
+	                 barThickness: 50,
+	                 maxBarThickness: 50,
 	                 minBarLength: 4
 	        	}]
 	           ,yAxes: [{
@@ -102,45 +118,126 @@ var graphChart = new Chart(ctx, {
 });
 });
 
+	///////////////////////// 매출현황 종류 - 년도별 매출현황  //////////////////////
+	function selectYear(){
+		alert(change_year);
+		location.href="/erp/salesYear.was?today_year="+change_year
+		    
+	}
+	
+	
+	
 	///////////////////////// 년도  //////////////////////////
 	// (금년) < 버튼 클릭시 
 	function preYear(){
-		pre_year = thisYear-1;
-		alert(pre_year);
+		change_year = change_year-1;
+		$.ajax({
+			method:"get"
+			,url:"/erp/salesSelectMonth.was?today_year="+change_year+"&today_month="+change_month
+		    ,success:function(data){
+		    	$("#div_chart").html(data);
+		    	$("#d_day").text(change_year+"년  "+change_month+"월");
+			
+					   }
+		}); 
 	}
 	// (금년) > 버튼 클릭시 
 	function nextYear(){
-		next_year = thisYear+1;
-		alert(next_year);
+		change_year = change_year+1;
+		$.ajax({
+			method:"get"
+			,url:"/erp/salesSelectMonth.was?today_year="+change_year+"&today_month="+change_month
+		    ,success:function(data){
+		    	$("#div_chart").html(data);
+		    	$("#d_day").text(change_year+"년  "+change_month+"월");
+			
+					   }
+		}); 
 	}
 	// 금년 버튼 클릭시 
 	function todayYear() {
-		alert(thisYear);
+		change_year = thisYear;
+		$.ajax({
+			method:"get"
+			,url:"/erp/salesSelectMonth.was?today_year="+change_year+"&today_month="+change_month
+		    ,success:function(data){
+		    	$("#div_chart").html(data);
+		    	$("#d_day").text(change_year+"년  "+change_month+"월");
+			
+					   }
+		}); 
 	}
 	///////////////////////// 월별  //////////////////////////
 	// 금월 버튼 클릭시 
 	function todayMonth() {
-		alert(thisMonth);
+		if(thisMonth>10){
+			thisMonth = '0'+thisMonth;
+		}
+		change_month = thisMonth;
+		location.href="salesMainSelect.was";
 	}
 	// (금월) < 버튼 클릭시 
 	function preMonth(){
-		pre_month = thisMonth-1;
-		alert(pre_month);
+		if(change_month<2){
+			change_year = change_year-1;
+			alert(change_month);
+			change_month = 12;
+		}
+		else{
+			if(change_month<10){
+				change_month = "0"+change_month;
+			}
+			change_month = change_month-1;
+		}
+		alert(change_year+"-"+change_month);
+		$.ajax({
+			method:"get"
+			,url:"/erp/salesSelectMonth.was?today_year="+change_year+"&today_month="+change_month
+		    ,success:function(data){
+		    	$("#div_chart").html(data);
+		    	$("#d_day").text(change_year+"년  "+change_month+"월");
+			
+					   }
+		}); 
 	}
 	// (금월) > 버튼 클릭시 
 	function nextMonth(){
-		next_month = thisMonth+1;
-		alert(next_month);
+		if(change_month>11){
+			change_year = change_year+1;
+			change_month = 1;
+			if(change_month>10){
+				change_month = '0'+change_month;
+			}
+		}
+		else{change_month = change_month+1;}
+		
+		alert(change_year+"-"+change_month);
+		$.ajax({
+			method:"get"
+			,url:"/erp/salesSelectMonth.was?today_year="+change_year+"&today_month="+change_month
+		    ,success:function(data){
+		    	$("#div_chart").html(data);
+		    	$("#d_day").text(change_year+"년  "+change_month+"월");
+			
+					   }
+		}); 
 	}
 	///////////////////////// 기간선택  //////////////////////////
 	function selectDate(){
 		selectDate_1 = $("#sales_date_1").val();
 		selectDate_2 = $("#sales_date_2").val();
 		alert(selectDate_1+" - "+selectDate_2);
-		
+		$.ajax({
+			method:"get"
+			,url:"/erp/salesTwoSelect.was?today_1="+selectDate_1+"&today_2="+selectDate_2
+		    ,success:function(data){
+		    	$("#div_chart").html(data);
+		    	$("#d_day").text(selectDate_1+" - "+selectDate_2);
+			
+					   }
+		}); 
 	}
 	
-
 </script>
 <style type="text/css">
 	input[id=btn_search] {
@@ -154,23 +251,22 @@ var graphChart = new Chart(ctx, {
 	  padding: 9px;
 	  width: 55px
 	}
-
 </style>
 </head>
 <body>
 <div class="container-fluid">
 <div class="row">
-<div style="width:20%">
+<div style="width:20%; height:1050px;">
 	 <%@ include file="/common/MenuCommon.jsp" %>
 </div>
 <!-- ==================================================  본 화면 78% ================================================== -->
 <div style="width:78%">
   <div class="card bg-dark text-white" style="height:50px;width:95%;margin-top:50px;margin-bottom:15px;margin-left:20px;">
-  <div class="card-body" style="height:30px;">매출현황</div>
+  <div class="card-body" style="height:30px;">영업/매출관리>매출현황</div>
   </div>
 	    <!-- ========================================검색창 ================================ -->
   <div class="w3-container" style="margin-top: 5px;margin-bottom:25px; height: 80px;width:100%">
-  <div class="box-container" style="margin-top: 5px; height: 40px;" align="center">
+  <div class="container" style="margin-top: 5px; height: 40px;" align="center">
   <div id="box">
   <table>
      <thead>
@@ -206,11 +302,11 @@ var graphChart = new Chart(ctx, {
         </th>
         <th>
            <td>
-              <input type="date" id="sales_date_1" class="form-control">
+              <input type="month" id="sales_date_1" class="form-control">
            </td>
            <td style="padding-left:5px;padding-right:5px;"><i class="fas fa-minus-square" style="font-size:36px" valign="center"></i></td>
            <td>
-              <input type="date" id="sales_date_2" class="form-control">
+              <input type="month" id="sales_date_2" class="form-control">
            </td>
            <td style="padding-left:5px;"><input id="btn_search" type="submit" value="조회" onClick="javascript:selectDate()"></td>
         </th>
@@ -218,11 +314,18 @@ var graphChart = new Chart(ctx, {
   </div>
   </div>
   </table>
+  <div style="margin-top:8px;">
+  <button type="button" class="btn btn-light" onClick="javascript:selectYear()">년별 매출 보기</button>
+  </div>
   </div>
   </div>
   </div>
     <!-- ========================================검색창 끝================================ -->
- <div>
+    <div id="d_day" style="font-size:24px;text-align:center;"></div>
+    <script type="text/javascript">
+    	$("#d_day").text(change_year+"년  "+change_month+"월");
+    </script>
+ <div id="div_chart">
 	<!-- html의 canvas태그는 애니메이션을 지원하는 태그이다. 즉 차트를 그릴 위치를 선언. -->
 		<canvas id="grChart" style="display: block; width: 1000px; height: 510px; margin-left:170px;" width="1000" height="510" class="chartjs-render-monitor"></canvas>
  </div>	

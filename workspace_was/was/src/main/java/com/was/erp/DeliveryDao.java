@@ -225,4 +225,14 @@ public class DeliveryDao {
 			e.printStackTrace();
 		}
 	}
+
+	public List<Map<String, Object>> delivery_excel(Map<String, Object> pMap) {
+		List<Map<String,Object>> r_list = null;
+		try {
+			r_list = sqlSessionTemplate.selectList("delivery",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return r_list;
+	}
 }

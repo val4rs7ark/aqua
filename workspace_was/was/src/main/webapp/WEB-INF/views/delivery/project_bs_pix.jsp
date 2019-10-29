@@ -16,6 +16,27 @@
 	if(request.getParameter("nowPage")!=null){
 		nowPage = Integer.parseInt(request.getParameter("nowPage"));
 	}
+	
+	String keyword = null; 
+	String before_date = null; 
+	String after_date = null; 
+	String cb_situation = null; 
+	String cb_search = null; 
+	if(pl_Map.get("keyword")!=null){
+		keyword = pl_Map.get("keyword").toString();
+	}
+	if(pl_Map.get("before_date_ud")!=null){
+		before_date = pl_Map.get("before_date_ud").toString();
+	}
+	if(pl_Map.get("after_date_ud")!=null){
+		after_date = pl_Map.get("after_date_ud").toString();
+	}
+	if(pl_Map.get("cb_situation")!=null){
+		cb_situation = pl_Map.get("cb_situation").toString();
+	}
+	if(pl_Map.get("cb_search")!=null){
+		cb_search = pl_Map.get("cb_search").toString();
+	}
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -96,6 +117,19 @@
 		$("#f_condition").attr("action","/erp/delivery_List");
 		$("#f_condition").submit();
 	}
+	function bs_excel_down(){
+		//var keyword = $("#keyword").val(); //텍스트
+		//var bs_Condition = $("#bs_Condition").val();
+		//var cb_search = $("#cb_search").val();
+		//var before_date = $("#before_date").val();
+		//var after_date = $("#after_date").val();
+		//var cb_situation = $("#cb_situation").val();
+		//location.href="/erp/delivery_List?keyword="+keyword+"&cb_situation="+cb_situation+"&cb_search="+cb_search+"&before_date="+before_date+"&after_date="+after_date
+		alert("양호");
+		$("#f_condition").attr("method","post");
+		$("#f_condition").attr("action","/erp/delivery_excel");
+		$("#f_condition").submit();
+	}
 </script>
 </head>
 <body>
@@ -121,26 +155,37 @@
 
 
 <div style="width:80%" >
-<div class="container" style="margin-left: 0px;">
-<div class="base_table_div" style="width: 1350px;">
+<div class="container" style="margin-left: 20px; margin-right: 0px;">
+<div class="base_table_div" style="width: 1330px;height: 841px;">
+<!--================================공통코드로 추가할 추가 상단바===========================================-->
+	<div style="margin-top:45px;font-size: 17px; font-weight: 900; padding-left: 26px">
+    	
+  	</div>
+<!--================================공통코드로 추가할 추가 상단바===========================================-->
 <!--================================상단바===========================================-->
-	<div class="card bg-dark text-white" style="height:50px; margin-top:70px">
-    	<div class="card-body">배송처 조회</div>
+	<div class="card bg-dark text-white" style="height:50px; margin-top:7px">
+    	<div class="card-body" style="font-size: 17px; font-weight: 900; ">생산/품질관리 > 배송처 조회</div>
   	</div>
   	<div class="row">
 	</div>  
 <!--================================상단바===========================================-->
 	<form id="f_condition">
-	  <table class="table table-hover" style="margin-bottom: 5px; background-color:#F1F1F1">
+	  <input type="hidden" value="<%=keyword %>" name="excel_keyword">
+	  <input type="hidden" value="<%=before_date %>" name="excel_before_date">
+	  <input type="hidden" value="<%=after_date %>" name="excel_after_date">
+	  <input type="hidden" value="<%=cb_situation %>" name="excel_cb_situation">
+	  <input type="hidden" value="<%=cb_search %>" name="excel_cb_search">
+	  <table class="table table-hover" style="margin-bottom: 5px;margin-top: 5px; background-color:#F1F1F1">
 	    <thead>
-	      <tr>
+	     <tr style="background:white;border-top:2px solid #dee2e6;">
+      
 	<!--<th style="width:10%">-->
-	        <th style="width: 250px;border-top-width: 10px;border-top-color: white;">
-	        		<button type="button" class="btn btn-dark" onclick="javascript:bs_trance()" style="width:54.5px">삭제</button>
+	        <th style="width: 250px;">
+	        		<button type="button" class="btn btn-dark" onclick="javascript:bs_trance()" style=" width:60px;padding:6px 5px 6px 5px;background: #efefef;padding: 3px 3px 3px 3px;color:black; border-color: #6c757d;font-size:15px;font-weight:900;margin-right: 10px;height: 33px;">삭제</button>
 			</th>
-	        <th style="border-top-width: 10px;border-top-color: white; padding-right:2px;">
-		        <div class="dropdown" style="width: 125px;">
-					<select id="cb_situation" name="cb_situation" class="btn btn-dark dropdown_bs" style="color:white; width:120px; height:35.75px; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px;">
+	        <th style=" padding-right:2px;">
+		        <div class="dropdown" style="width: 130px;">
+					<select id="cb_situation" name="cb_situation" class="btn btn-dark dropdown_bs" style="background: #efefef;padding: 3px 3px 3px 7px;color:black;border-color: #6c757d;font-size:15px;font-weight:900;margin-right: 10px;height: 33px;">
 						<option value="">진행선택</option>
 						<option value="1">결제전</option>
 						<option value="2">배송중</option>
@@ -149,9 +194,9 @@
 					</select>
 				</div>
 	        </th>
-	        <th style="border-top-width: 10px;border-top-color: white; padding-left:2px; padding-right:2px;">
+	        <th style="padding-left:2px; padding-right:2px;">
 		        <div class="dropdown" style="width: 125px;">
-					<select id="cb_search" name="cb_search" class="btn btn-dark dropdown_bs" style="color:white; width:120px; height:35.75px; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px;">
+					<select id="cb_search" name="cb_search" class="btn btn-dark dropdown_bs" style="background: #efefef;padding: 3px 3px 3px 7px;color:black;border-color: #6c757d;font-size:15px;font-weight:900;margin-right: 10px;height: 33px;">
 						<option value="">선택</option>
 						<option value="comp_name">업체명</option>
 						<option value="comp_addr">업체주소</option>
@@ -160,21 +205,22 @@
 					</select>
 				</div>
 	        </th>
-	        <th style="border-top-width: 10px;border-top-color: white;">
+	        <th>
 				<input id="keyword" name="keyword" type="text" class="form-control" placeholder=" 내용을 입력하세요."  size="27" style="height: 35.75px;width:100%;min-width:140px; font-size: 13px;">
 	        </th>
-	        <th style="border-top-width: 10px;border-top-color: white;">
+	        <th>
 				<input id="before_date" name="before_date" type="date" class="form-control">
 			</th>
-			<th style="border-top-width: 10px;border-top-color: white;">
+			<th>
 				<i class='fas fa-minus-square' style='font-size:36px'/>
 			</th>
-			<th style="border-top-width: 10px;border-top-color: white;">
+			<th>
 				<input id="after_date" name="after_date" type="date" class="form-control">
 			</th>
-			<th style="border-top-width: 10px;border-top-color: white;">
+			<th>
 		   <!-- <button class="btn btn-dark" onclick="javascript:bs_search()" style="float: right; width:54.5px">조회</button> -->
-				<button class="btn btn-dark" type="button" onclick="javascript:bs_search()" style="float: right; width:54.5px">조회</button>
+				<button class="btn btn-dark" type="button" onclick="javascript:bs_search()" style="float:right; width:60px;padding:6px 5px 6px 5px;background: #efefef;padding: 3px 3px 3px 3px;color:black;
+     border-color: #6c757d;font-size:15px;font-weight:900;margin-right: 10px;height: 33px;">조회</button>
 			</th>
 	      </tr>
 	    </thead>
@@ -183,7 +229,7 @@
   <!-- ====================================여기서부터 테이블시작======================================= -->
 	  <table class="table" style="border-bottom:inset;  margin-bottom: 0px;">
 	    <thead>
-	      <tr style="background-color: #cccccc96;">
+	      <tr style="background-color: #efefef">
 	        <th style="width:5%; text-align:center; vertical-align: middle;">
 	        	<div><input type="checkbox" class="bs_checkbox" id="checkall"></div> 
 	        </th>
@@ -194,7 +240,9 @@
 	        	업체명
 	        </th>
 	        <th class="bs_table_header" style="width:15%;">
-	        	날짜
+	        	날짜 <a onclick="javascrip:bs_excel_down()" style="cursor: pointer;">
+	        			<img alt="excel" src="/erp/images/excel_icon.png" style="width:20px; float: right; margin-right: 20px;">
+	        		</a> 
 	        </th>
 	      </tr>
 	    </thead>
@@ -348,29 +396,9 @@
   </div>
   <!-- ====================================여기서 테이블 끝======================================= -->
 </div>
-<div class="container" style="margin-left: 0px;">
-  <ul class="pagination" style="justify-content: center;">
-	<%		
-			String keyword = null; 
-			String before_date = null; 
-			String after_date = null; 
-			String cb_situation = null; 
-			String cb_search = null; 
-			if(pl_Map.get("keyword")!=null){
-				keyword = pl_Map.get("keyword").toString();
-			}
-			if(pl_Map.get("before_date_ud")!=null){
-				before_date = pl_Map.get("before_date_ud").toString();
-			}
-			if(pl_Map.get("after_date_ud")!=null){
-				after_date = pl_Map.get("after_date_ud").toString();
-			}
-			if(pl_Map.get("cb_situation")!=null){
-				cb_situation = pl_Map.get("cb_situation").toString();
-			}
-			if(pl_Map.get("cb_search")!=null){
-				cb_search = pl_Map.get("cb_search").toString();
-			}
+<div class="container">
+  <ul class="pagination" style="justify-content: center; margin-bottom: 70px; margin-top: 25px; ">
+	<%
 			String pagePath = "/erp/delivery_List?keyword="+keyword+"&before_date="+before_date+"&after_date="+after_date+"&cb_situation="+cb_situation+"&cb_search="+cb_search;
 			PageBar pb = new PageBar(numPerPage,tot,nowPage,pagePath);
 			String pagination = null;

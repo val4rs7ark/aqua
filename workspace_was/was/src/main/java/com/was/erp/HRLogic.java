@@ -21,6 +21,12 @@ public class HRLogic {
 		List<Map<String,Object>> r_List = hrDao.HRSalery_insert();
 		return r_List;
 	}
+	public List<Map<String, Object>> HRseach_emp_name(Map<String, Object> pMap) {
+		logger.info("HRSalery_insert//////////////////logic");
+		
+		List<Map<String,Object>> r_List = hrDao.HRseach_emp_name(pMap);
+		return r_List;
+	}
 
 	public String HRSalery_insert_commit(Map<String, Object> pMap) {
 		logger.info("HRSalery_insert_commit//////////////////logic");
@@ -32,6 +38,27 @@ public class HRLogic {
 			msg = hrDao.HRSalery_insert_commit_one(pMap);
 		}
 		return msg;
+	}
+
+	public Map<String, Object> HRsalary_change_account(Map<String, Object> pMap) {
+		Map<String,Object> rMap = hrDao.HRsalary_change_account(pMap); 
+		return rMap;
+	}
+	public String HRcatch_Access(String empno) {
+		String dept_name = hrDao.HRcatch_Access(empno);
+		return dept_name;
+	}
+	public List<Map<String, Object>> HRsal_select(Map<String, Object> pMap) {
+		List<Map<String,Object>> r_List = hrDao.HRsal_select(pMap);
+		return r_List;
+	}
+	public List<Map<String, Object>> HRsal_year(Map<String, Object> pMap) {
+		List<Map<String,Object>> r_list = hrDao.HRsal_year(pMap);
+		return r_list;
+	}
+	public List<Map<String, Object>> HRsal_select_f(Map<String, Object> pMap) {
+		List<Map<String,Object>> r_list = hrDao.HRsal_select_f(pMap);
+		return r_list;
 	}
 
 }

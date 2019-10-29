@@ -2,27 +2,514 @@
 <!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mybatis.mapper.HRMapper">
 	<select id="HRSalery_insert" parameterType="map" resultType="map">
-		select empno,emp_name,resident_no,emp_hp,emp_indate,dept_name||'-'||team_name emp_sosoc,emp_bank||'은행' emp_back,sal_account,em.emp_sal emp_sal from emp em, dept dt
+		select empno,emp_name,resident_no,emp_hp,emp_indate,dept_name||'-'||team_name emp_sosoc,emp_bank||'은행' emp_bank,sal_account,em.emp_sal emp_sal, em.emp_level emp_level, em.emp_email emp_email, em.emp_position emp_position 
+		  from emp em, dept dt
 		 where em.dept_code = dt.dept_code
+		 <!-- 사원검색 -->
+		 <if test="search_emp_name != null">
+		 		and em.emp_name like '%'||#{search_emp_name}||'%'
+		 </if>
+		 <if test="search_emp_name_one != null">
+		 		and em.emp_name like '%'||#{search_emp_name_one}||'%'
+		 </if>
+	</select>
+	<!-- 급여조회 처음 화면 들어갈때 필요한 정보 -->
+	<select id="HRsal_select_f" parameterType="map" resultType="map">
+		select empno,emp_indate 
+		  from emp
+		 where empno = #{empno}
+	</select>
+	<!-- 직근 3개월 급여 구하는 코드 -->
+	<select id="wasAvgofSal" parameterType="map" statementType="CALLABLE">
+		{ CALL proc_AvgofSal
+			( 
+			 #{g_empno, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+			,#{avgofSal, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
+			)
+        }
 	</select>
 	<insert id="HRSalery_insert_commit" parameterType="map">
 		insert into salary(sal_no,empno,sal_default,sal_plus,sal_over,sal_rest,
-						sal_etc,sal_rice,sal_drive,sal_life,sal_tel,sal_level,sal_baby,
-						tax_soduc,tax_jungsan,tax_chon,tax_nocheck,tax_kukmin,tax_long,
+						sal_etc,sal_rice,sal_drive,sal_life,sal_tel,sal_level,sal_baby,sal_imsihap,
+						tax_soduc,tax_jungsan,tax_chon,tax_nocheck,tax_kukmin,tax_long,tax_imsihap,
 						tax_health,tax_pain,tax_work,tax_etc_sudang,sal_when,
 						sal_total,sal_etc_detail,tax_etc_sudang_dt,sal_regdate,sal_writer,sal_gubun)
 		 values((select max(sal_no)+1 from salary),#{empno},#{sal_default},#{sal_plus},#{sal_over},#{sal_rest},
-		 #{sal_etc},#{sal_rice},#{sal_drive},#{sal_life},#{sal_tel},#{sal_level},#{sal_baby},
-		 #{tax_soduc},#{tax_jungsan},#{tax_chon},#{tax_nocheck},#{tax_kukmin},#{tax_long},
+		 #{sal_etc},#{sal_rice},#{sal_drive},#{sal_life},#{sal_tel},#{sal_level},#{sal_baby},#{imsi_sal_total},
+		 #{tax_soduc},#{tax_jungsan},#{tax_chon},#{tax_nocheck},#{tax_kukmin},#{tax_long},#{imsi_minus_total},
 		 #{tax_health},#{tax_pain},#{tax_work},#{tax_etc_sudang},#{sal_when},
 		 #{sal_total},#{sal_etc_detail},#{tax_etc_sudang_dt},to_char(sysdate,'yyyy-mm-dd/hh24:mi'),#{sal_writer},1)
 	</insert>
 	<insert id="HRSalery_insert_commit_one" parameterType="map">
-		insert into salary(sal_no,empno,sal_default,sal_over,sal_rice,sal_drive,sal_life,sal_tel,tax_soduc,tax_kukmin,tax_long,
-						tax_health,tax_pain,tax_work,tax_etc_sudang,sal_one_date,sal_whensal_total,tax_etc_sudang_dt,sal_regdate,
-						sal_writer,sal_gubun)
-		 values((select max(sal_no)+1 from salary),#{empno},#{sal_default},#{sal_over},#{sal_rice},#{sal_drive},#{sal_life},
-		 #{sal_tel},#{tax_soduc},#{tax_kukmin},#{tax_long},#{tax_health},#{tax_pain},#{tax_work},#{tax_etc_sudang},#{sal_one_date},
-		 #{sal_when},#{sal_total},#{tax_etc_sudang_dt},to_char(sysdate,'yyyy-mm-dd/hh24:mi'),#{sal_writer},2)
+		insert into salary(sal_no,empno,sal_default,sal_one_date,sal_over,
+						sal_rice,sal_drive,sal_life,
+						tax_soduc,tax_kukmin,tax_long,
+						tax_health,tax_pain,tax_work,tax_etc_sudang,sal_when,
+						sal_total,tax_etc_sudang_dt,sal_regdate,sal_writer,sal_gubun)
+		 values((select max(sal_no)+1 from salary),#{empno},#{sal_default_one},#{sal_one_date},#{sal_over_one},
+		 #{sal_rice_one},#{sal_drive_one},#{sal_life_one},
+		 #{tax_soduc_one},#{tax_kukmin_one},#{tax_long_one},
+		 #{tax_health_one},#{tax_pain_one},#{tax_work_one},#{tax_etc_sudang_one},#{sal_when_one},
+		 #{sal_total_one},#{tax_etc_sudang_dt_one},to_char(sysdate,'yyyy-mm-dd/hh24:mi'),#{sal_writer_one},2)
 	</insert>
+	<select id="HRsalary_change_account" parameterType="map" statementType="CALLABLE">
+		{ CALL proc_update_account(
+                 #{p_empno, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+                ,#{sal_account, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+                ,#{emp_sal, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+                ,#{emp_bank, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{emp_writer, mode=IN, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{empno, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{emp_name, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{resident_no, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}                
+                ,#{emp_hp, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{emp_indate, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{emp_sosoc, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{emp_bank, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{sal_account, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{emp_sal, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
+                ,#{emp_level, mode=OUT, jdbcType=VARCHAR,  javaType=java.lang.String}
+                )
+        }
+	</select>
+	<select id="HRcatch_Access" parameterType="java.lang.String" resultType="java.lang.String">
+		select dept_name from emp em, dept dt
+		 where em.dept_code = dt.dept_code
+		   and em.empno = #{empno}
+	</select>
+	<!-- 급여명세서 정보 뽑아내는 쿼리문 -->
+	<select id="HRsal_empselect" parameterType="map" resultType="map">
+                  select sal_default,sal_plus,sal_over,sal_rest, sal_etc,sal_rice,sal_drive,sal_life,
+                  	 	 sal_tel,sal_level,sal_baby, sal_imsihap,tax_soduc,tax_jungsan,tax_chon,
+                  	 	 tax_nocheck,tax_kukmin,tax_long, tax_health,tax_pain,tax_work,tax_etc_sudang, 
+                  	 	 tax_imsihap,sal_when,sal_etc_detail,tax_etc_sudang_dt,sal_gubun,sal_total, 
+                  	 	 dt.dept_name||'-'||em.team_name emp_sosoc, emp_position,emp_indate, em.empno, 
+                  	 	 emp_name, emp_bank||'은행 '||sal_account emp_bank_up
+				    from emp em, salary sal, dept dt 
+				   where em.empno=sal.empno 
+					 and em.empno=#{p_empno} and sal_gubun=1 and em.dept_code=dt.dept_code 
+					 and sal_when = (select max(sal_when) from salary sal, emp em where sal.empno=em.empno and substr(sal_when,1,7)=#{p_sal_when} and em.empno =#{p_empno})
+	</select>
+	<!-- 연간급여조회 쿼리문 -->
+	<select id="HRsal_year" parameterType="map" resultType="map">
+                  select empno,'기본급', max(decode(substr(sal_regdate,6,2),'01',sal_default)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',sal_default)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',sal_default)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',sal_default)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',sal_default)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',sal_default)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',sal_default)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',sal_default)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',sal_default)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',sal_default)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',sal_default)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',sal_default)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'성과급', max(decode(substr(sal_regdate,6,2),'01',sal_plus)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',sal_plus)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',sal_plus)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',sal_plus)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',sal_plus)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',sal_plus)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',sal_plus)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',sal_plus)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',sal_plus)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',sal_plus)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',sal_plus)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',sal_plus)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'식대', max(decode(substr(sal_regdate,6,2),'01',sal_rice)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',sal_rice)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',sal_rice)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',sal_rice)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',sal_rice)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',sal_rice)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',sal_rice)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',sal_rice)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',sal_rice)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',sal_rice)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',sal_rice)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',sal_rice)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'통신비', max(decode(substr(sal_regdate,6,2),'01',sal_tel)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',sal_tel)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',sal_tel)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',sal_tel)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',sal_tel)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',sal_tel)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',sal_tel)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',sal_tel)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',sal_tel)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',sal_tel)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',sal_tel)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',sal_tel)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'교통비', max(decode(substr(sal_regdate,6,2),'01',sal_drive)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',sal_drive)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',sal_drive)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',sal_drive)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',sal_drive)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',sal_drive)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',sal_drive)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',sal_drive)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',sal_drive)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',sal_drive)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',sal_drive)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',sal_drive)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'생명수당', max(decode(substr(sal_regdate,6,2),'01',sal_life)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',sal_life)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',sal_life)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',sal_life)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',sal_life)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',sal_life)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',sal_life)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',sal_life)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',sal_life)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',sal_life)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',sal_life)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',sal_life)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'초과수당', max(decode(substr(sal_regdate,6,2),'01',sal_over)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',sal_over)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',sal_over)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',sal_over)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',sal_over)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',sal_over)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',sal_over)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',sal_over)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',sal_over)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',sal_over)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',sal_over)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',sal_over)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'직책수당', max(decode(substr(sal_regdate,6,2),'01',sal_level)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',sal_level)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',sal_level)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',sal_level)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',sal_level)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',sal_level)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',sal_level)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',sal_level)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',sal_level)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',sal_level)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',sal_level)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',sal_level)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'주휴수당', max(decode(substr(sal_regdate,6,2),'01',sal_rest)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',sal_rest)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',sal_rest)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',sal_rest)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',sal_rest)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',sal_rest)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',sal_rest)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',sal_rest)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',sal_rest)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',sal_rest)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',sal_rest)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',sal_rest)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'육아수당', max(decode(substr(sal_regdate,6,2),'01',sal_baby)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',sal_baby)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',sal_baby)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',sal_baby)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',sal_baby)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',sal_baby)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',sal_baby)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',sal_baby)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',sal_baby)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',sal_baby)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',sal_baby)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',sal_baby)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'기타수당', max(decode(substr(sal_regdate,6,2),'01',sal_etc)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',sal_etc)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',sal_etc)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',sal_etc)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',sal_etc)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',sal_etc)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',sal_etc)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',sal_etc)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',sal_etc)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',sal_etc)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',sal_etc)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',sal_etc)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'지급계',RTRIM (max(decode(substr(sal_regdate,6,2),'01',sal_imsihap)),'원') "1월"
+					            , RTRIM (max(decode(substr(sal_regdate,6,2),'02',sal_imsihap)),'원') "2월"
+					            , RTRIM (max(decode(substr(sal_regdate,6,2),'03',sal_imsihap)),'원') "3월"
+					            , RTRIM (max(decode(substr(sal_regdate,6,2),'04',sal_imsihap)),'원') "4월"
+					            , RTRIM (max(decode(substr(sal_regdate,6,2),'05',sal_imsihap)),'원') "5월"
+					            , RTRIM (max(decode(substr(sal_regdate,6,2),'06',sal_imsihap)),'원') "6월"
+					            , RTRIM (max(decode(substr(sal_regdate,6,2),'07',sal_imsihap)),'원') "7월"
+					            , RTRIM (max(decode(substr(sal_regdate,6,2),'08',sal_imsihap)),'원') "8월"
+					            , RTRIM (max(decode(substr(sal_regdate,6,2),'09',sal_imsihap)),'원') "9월"
+					            , RTRIM (max(decode(substr(sal_regdate,6,2),'10',sal_imsihap)),'원') "10월"
+					            , RTRIM (max(decode(substr(sal_regdate,6,2),'11',sal_imsihap)),'원') "11월"
+					            , RTRIM (max(decode(substr(sal_regdate,6,2),'12',sal_imsihap)),'원') "12월"
+					 from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'소득세', max(decode(substr(sal_regdate,6,2),'01',tax_soduc)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',tax_soduc)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',tax_soduc)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',tax_soduc)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',tax_soduc)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',tax_soduc)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',tax_soduc)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',tax_soduc)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',tax_soduc)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',tax_soduc)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',tax_soduc)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',tax_soduc)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'연말정산소득세', max(decode(substr(sal_regdate,6,2),'01',tax_jungsan)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',tax_jungsan)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',tax_jungsan)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',tax_jungsan)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',tax_jungsan)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',tax_jungsan)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',tax_jungsan)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',tax_jungsan)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',tax_jungsan)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',tax_jungsan)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',tax_jungsan)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',tax_jungsan)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'지방소득세', max(decode(substr(sal_regdate,6,2),'01',tax_chon)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',tax_chon)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',tax_chon)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',tax_chon)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',tax_chon)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',tax_chon)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',tax_chon)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',tax_chon)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',tax_chon)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',tax_chon)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',tax_chon)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',tax_chon)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'결근공제액', max(decode(substr(sal_regdate,6,2),'01',tax_nocheck)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',tax_nocheck)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',tax_nocheck)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',tax_nocheck)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',tax_nocheck)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',tax_nocheck)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',tax_nocheck)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',tax_nocheck)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',tax_nocheck)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',tax_nocheck)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',tax_nocheck)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',tax_nocheck)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'국민연금', max(decode(substr(sal_regdate,6,2),'01',tax_kukmin)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',tax_kukmin)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',tax_kukmin)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',tax_kukmin)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',tax_kukmin)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',tax_kukmin)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',tax_kukmin)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',tax_kukmin)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',tax_kukmin)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',tax_kukmin)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',tax_kukmin)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',tax_kukmin)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'장기요양보험', max(decode(substr(sal_regdate,6,2),'01',tax_long)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',tax_long)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',tax_long)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',tax_long)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',tax_long)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',tax_long)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',tax_long)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',tax_long)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',tax_long)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',tax_long)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',tax_long)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',tax_long)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'건강보험', max(decode(substr(sal_regdate,6,2),'01',tax_health)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',tax_health)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',tax_health)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',tax_health)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',tax_health)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',tax_health)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',tax_health)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',tax_health)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',tax_health)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',tax_health)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',tax_health)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',tax_health)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'노동조합비용', max(decode(substr(sal_regdate,6,2),'01',tax_pain)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',tax_pain)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',tax_pain)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',tax_pain)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',tax_pain)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',tax_pain)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',tax_pain)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',tax_pain)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',tax_pain)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',tax_pain)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',tax_pain)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',tax_pain)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'고용보험', max(decode(substr(sal_regdate,6,2),'01',tax_work)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',tax_work)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',tax_work)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',tax_work)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',tax_work)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',tax_work)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',tax_work)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',tax_work)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',tax_work)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',tax_work)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',tax_work)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',tax_work)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'기타공제', max(decode(substr(sal_regdate,6,2),'01',tax_etc_sudang)) "sal_Jany"
+					            , max(decode(substr(sal_regdate,6,2),'02',tax_etc_sudang)) "sal_Feb"
+					            , max(decode(substr(sal_regdate,6,2),'03',tax_etc_sudang)) "sal_Mar"
+					            , max(decode(substr(sal_regdate,6,2),'04',tax_etc_sudang)) "sal_Apr"
+					            , max(decode(substr(sal_regdate,6,2),'05',tax_etc_sudang)) "sal_May"
+					            , max(decode(substr(sal_regdate,6,2),'06',tax_etc_sudang)) "sal_Jun"
+					            , max(decode(substr(sal_regdate,6,2),'07',tax_etc_sudang)) "sal_July"
+					            , max(decode(substr(sal_regdate,6,2),'08',tax_etc_sudang)) "sal_Aug"
+					            , max(decode(substr(sal_regdate,6,2),'09',tax_etc_sudang)) "sal_Sep"
+					            , max(decode(substr(sal_regdate,6,2),'10',tax_etc_sudang)) "sal_Oct"
+					            , max(decode(substr(sal_regdate,6,2),'11',tax_etc_sudang)) "sal_Nov"
+					            , max(decode(substr(sal_regdate,6,2),'12',tax_etc_sudang)) "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'공제계', RTRIM (max(decode(substr(sal_regdate,6,2),'01',tax_imsihap)),'원') "sal_Jany"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'02',tax_imsihap)),'원') "sal_Feb"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'03',tax_imsihap)),'원') "sal_Mar"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'04',tax_imsihap)),'원') "sal_Apr"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'05',tax_imsihap)),'원') "sal_May"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'06',tax_imsihap)),'원') "sal_Jun"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'07',tax_imsihap)),'원') "sal_July"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'08',tax_imsihap)),'원') "sal_Aug"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'09',tax_imsihap)),'원') "sal_Sep"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'10',tax_imsihap)),'원') "sal_Oct"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'11',tax_imsihap)),'원') "sal_Nov"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'12',tax_imsihap)),'원') "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+					  union all
+					select empno,'총지급계', RTRIM (max(decode(substr(sal_regdate,6,2),'01',sal_total)),'원') "sal_Jany"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'02',sal_total)),'원') "sal_Feb"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'03',sal_total)),'원') "sal_Mar"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'04',sal_total)),'원') "sal_Apr"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'05',sal_total)),'원') "sal_May"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'06',sal_total)),'원') "sal_Jun"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'07',sal_total)),'원') "sal_July"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'08',sal_total)),'원') "sal_Aug"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'09',sal_total)),'원') "sal_Sep"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'10',sal_total)),'원') "sal_Oct"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'11',sal_total)),'원') "sal_Nov"
+					           , RTRIM (max(decode(substr(sal_regdate,6,2),'12',sal_total)),'원') "sal_Dec"
+					  from salary
+					where empno = #{sal_empno}
+					  and substr(sal_regdate,1,4) = #{sal_year} 
+					group by empno
+	</select>
+	<select id="Emp_birth" parameterType="map" resultType="map">
+		select emp_name, team_name,substr(resident_no,3,2) birth_month,substr(resident_no,5,2) birth_day from emp
+		where substr(resident_no,3,2) = (select to_char(sysdate,'mm') from dual)
+	</select>
+	<select id="wasTo_day" parameterType="map" resultType="java.lang.String">
+		select to_char(sysdate,'yyyymmdd') from dual
+	</select>
+	<select id="Main_schedule" parameterType="map" resultType="map">
+		select note_content from NOTEPAD 
+		 where note_write_date = (select to_char(sysdate,'yyyy-mm-dd') from dual)
+		   and empno = #{empno}
+	</select>
 </mapper> 

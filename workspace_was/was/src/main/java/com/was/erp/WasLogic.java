@@ -356,5 +356,39 @@ public class WasLogic {
 		List<Map<String,Object>> result = wasDao.wasMainChart(pMap);
 		return result;
 	}
+	//퇴직금 : 직근 3개월 평균 비용 구하기
+	public String wasAvgofSal(Map<String, Object> pMap) {
+		String avgofSal = wasDao.wasAvgofSal(pMap);
+		return avgofSal;
+	}
+	//생일자 구하는 로직
+	public String wasEmp_birth(String gubun) {
+		String result_st = "";
+		StringBuilder result = new StringBuilder();
+		if("birth".equals(gubun)) {
+		List<Map<String,Object>> r_list = wasDao.wasEmp_birth();
+			for(int i=0;i<r_list.size();i++) {
+				Map<String,Object> r_Map = r_list.get(i);
+				//총무1팀 홍길동(10.3),배송 1팀 배성우(10.12)
+				result.append(r_Map.get("TEAM_NAME").toString()+"&nbsp;");
+				result.append(r_Map.get("EMP_NAME").toString()+"님(");
+				result.append(r_Map.get("BIRTH_MONTH").toString()+".");
+				result.append(r_Map.get("BIRTH_DAY").toString()+")&nbsp;");
+			}
+			result_st = result.toString();
+		}else if("to_day".equals(gubun)) {
+			String imsi_result_st = wasDao.wasTo_day();
+			result_st = imsi_result_st.substring(0, 4)+"년"+imsi_result_st.substring(4, 6)+"월"+imsi_result_st.substring(6, 8)+"일";
+		}
+		return result_st;
+	}
 
+	public List<Map<String, Object>> wasMain_schedule(Map<String,Object> pMap) {
+		List<Map<String,Object>> rList = wasDao.wasMain_schedule(pMap);
+		return rList;
+	}
+
+	public void wasMain_schedule_Memo(Map<String, Object> pMap) {
+		wasDao.wasMain_schedule_Memo(pMap);
+	}
 }
