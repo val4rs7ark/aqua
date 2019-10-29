@@ -32,6 +32,10 @@ public class WasLogic {
 		else {
 			pMap.put("login_gubun","no_first");
 		}
+		
+		if(pMap.get("postHandle")!=null) { 
+			wasDao = new WasDao(); 
+		}
 		wasDao.wasLogin(pMap);
 		String emp_name = pMap.get("msg").toString();
 		if(!"존재하지 않는 사원코드입니다..".equals(emp_name)&&!"비밀번호를 다시 확인하세요".equals(emp_name))  {

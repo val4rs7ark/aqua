@@ -4,8 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
-<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js">
+<script src="https://www.chartjs.org/samples/latest/utils.js"></script> 
 <title>Insert title here</title>
 <style type="text/css">
 	canvas { 
@@ -50,6 +50,7 @@ $(document).ready(function() {
     type: 'bar', //그래프 형태 지정하기
     data: {
         labels: barLabel,
+        beginAtZero: true,
         datasets: [{
             label: '6개월 매출', //상단 라벨(데이터값들의 그룹명)
             data: barData,//데이터값
@@ -86,7 +87,16 @@ $(document).ready(function() {
         	}]
            ,yAxes: [{
                  ticks: {
-                    beginAtZero:true
+                	 beginAtZero: true,
+                     callback: function(value, index, values) {
+                         if(parseInt(value) > 999){
+                             return '￦' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                         } else if (parseInt(value) < -999) {
+                             return '-￦' + Math.abs(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                         } else {
+                             return '￦' + value;
+                         }
+                     }
                 }
             }]
         }

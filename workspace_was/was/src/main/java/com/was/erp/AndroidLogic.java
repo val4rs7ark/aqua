@@ -35,4 +35,16 @@ public class AndroidLogic {
 		String deli_afterTime = androidDao.deliveryCommit(pMap);
 		return deli_afterTime;
 	}
+
+	public String wasAndroidProductInsert(Map<String, Object> pMap) {
+		int result = 0;
+		String string = null;
+		result = androidDao.wasAndroidProductInsert(pMap);
+		if(result == 0) {
+			string ="입력사항을 다시 확인하세요.";
+		}else {
+			string ="입력 성공하였습니다.";
+		}
+		return string;
+	}
 }

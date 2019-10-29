@@ -29,11 +29,6 @@ public class ErpServlet extends HttpServlet{
 		/////METHOD 방식의 구분인자 하나를 정했다.////////
 		if(req.getParameter("gap")!=null) {
 		String gap = req.getParameter("gap").toString();
-		logger.info("gap:::::::::::::::::"+gap);
-		Object[] keys = pMap.keySet().toArray();
-		for(Object key : keys) {
-		logger.info("requestParams :::::: key :"+key.toString()+", value :"+pMap.get(key.toString()));
-		}
 		////////////////////////////////////////
 		HashMapBinder hmb = new HashMapBinder(req,gap);
 		hmb.selectBind(pMap);
