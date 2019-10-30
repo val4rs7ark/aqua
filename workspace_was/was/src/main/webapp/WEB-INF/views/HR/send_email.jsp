@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
 <%@ page import="javax.mail.*,javax.mail.internet.*,java.util.Properties,com.util.Email_form, java.util.*" %>
+
 <%
 	Map<String,Object> pMap = (Map<String,Object>)request.getAttribute("sal_pMap");
 	
@@ -57,7 +58,26 @@
 		msg.setSubject(subject);
 		msg.setContent(content, "text/html;charset=euc-kr");
 		Transport.send(msg);
-		out.print("성공적으로 전달되었습니다.");
+		out.print("성공적으로 전달되었습니다.<br>");
+ 		out.print("<script type='text/javascript'>");
+		out.print("setInterval(autoReload,1000);");
+		out.print("function autoReload(){");
+ 		out.print("$.ajax({");
+		out.print("method:'get'");
+		out.print(",url:'/erp/HRsecondchange'");
+		out.print(",dataType:'html'");
+		out.print(",success:function(result){");
+		out.print("$('#d_news').html(result);}");
+		out.print(",fail:function(xhrObject, textStatus){");
+		out.print("alert('Request failed:'+textStatus);");
+		out.print("alert(xhrObject.responseText);}");
+		out.print("});"); 
+		out.print("}");
+		out.print("autoReload();");
+		out.print("</script>");
+		out.print("<div id='d_news'>");
+		out.print("<div>123</div>");
+		out.print("</div>");
 		out.print("<a href='javascript:closed()'>닫기</a>");
 	}catch(Exception e){
 		e.printStackTrace();
@@ -70,15 +90,17 @@
 <title>Waiting</title>
 <script type="text/javascript">
 
-function auto_close() {
-setTimeout('closed()',3000);
-}
-
-function closed() {
-self.close();
-}
-
-auto_close();
+	auto_close();
+	function autoReload(){
+		alert("autoReload");
+	}
+	function auto_close() {
+	setTimeout('closed()',3500);
+	}
+	
+	function closed() {
+	self.close();
+	}
 </script>
 </head>
 <body>
