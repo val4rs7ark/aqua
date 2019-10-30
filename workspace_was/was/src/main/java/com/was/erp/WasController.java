@@ -27,6 +27,7 @@ public class WasController {
 	WasLogic wasLogic;
 	@Autowired
 	BoardLogic boardLogic;
+
 //////////////SessionAttributes가 처음 실행 되었을 때 아직 request로 받기 전이라 null방지///////////	
 	@ModelAttribute("s_emp_no")
 	public String setSempNo() {
@@ -110,5 +111,30 @@ public class WasController {
 		path="calendar/insertAjax";
 		return path;
 	}
+	//main메뉴 캘린더 호출 메소드
+	@GetMapping("wasEmpStatus_main.was")
+	public String wasEmpStatus_main(@RequestParam Map<String,Object> pMap,Model model) {
+		String path = null;
+		List<Map<String,Object>> rList = wasLogic.wasEmpStatus(pMap);
+		if(rList.get((rList.size()-1)).get("calendar_bungi")!=null) {
+			model.addAttribute("wasEmpStatus",rList);
+			path ="delivery/ajax/test";
+		}
+		return path;
+	}
+	//main 스케줄
+	@GetMapping("wasMain_schedule")
+	public String wasMain_schedule(@RequestParam Map<String,Object> pMap,Model model) {
+		List<Map<String,Object>> rList = wasLogic.wasMain_schedule(pMap);
+		model.addAttribute("schedule_List",rList);
+		return "delivery/ajax/scadule";
+	}
+	//main 스케줄 메모 추가 아직 구현
+	@GetMapping("wasMain_schedule_Memo")
+	public String wasMain_schedule_Memo(@RequestParam Map<String,Object> pMap,Model model) {
+		wasLogic.wasMain_schedule_Memo(pMap);
+		return "#";
+	}
+	
 	
 }

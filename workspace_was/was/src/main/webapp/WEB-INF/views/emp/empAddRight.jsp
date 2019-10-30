@@ -166,13 +166,10 @@
 			      <option value="대표">대표이사</option>
  			</select>
  		</td>
-		
-	</tr>
-	<tr>
-		<td style="width:17%" colspan="4" align="right">
-			<button class="btn btn-dark" style="margin-right:2px" onclick="javascript:cancel()">취소</button>
-			<button class="btn btn-dark" onclick="javascript:updateAction()">수정</button>
-		</td>
 	</tr>
   </table>
+  <div align="right">
+			<input id="btn_cancel" type="button" value="취소" onclick="javascript:cancel()"> 
+			<input id="btn_save" type="submit" value="저장">
+  </div>
   </form>

@@ -54,6 +54,14 @@ function Attendance(){
 	function f_salesGraph(){
 		$("#f_salesGrapg").submit();
 	}
+	//급여화면 접근가능 확인 함수
+	function HRcatch_Access(){
+    	$("#f_HRAccess").submit();
+	}	
+	//급여조회 입장 함수
+	function HRsal_select_f(){
+    	$("#HRsal_select_f").submit();
+	}	
 </script>
 <style type="text/css">
  #d_button{
@@ -89,6 +97,26 @@ function Attendance(){
 	  <form id="f_salesGrapg" action="/erp/salesMainSelect.was" method="get">
 	  		<input type="hidden" value="1" name="gap"> 
 	  </form>
+	  <!-- 급여 조회 접근할때 -->
+	  <form id="HRsal_select_f" action="/erp/HRsal_select_f" method="post">
+	  <%
+	  	if(s_emp_no!=null && s_emp_pw!=null){
+	  %>
+					<input type="hidden" value=<%= s_emp_no %> name="empno">
+	  <%
+	  	}
+	  %>
+	  </form>
+	  <!-- 급여 화면 접근제한때문에 추가 생성 -->
+	  <form id="f_HRAccess" action="/erp/HRcatch_Access.was" method="post">
+	  <%
+	  	if(s_emp_no!=null && s_emp_pw!=null){
+	  %>
+					<input type="hidden" value=<%= s_emp_no %> name="empno">
+	  <%
+	  	}
+	  %>
+	  </form>
 	  <form id="f_EmpLogin"action="/erp/wasLogin.was" method="post">
 	 
 	  <%
@@ -117,7 +145,7 @@ function Attendance(){
             <h6>최근 접속 시간은&nbsp;<%if(s_outtime!=null)out.print(s_outtime); %></h6>
          </div>
    </div>
-   <div style="height:76%;width:90%;">
+   <div style="height: 77%;width:90%;">
     <div style="background-color:#383E49; height:100%; color:#FFFFFF">
        <ul class="nav flex-column">
             <div class="list-group" style="background-color: #383E49">
@@ -135,7 +163,8 @@ function Attendance(){
             <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major2" style="width:100%;text-align: center;font-size: large;">영업/매출관리</button>
                <div id="major2" class="collapse">
                   <a href="javascript:f_salesGraph()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">매출현황</a>
-                  <a href="HRSalery_insert" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">급여</a>
+                  <a href="javascript:HRcatch_Access()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">급여등록</a>
+                  <a href="javascript:HRsal_select_f()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">급여조회</a>
                   
                </div>
             <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major3" style="width:100%;text-align: center;font-size: large;">인사관리</button>
