@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -50,5 +51,11 @@ public class AndroidDao {
 			e.printStackTrace();
 		}
 		return deli_afterTime;
+	}
+
+	public int wasAndroidProductInsert(Map<String, Object> pMap) {
+		int result = 0;
+			result = sqlSessionTemplate.insert("supplyInsert",pMap);
+		return result;
 	}
 }
