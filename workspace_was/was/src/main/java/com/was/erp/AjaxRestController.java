@@ -1,6 +1,7 @@
 ﻿package com.was.erp;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,10 @@ public class AjaxRestController {
 	@Autowired
 	WasLogic wasLogic;
 	@Autowired
-	SalesGraphLogic salesGraphLogic;
+	DraftLogic draftLogic;
+	/*
+	 * @Autowired SalesGraphLogic salesGraphLogic;
+	 */
 	
 	@GetMapping(value="wasEmpAttendance.was",produces="application/json;charset=UTF-8")
 	public String wasEmpAttendance(@RequestParam Map<String,Object> pMap) {
@@ -111,4 +115,25 @@ public class AjaxRestController {
 		
 		return result;
 	}
+	//기안서 등록눌렀을때
+	@GetMapping("wasDraft_commitEmp")
+	public String draft_commitEmp(@RequestParam Map<String,Object> pMap) {
+		logger.info("draft_commitEmp 호출 성공");
+		String rowid = null;
+		List<String> r_list = new ArrayList<>();
+		List<Map<String,Object>> rm_list = null;
+		if(pMap.get("rowid").toString()!=null) {
+			rowid= pMap.get("rowid").toString();
+			String r_rowid[] = rowid.split(",");
+			for(int i=0;i<r_rowid.length;i++) {
+				r_list.add(r_rowid[i]);
+			}
+			rm_list = draftLogic.draft_commitEmp(r_list); 
+		}
+		String gson = "";
+		Gson g = new Gson();
+		gson = g.toJson(rm_list);
+		return gson;
+	}
+	
 }

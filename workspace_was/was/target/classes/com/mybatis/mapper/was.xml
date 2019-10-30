@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8" ?> 
 <!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mybatis.mapper.WasMapper">
@@ -94,134 +93,6 @@
 		insert into notepad(note_no,empno,note_content,note_write_date)
         values((select nvl((select max(note_no)+1 from notepad),1)from dual),#{empno},#{note_content},#{note_write_date, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}) 
 	</update>
-	<select id="wasEmpStatusNoteDetail" parameterType="map" resultType="map">
-		select note_write_date,note_content,note_no from notepad
-            where empno = #{empno, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
-            and note_write_date like #{empStatus_year, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}||'_'
-            						||#{empStatus_month, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}||'_'
-            						||#{empStatus_day, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
-	</select>
-	<select id="wasEmpStatusNoteList" parameterType="map" resultType="map">
-		select note_no,note_write_date from notepad
-            where empno = #{empno}
-            and note_write_date like #{empStatus_year, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}||'_'||#{empStatus_month, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}||'%'
-	</select>
-	<select id="wasEmpStatus" parameterType="map" resultType="map">
-		select status_startdate, status_enddate, status_name from empstatus
-            where empno = #{empno}
-            and status_startdate like #{empStatus_year}||'_'||#{empStatus_month}||'%'
-	</select>
-    <select id="wasLogin" parameterType="map" statementType="CALLABLE">
-    	{ CALL proc_login(
-                #{empno, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
-                ,#{emp_pw, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
-                ,#{login_gubun, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
-                ,#{msg, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String}
-                ,#{outtime, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String}                 
-            )}
-    </select>
-    <update id="firstLogin" parameterType="map">
-    	update emp set session_no = #{session_no}
-    				where empno = #{empno}
-    </update>
-    <update id="sessionOut" parameterType="string">
-    	update emp set session_no = NULL
-    				where session_no = #{value}
-    </update>
-    <select id="checkLogin" parameterType="map" resultType="string">
-    	select nvl((select session_no from emp
-    		where empno = #{empno}),' ') from dual
-    </select>
-    <select id="dumyIndex" parameterType="string" resultType="string">
-    	select nvl((select resident_no from emp
-			where empno = #{value}),'-1') from dual
-    </select>
-=======
-<?xml version="1.0" encoding="UTF-8" ?> 
-<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mybatis.mapper.WasMapper">
-	<select id="androidDelivery" parameterType="map" resultType="map">
-		select ivgroup_name, order_count, cus_addr, cus_name, order_startdate, cus_man, cus_manhp
-     		  from(select rownum rno, order_no, order_gubun, cus_name, business_no, cus_ceoname,order_indate, 
-	     			      cus_hp, cus_busikind, cus_addr, cus_man, cus_manhp, ivgroup_code,
-	                      delivery_date,order_count, order_memo, delivery_state, 
-	                      delivery_info, order_startdate,order_enddate, ivgroup_name, emp_name, emp_hp, team_name
-                     from(select ordr.order_gubun order_gubun, ordr.order_no, cus.cus_name, 
-		            			 cus.business_no, cus.cus_ceoname, cus.cus_hp, cus.cus_busikind, cus.cus_addr, 
-		            			 ordr.cus_man, ordr.cus_manhp, inven.ivgroup_code,inven.ivgroup_name, ordr.order_count, 
-		            			 ordr.order_memo, ordr.delivery_state,ordr.order_indate, ordr.delivery_info, 
-		            			 ordr.order_startdate, ordr.delivery_date, ordr.order_enddate, em.emp_name emp_name, em.emp_hp emp_hp,
-		            			 em.team_name team_name
-		                    from customer cus, order_deli ordr , INVENGROUP inven, emp em
-		                   where cus.cus_code = ordr.cus_code and ordr.ivgroup_code = inven.ivgroup_code and em.empno = ordr.order_writer
-						 	 and order_gubun = '생산'
-						 <!-- 물품검색 -->
-						 <if test="cb_search!=null and cb_search.equals('fish_code')">
-						 		and inven.ivgroup_name like '%'||#{keyword}||'%'
-						 </if>
-						 <!-- 거래처검색 -->
-						 <if test="cb_search!=null and cb_search.equals('comp_name')">
-						 		and cus.cus_name like '%'||#{keyword}||'%'
-						 </if>
-						 <!-- 주소검색 -->
-						 <if test="cb_search!=null and cb_search.equals('comp_addr')">
-						 		and cus.cus_addr like '%'||#{keyword}||'%'
-						 </if>
-						 <!-- 담당자검색 -->
-						 <if test="cb_search!=null and cb_search.equals('comp_man')">
-						 		and ordr.cus_man like '%'||#{keyword}||'%'
-						 </if>
-						 <!-- 작성자검색 -->
-						 <if test="cb_search!=null and cb_search.equals('bs_writer')">
-						 		and em.emp_name like '%'||#{keyword}||'%'
-						 </if>
-						 <!-- 진행상황 검색 -->
-						 <if test="cb_situation!=null and !cb_situation.equals('null')">
-						 		and ordr.delivery_state = #{cb_situation}
-						 </if>
-						 <!-- 날짜검색 -->
-						 <if test="before_date_ud!=null and after_date_ud!=null">
-						 		and ordr.delivery_date between #{before_date_ud} and #{after_date_ud}
-						 </if>
-						 <if test="before_date_ud!=null and after_date_ud==null">
-						 		and ordr.delivery_date between #{before_date_ud} and (select max(ordr.delivery_date) from order_deli)
-						 </if>
-						 <if test="before_date_ud==null and after_date_ud!=null">
-						 		and ordr.delivery_date between (select min(ordr.delivery_date) from order_deli) and #{after_date_ud}
-						 </if>
-						  order by ordr.delivery_state asc, ordr.delivery_date asc ) a ) b
-						  where 1=1
-				 <if test="start>0 and end>0">
-		  		   		and rno between #{start} and #{end} 
-				 </if>
-	</select>
-	<select id="wasMainChart" parameterType="map" resultType="map">
-		select sum(touch) as touch, mcmonth  from(select   sum(order_unitprice*order_count) as touch  
-		   ,CASE WHEN '${mcYear}-${mcMonth}-01' <![CDATA[ <= ]]> order_enddate and '${mcYear}-${mcMonth}-31' <![CDATA[ >= ]]> order_enddate THEN '${mcMonth}'
-            WHEN '${mcYear1}-${mcMonth1}-01' <![CDATA[ <= ]]> order_enddate and '${mcYear1}-${mcMonth1}-31' <![CDATA[ >= ]]> order_enddate THEN '${mcMonth1}'
-            WHEN '${mcYear2}-${mcMonth2}-01' <![CDATA[ <= ]]> order_enddate and '${mcYear2}-${mcMonth2}-31' <![CDATA[ >= ]]> order_enddate THEN '${mcMonth2}'
-            WHEN '${mcYear3}-${mcMonth3}-01' <![CDATA[ <= ]]> order_enddate and '${mcYear3}-${mcMonth3}-31' <![CDATA[ >= ]]> order_enddate THEN '${mcMonth3}'
-            WHEN '${mcYear4}-${mcMonth4}-01' <![CDATA[ <= ]]> order_enddate and '${mcYear4}-${mcMonth4}-31' <![CDATA[ >= ]]> order_enddate THEN '${mcMonth4}'
-            WHEN '${mcYear5}-${mcMonth5}-01' <![CDATA[ <= ]]> order_enddate and '${mcYear5}-${mcMonth5}-31' <![CDATA[ >= ]]> order_enddate THEN '${mcMonth5}'
-            end as mcmonth
-            from order_deli
-            where order_gubun = '생산'
-      group by order_enddate )
-      group by mcmonth
-      order by mcmonth   
-	</select>
-	<select id="wasEmpAttendance" parameterType="map" statementType="CALLABLE">
-		{ CALL proc_empAttendance(#{empno, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
-							     ,#{msg, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String}) }
-	</select>
-	<update id="wasEmpStatusNoteDelete" parameterType="map">
-		delete from notepad
-        where note_no = #{note_no} 
-	</update>
-	<update id="wasEmpStatusNoteInsert" parameterType="map">
-		insert into notepad(note_no,empno,note_content,note_write_date)
-        values((select nvl((select max(note_no)+1 from notepad),1)from dual),#{empno},#{note_content},#{note_write_date, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}) 
-	</update>
 	<update id="wasMain_schedule_Memo" parameterType="map">
 		insert into notepad(note_no,empno,note_content,note_write_date)
         values((select nvl((select max(note_no)+1 from notepad),1)from dual),#{empno},#{note_content},to_char(sysdate,'yyyy-mm-dd')) 
@@ -268,5 +139,4 @@
     	select nvl((select resident_no from emp
 			where empno = #{value}),'-1') from dual
     </select>
->>>>>>> ghost
 </mapper> 

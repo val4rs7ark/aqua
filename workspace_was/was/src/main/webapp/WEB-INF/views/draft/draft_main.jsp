@@ -18,7 +18,7 @@
 	var popupY= (window.screen.height/2)-(800/1.7);
 	//만들 팝업창 상하 크기의 1/2 만큼 보정값으로 빼주었음
 	function pop_basic(){
-	window.open('draft_basic','팝업창2','width=880px,height=880px,left='+popupX+',top='+ popupY);
+	window.open('draft_basic','팝업창2','width=948px,height=880px,left='+popupX+',top='+ popupY);
 	}
 </script>
 </head>
@@ -31,8 +31,7 @@
 			<input id="s_emp_name" type="hidden" value=<%=s_emp_name%>>
 			      
 			<%
-			//////////////////세션에 담긴 아이디 담기.////////////
-			out.print("s_emp_name:"+s_emp_name);    
+			//////////////////세션에 담긴 아이디 담기.//////////// 
 			%>
 		</div>
 <!--
@@ -42,7 +41,7 @@
  -->	
 		<div id="main" style="width:80%" >
 		<div class="container" style="margin-left: 0px;">
-		<div class="base_table_div" style="height: 865px;width:1350px">
+		<div class="base_table_div" style="height: 969px;width:1350px">
 <!--=====================================상단바 시작=================================-->
 			<div class="card bg-dark text-white" style="height:50px; margin-top:70px">
 				<div class="card-body" style="font-size:20px;display:table">

@@ -7,7 +7,7 @@
 	if(schedule_List.size()!=0){
 		for(int i=0;i<schedule_List.size();i++){
 			Map<String,Object> pMap = schedule_List.get(i);
-			out.print((i+1)+"."+"&nbsp;"+pMap.get("NOTE_CONTENT").toString()+"<br>");	
+			out.print("<div style='height: 45px;'>"+(i+1)+"."+"&nbsp;"+pMap.get("NOTE_CONTENT").toString()+"<br></div>");	
 		}
 	}else{
 		out.print("등록된 일정이 없습니다.");

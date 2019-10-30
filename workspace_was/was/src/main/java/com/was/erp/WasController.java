@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.google.gson.Gson;
+
 @SessionAttributes({"s_emp_no","s_emp_pw","s_emp_name","s_outtime"})
 @Controller
 @RequestMapping("/was*")
@@ -134,6 +136,12 @@ public class WasController {
 		wasLogic.wasMain_schedule_Memo(pMap);
 		return "#";
 	}
-	
+	// 기안서 팀명 선택하는곳
+	@GetMapping("wasSearch_mem")
+	public String wasSearch_mem(@RequestParam Map<String,Object> pMap,Model model) {
+		List<Map<String,Object>> l_list = wasLogic.wasSearch_mem(pMap);
+		model.addAttribute("team_name", l_list);
+		return "general/ajax/select_teamName";
+	}
 	
 }

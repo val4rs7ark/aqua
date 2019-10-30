@@ -151,4 +151,15 @@ public class WasDao {
 			e.printStackTrace();
 		}
 	}
+	public List<Map<String, Object>> wasSearch_mem(Map<String, Object> pMap) {
+		List<Map<String,Object>> resultList = null;
+		try {
+			resultList = sqlSessionTemplate.selectList("wasSearch_mem",pMap);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return resultList;
+	}
 }
