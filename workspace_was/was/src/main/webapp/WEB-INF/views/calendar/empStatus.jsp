@@ -170,7 +170,7 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
 %>
 <div class="container-fluid ">
 <div class="row">
-   <div style="width:20%;height:1050px;">
+   <div style="width:20%;height:969px;">
       <%@ include file="/common/MenuCommon.jsp" %>
   </div>
   <div id="calendarRow" style="width:72%">

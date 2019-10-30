@@ -168,4 +168,54 @@
 		#{inven_gubun})
 	</insert> -->	
 
+<!-- ============================================================================================== -->
+<!-- 										기안서 내용 											 -->
+<!-- ============================================================================================== -->
+	
+	<!-- 결제승인표 선택할 사람 정하는 리스트 뿌리는 메소드 -->
+	<select id="wasSearch_mem" parameterType="map" resultType="map">
+		select emp_name,team_name,emp_level,empno from emp
+         where team_name=#{team_name}
+	</select>
+	<!-- 결제승인표 사람 체크후에 선택 -->
+	<update id="draft_insertEmp" parameterType="list">
+      INSERT ALL
+        <foreach collection="list" item="item" index="index" separator=" ">
+                INTO sub_draft(sub_empno) 
+		 VALUES (#{item.sub_empno})
+        </foreach>
+		SELECT * FROM DUAL
+    </update>
+	<!-- 인설트 이후 실행 -->
+	<select id="draft_selectEmp" parameterType="map" resultType="map">
+		select emp.emp_name,emp.empno,emp.team_name,emp.emp_level
+		  from emp,sub_draft
+         where emp.empno=sub_draft.sub_empno
+	</select>
+	<!-- sub창 등록버튼 눌렀을때 -->
+	<select id="draft_commitEmp" parameterType="list" resultType="map">
+      select empno, emp_name,emp_level,team_name from emp
+       where empno in
+        <foreach item="item" index="index" collection="list"
+				 open="(" separator="," close=")">
+				 #{item}
+		</foreach>
+    </select>
+	<!-- 기안서 등록 눌렀을때 -->
+	<update id="draftAdd" parameterType="map" >
+      	insert into draft (draft_no, draft_title, draft_contents, draft_status, draft_kind, empno, first_permission, seccond_permission, third_permission, forth_permission)
+      	 values ((select max(draft_no)+1 from draft), #{db_title}, #{ir1}, '1', 'default', #{s_emp_no}, #{first_permission}, #{seccond_permission}, #{third_permission}, #{forth_permission})
+    </update>
+	<!-- 결제승인표 선택된 사람 제거 -->
+	<delete id="draft_deleteEmp" parameterType="list">
+		delete from sub_draft 
+		 where sub_empno in
+		<foreach item="item" index="index" collection="list"
+				 open="(" separator="," close=")">
+				 #{item}
+		</foreach>
+	</delete>
+	<delete id="draft_cancle" parameterType="map">
+		delete from sub_draft 
+	</delete>
 </mapper>

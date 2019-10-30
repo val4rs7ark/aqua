@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -10,8 +10,32 @@
 <head>
 <meta charset="UTF-8" />
 <meta http-equiv="Content-Type" content="text/html;">
-<%@ include file="/common/bootStrap4.jsp" %>
-<%@ include file="/common/styles.jsp" %>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+	  integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+	  crossorigin="anonymous">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment-with-locales.min.js"/></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js"/></script>
+<script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"/></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src='//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/d3.min.js'></script>
 
 <title>WAS·AQUA</title>
 <script type="text/javascript">
@@ -56,22 +80,6 @@
                   }
                });
       });
-      /* ============================================================================뉴스============================================================================ */
-      function autoReload() {
-          $.ajax({//$를 사용하려면jquery.min.js 임폴트 해주어야 한다. 
-             method : "get",
-             url : "/erp/common/news.jsp",
-             success : function(result) {//result는 응답페이지의 출력문자열담김. 
-             
-             //innerHTML -> jtml()  jquery가 지원하는 api , innerText ->text(); jquery가 지원하는 api 
-                $("#d_news").html(result);
-             }
-             ,fail:function(xhrObject, textStatus){
-                alert( "Request failed: " + textStatus );
-                alert(xhrObject.responseText);
-             }
-       });
-     }
       //캘린더 호출 함수
       function load_calendar(){
 			var empno = $("#cal_empno").val();
@@ -113,12 +121,6 @@
 	  	function HRsal_select_f(){
 	      	$("#HRsal_select_f").submit();
 	  	}	
-		//일정 추가 하는 함수
-	  	function moAdd(){
-  			var note_content = $("#noteContent").val();
-  			var empno = $("#cal_empno").val();
-  			location.href="/erp/wasMain_schedule_Memo?note_content="+note_content+"&empno="+empno;
-  		}
 </script>
 </head>
 <body onload="javascript:load_calendar()">
@@ -166,7 +168,7 @@
                      <tr style="height:40px; background-color:#dee2e6; 
                           color:black; font-size:17px; margin-top: 50px; text-align:center;">
                        <th style="width:15%;padding-top: 5px;padding-bottom: 5px;">번호</th>
-                       <th style="width:35%;padding-top: 5px;padding-bottom: 5px;">제목</th>
+                       <th style="width:36%;padding-top: 5px;padding-bottom: 5px;">제목</th>
                        <th style="width:20%;padding-top: 5px;padding-bottom: 5px;">작성자</th>
                        <th style="width:30%;padding-top: 5px;padding-bottom: 5px;">작성일</th>
                      </tr>
@@ -203,7 +205,63 @@
            </td>
            <td>
             	<div>
-                   <%@ include file="/common/weather.jsp" %>
+            	<!-- ================================================================================== -->
+	<div style="text-align: -webkit-center; width: 100%; height: 240px; border-radius: 20px 20px 20px 20px/20px 20px 20px 20px; 
+		 	 background-size: cover;">
+		<table style="margin-top: 40px;">
+			<tr>
+				<td style="display: inline;">
+					<table>
+						<tr>
+							<td style="width: 100%"><input id="where_c" type="text"
+								style="border: none; width: 100%; text-align: center; background-color: transparent; font-weight: 900;">
+							</td>
+						</tr>
+					</table>
+					<table>
+						<tr>
+							<td style="text-align: center;"><img id="weather" alt="날씨"
+								src="" style="width: 90px;"></td>
+							<td><input id="Temperature" type="text"
+								style="border: none; width: 130px; text-align: center; font-size: 48px; font-family: fantasy; background-color: transparent;">
+							</td>
+						</tr>
+					</table>
+					<table>
+						<tr>
+							<td style="text-align: center;">
+							<img id="img_wind_hyang"
+								alt="방향" style="width: 30px;"
+								src="/erp/images/navigation_black.png">
+							</td>
+							<td style="text-align: center;">
+							<img id="img_wind_power"
+								alt="바람" style="width: 30px;" src="/erp/images/toys_black.png">
+							</td>
+							<td style="text-align: center;">
+							<img id="img_cloud_info"
+								alt="구름" style="width: 30px;" src="/erp/images/cloud_black.png">
+							</td>
+						</tr>
+						<tr>
+							<td><input id="wind_hyang" type="text"
+								style="border: none; width: 80px; text-align: center; background-color: transparent;">
+							</td>
+							<td><input id="wind_power" type="text"
+								style="border: none; width: 80px; text-align: center; background-color: transparent;">
+							</td>
+							<td><input id="cloud_info" type="text"
+								style="border: none; width: 80px; text-align: center; background-color: transparent;">
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+
+            	<!-- ================================================================================== -->
                </div> 
             	<table style="border: 1px solid #E4E4E4; width: 100%;">
             		<tr>
@@ -228,43 +286,14 @@
             			<td style="font-size: 13px; padding-left: 15px; padding-top: 5px; font-family: 돋움;height: 33px;">⊙&nbsp;<a href="/erp/draftMain" style="color:black;">기안서 작성</a></td>
             		</tr>
             	</table>
-               <%-- 
-	           		<td style="width: 90%; height:100%; text-align: -webkit-center;">
-		               <div >
-		                  	<%@ include file="/common/chartjs_bar.jsp"%>
-		               </div> 
-	            	</td>
-	           --%>
+            
            </td>
         </tr>
      </table>   
-      <!-- //1 <hr style="margin-top: 10px; margin-bottom: 10px;"> -->
    </form>
 <!-- ===========================================================공지사항==========================================================  --> 
 <!-- ===========================================================table=========================================================== -->
-     <!--  //2
-     <table style="width:70%;">
-         <tr>
-            <td>
-               <script type="text/javascript">
-                   $(document).ready(function() {
-                       var watch;
-                       function start() {
-                          //첫번째 파라미터는 메소드 호출하기
-                          //두번째 파라미터는 지연 시간 주기
-                          //아래 경우 3초마다 한번씩 메소드가 호출 됨.
-                          watch = setInterval(autoReload, 1000);
-                       }
-                       start();
-                    });
-               </script>
-               <div id="d_news" width="1000px"></div>
-            </td>
-           
-         </tr>
-	  </table>
-      <hr style="margin-top: 10px; margin-bottom: 10px;"> 
-      -->
+    
       <table style="width: 91%; border: 1px solid #E4E4E4; margin-top: 40px;">
 	      <tr>
 		      <td colspan="2" style="border-bottom: 1px solid #E4E4E4; background-color: #dee2e6;font-size: 15px; font-weight: bold; padding-left: 20px; height: 30px;">
@@ -278,7 +307,8 @@
 		      </td>
 		      <td style="width: 360px;vertical-align: text-top; padding-top: 17px;font-weight: 700; padding-left: 20px;">
 			      	◎ <b id="wasTo_day"></b> 일정  
-			      	<!-- <button type="button"  class="btn btn-secondary" style="width: 73px; margin-left: 10px; height: 22px; font-size: 12px; padding-top: 1px; padding-bottom: 2px; padding-left: 5px; padding-right: 5px; background-color: #efefef; color: black; font-weight: 900;" data-toggle="modal" data-target="#memo_Modal">일정추가</button> -->				  <div id="main_schedule" style="margin-top: 15px;	margin-left: 20px;">
+			      	<!-- <button type="button"  class="btn btn-secondary" style="width: 73px; margin-left: 10px; height: 22px; font-size: 12px; padding-top: 1px; padding-bottom: 2px; padding-left: 5px; padding-right: 5px; background-color: #efefef; color: black; font-weight: 900;" data-toggle="modal" data-target="#memo_Modal">일정추가</button> -->				 
+			      	 <div id="main_schedule" style="margin-top: 30px;	margin-left: 20px;">
 					  등록된 일정이 없습니다.
 				  </div>
 		      </td>
@@ -306,38 +336,5 @@
       </div><!-- end of in_container -->
    </div><!-- end of outter row -->
 </div><!-- end of container -->
-<!--===================================== 메모를 등록하는 The Modal =====================================================-->
-  <div class="modal fade" id="memo_Modal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">메모 등록</h4>
-          <button type="button" class="close" data-dismiss="modal">×</button>
-        </div>
-        
-        <!-- Modal body -->
-        <div class="modal-body">
-        <form class="was-validated">	        	
-          <div class="form-group">
-          	<label><div id="d_curday"></div></label>
-          	<input type="text" class="form-control" id="noteContent" name="content" placeholder="내용 적기" required>
-          	<div class="valid-feedback">Valid.</div>
-          	<div class="invalid-feedback">메모를 작성하세요.</div>
-          </div>
-          <button type="button" class="btn btn-primary" onClick="moAdd()">등록</button>
-        </form>
-        </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-        
-      </div>
-    </div>
-  </div>  
-<!--===================================== 메모를 등록하는 The Modal =====================================================-->
 </body>
 </html>
