@@ -1,5 +1,6 @@
 ﻿package com.was.erp;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,8 @@ public class WasController {
 	private static final Logger logger = LoggerFactory.getLogger(WasController.class);
 	@Autowired
 	WasLogic wasLogic;
+	@Autowired
+	BoardLogic boardLogic;
 //////////////SessionAttributes가 처음 실행 되었을 때 아직 request로 받기 전이라 null방지///////////	
 	@ModelAttribute("s_emp_no")
 	public String setSempNo() {
