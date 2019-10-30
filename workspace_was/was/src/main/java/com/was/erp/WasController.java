@@ -51,6 +51,7 @@ public class WasController {
 	   public String wasLogin(@RequestParam Map<String,Object> pMap,Model model,HttpServletRequest req) {
 	      logger.info("wasLogin 호출 성공");
 	      pMap.put("session_no",req.getSession().getId());
+	      logger.info("Controller에서 empno ->"+pMap.get("empno")+" , emp_pw ->"+pMap.get("emp_pw"));
 	      wasLogic.wasLogin(pMap);
 	      String path = "";
 	      String result = pMap.get("emp_name").toString();

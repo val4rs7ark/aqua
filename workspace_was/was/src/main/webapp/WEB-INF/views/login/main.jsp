@@ -12,6 +12,7 @@
 <meta http-equiv="Content-Type" content="text/html;">
 <%@ include file="/common/bootStrap4.jsp" %>
 <%@ include file="/common/styles.jsp" %>
+
 <title>WAS·AQUA</title>
 <script type="text/javascript">
       $(document).ready(function() {
