@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -31,6 +32,10 @@ public class WasLogic {
 		}
 		else {
 			pMap.put("login_gubun","no_first");
+		}
+		
+		if(pMap.get("postHandle")!=null) { 
+			wasDao = new WasDao(); 
 		}
 		wasDao.wasLogin(pMap);
 		String emp_name = pMap.get("msg").toString();
@@ -390,5 +395,41 @@ public class WasLogic {
 
 	public void wasMain_schedule_Memo(Map<String, Object> pMap) {
 		wasDao.wasMain_schedule_Memo(pMap);
+	}
+
+	public List<Map<String, Object>> wasSearch_mem(Map<String, Object> pMap) {
+		if("chongmu_1team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","총무1팀");
+		}else if("chongmu_2team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","총무2팀");
+		}else if("chongmu_3team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","총무3팀");
+		}else if("insa_1team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","인사1팀");
+		}else if("insa_2team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","인사2팀");
+		}else if("insa_3team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","인사3팀");
+		}else if("beasong_1team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","배송1팀");
+		}else if("beasong_2team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","배송2팀");
+		}else if("beasong_3team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","배송3팀");
+		}else if("prod_1team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","생산1팀");
+		}else if("prod_2team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","생산2팀");
+		}else if("prod_3team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","생산3팀");
+		}else if("sales_1team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","영업1팀");
+		}else if("sales_2team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","영업2팀");
+		}else if("sales_3team".equals(pMap.get("team_name").toString())) {
+			pMap.put("team_name","영업3팀");
+		}
+		List<Map<String,Object>> rList = wasDao.wasSearch_mem(pMap);
+		return rList;
 	}
 }

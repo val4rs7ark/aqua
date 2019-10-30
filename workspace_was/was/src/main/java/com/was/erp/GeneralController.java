@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.google.gson.Gson;
+
 @Controller
 @RequestMapping("/general*")
 public class GeneralController {
@@ -247,34 +249,8 @@ public class GeneralController {
 //		generalLogic.invenAdd(pMap);
 //		return "redirect:general_invenList";
 //	}
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

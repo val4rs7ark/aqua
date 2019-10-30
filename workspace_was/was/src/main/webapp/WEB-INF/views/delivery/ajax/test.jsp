@@ -13,11 +13,6 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
 <meta charset="UTF-8">
 <title>일정관리</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
   	<script type="text/javascript">
   		var v_note_no;
   		var v_yyyy;
@@ -231,4 +226,4 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
   </div>
 </div>
 </body>
-</html>
+</html> 

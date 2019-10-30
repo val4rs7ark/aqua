@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -59,5 +60,12 @@ public class AndroidRestController {
 		String deli_afterTime = androidLogic.deliveryCommit(pMap);
 		String result = deli_afterTime+"^"+"배송완료 되었습니다.";
 		return result;
+	}
+	@PostMapping(value="/wasAndroidProductInsert.was")
+	public String wasAndroidProductInsert(@RequestParam Map<String,Object> pMap,Model model) {
+		logger.info("productInsert 메소드 호출 성공");
+		String result = null;
+		result = androidLogic.wasAndroidProductInsert(pMap);
+		return result;	
 	}
 }

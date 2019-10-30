@@ -1,10 +1,15 @@
 package com.was.erp;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +22,25 @@ public class WasDao {
 	@Autowired
 	SqlSessionTemplate sqlSessionTemplate;
 	
+	private static SqlSessionFactory sqlSessionFactory = null;
+	
 	public void wasLogin(Map<String, Object> pMap) {
 		pMap.put("msg", "");
 		pMap.put("outtime", "");
+		
+		if(pMap.get("postHandle")!=null) { 
+			if(sqlSessionFactory==null) { 
+				try { 
+					String resource = "/mapper/mybatis-config.xml"; 
+					Reader reader = Resources.getResourceAsReader(resource); 
+					sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader,"development");
+				} catch (IOException e) { 
+					e.printStackTrace(); 
+				} 
+			}
+			sqlSessionTemplate = new SqlSessionTemplate(sqlSessionFactory); 
+		}
+		 
 		sqlSessionTemplate.selectOne("wasLogin", pMap);
 	}
 	public void firstLogin(Map<String, Object> pMap) {
@@ -150,5 +171,16 @@ public class WasDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public List<Map<String, Object>> wasSearch_mem(Map<String, Object> pMap) {
+		List<Map<String,Object>> resultList = null;
+		try {
+			resultList = sqlSessionTemplate.selectList("wasSearch_mem",pMap);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return resultList;
 	}
 }
