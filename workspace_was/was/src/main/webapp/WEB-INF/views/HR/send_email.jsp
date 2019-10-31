@@ -97,7 +97,6 @@
 		e.printStackTrace();
 	}
 %>
-
 <script type="text/javascript">
 	
 	auto_close();
@@ -111,6 +110,7 @@
 	function closed() {
 	self.close();
 	}
+
 </script>
 </body>
 </html> 

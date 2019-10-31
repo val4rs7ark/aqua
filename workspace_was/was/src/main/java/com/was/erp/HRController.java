@@ -1,4 +1,4 @@
-package com.was.erp;
+﻿package com.was.erp;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -234,10 +234,8 @@ public class HRController {
 
 	        return day >= beginDay && day <= endDay;
 	}
-	
 	@GetMapping("HRsecondchange")
 	public String change_default() {
-		logger.info("secondchange 호오추울");
-		return "/HR/ajax/secondchange";
+	   return "/HR/ajax/secondchange";
 	}
 }
