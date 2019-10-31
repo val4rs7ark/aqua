@@ -1,5 +1,6 @@
 package com.was.erp;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,38 @@ public class DraftLogic {
 	}
 	public List<Map<String, Object>> draft_commitEmp(List<String> r_list) {
 		List<Map<String,Object>> result_List = draftDao.draft_commitEmp(r_list);
-		return result_List;
+		List<Map<String,Object>> nList = new ArrayList<>();
+		for(int i=0;i<result_List.size();i++) {
+			if(("임시").equals(result_List.get(i).get("EMP_LEVEL"))){
+				logger.info("임시");
+				nList.add(result_List.get(i));
+			}
+		}
+		for(int i=0;i<result_List.size();i++) {
+			if(("사원").equals(result_List.get(i).get("EMP_LEVEL"))){
+				logger.info("임시");
+				nList.add(result_List.get(i));
+			}
+		}
+		for(int i=0;i<result_List.size();i++) {
+			if(("대리").equals(result_List.get(i).get("EMP_LEVEL"))){
+				logger.info("임시");
+				nList.add(result_List.get(i));
+			}
+		}
+		for(int i=0;i<result_List.size();i++) {
+			if(("차장").equals(result_List.get(i).get("EMP_LEVEL"))){
+				logger.info("임시");
+				nList.add(result_List.get(i));
+			}
+		}
+		for(int i=0;i<result_List.size();i++) {
+			if(("부장").equals(result_List.get(i).get("EMP_LEVEL"))){
+				logger.info("임시");
+				nList.add(result_List.get(i));
+			}
+		}
+		return nList;
 	}
 
 }

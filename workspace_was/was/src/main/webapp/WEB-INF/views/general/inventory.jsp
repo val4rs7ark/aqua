@@ -167,8 +167,8 @@
 		//alert("confirm 호출");
 		var order_no = $("#d_order_no"+i).val();
 		//$("#f_order_no").val(order_no);
-		//alert(order_no);
-		document.getElementById('r_order_no').innerHTML="order_no";//원시
+		alert(order_no);
+		//document.getElementById('r_order_no').innerHTML="order_no";//원시
 		//$("#r_order_no").val(order_no);//jquery
 		//var order_writer = document.getElementById('order_writer'+i).value;
 		//alert("order_writer:"+order_writer);
@@ -179,7 +179,7 @@
 			//alert(s_emp_name);
 			//alert("if탐");
 		$("#f_invenDetail").attr("method","post");
-		$("#f_invenDetail").attr("action","general_confirm");
+		$("#f_invenDetail").attr("action","general_confirm?order_no="+order_no);
 		$("#f_invenDetail").submit();
 		}else{
 			alert("승인 권한이 없습니다. 구매부에 문의하세요.");
@@ -831,7 +831,7 @@
 		             <td class="bi_table_insert" style="width:20%; padding-top:7px; padding-bottom: 7px;">구분</td>
 		             <td style="width:45%;padding-top: 5px; padding-bottom: 5px;">
       		<input id="d_order_no<%=i%>" name="order_no" type="hidden" value="<%=pMap.get("ORDER_NO")%>">
-      		<input id="r_order_no" name="r_order_no" type="hidden">
+      		<input id="r_order_no" name="r_order_no" type="hidden" value="">
       		<input id="order_writer<%=i%>" name="order_writer" type="hidden" value="<%=pMap.get("ORDER_WRITER")%>">
 	   		              <input id="order_gubun" name="order_gubun" type="text" class="form-control" 
 	   		              		 style="height: 28px;font-size: 13px;text-align:right" readonly

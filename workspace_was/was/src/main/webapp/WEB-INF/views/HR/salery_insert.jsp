@@ -488,7 +488,7 @@
 			    	,method:"get"
 			    	,success:function(data){//해석하기
 			    		$("#select_empno_change_one").html(data);//해석하기
-			    	}
+			    	}+
 			    	,error:function(e){
 			    		alert(e.responseText);
 			    	}

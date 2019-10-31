@@ -2,6 +2,16 @@
     pageEncoding="EUC-KR"%>
 <%@ page import="javax.mail.*,javax.mail.internet.*,java.util.Properties,com.util.Email_form, java.util.*" %>
 
+
+<meta charset="UTF-8" />
+<html lang="ko">
+<head>
+    <%@ include file="/common/bootStrap4.jsp" %>
+    <%@ include file="/common/styles.jsp" %>
+    <%@ include file="/common/bs_css.jsp"%>
+<title>Waiting</title>    
+</head>
+<body>
 <%
 	Map<String,Object> pMap = (Map<String,Object>)request.getAttribute("sal_pMap");
 	
@@ -58,7 +68,10 @@
 		msg.setSubject(subject);
 		msg.setContent(content, "text/html;charset=euc-kr");
 		Transport.send(msg);
-		out.print("성공적으로 전달되었습니다.<br>");
+		
+		out.print("<div style='background-color:white;height:100%;width:100%;display:table;text-align:center;'>");
+		out.print("<div style='display:table-cell;vertical-align:middle'>");
+		out.print("<div style='font-size:20px'>e-mail 전송이 완료되었습니다.</div>");
  		out.print("<script type='text/javascript'>");
 		out.print("setInterval(autoReload,1000);");
 		out.print("function autoReload(){");
@@ -73,23 +86,20 @@
 		out.print("alert(xhrObject.responseText);}");
 		out.print("});"); 
 		out.print("}");
-		out.print("autoReload();");
 		out.print("</script>");
 		out.print("<div id='d_news'>");
-		out.print("<div>123</div>");
+		out.print("<div style='font-size:20px'>3초 후에 창이 닫힙니다.....</div>");
 		out.print("</div>");
-		out.print("<a href='javascript:closed()'>닫기</a>");
+		out.print("<a style='font-size:20px' href='javascript:closed()'>닫기</a>");
+		out.print("</div>");		
+		out.print("</div>");
 	}catch(Exception e){
 		e.printStackTrace();
 	}
 %>
 
-<meta charset="UTF-8" />
-<html lang="ko">
-<head>
-<title>Waiting</title>
 <script type="text/javascript">
-
+	
 	auto_close();
 	function autoReload(){
 		alert("autoReload");
@@ -102,8 +112,6 @@
 	self.close();
 	}
 </script>
-</head>
-<body>
 </body>
 </html> 
 
