@@ -50,6 +50,7 @@ public class DraftController {
 		logger.info("general_dBChoice 호출 성공");
 		return "/draft/choice";
 	}
+	
 	//선택창 눌르면 켜지는 모달창
 	@PostMapping("/draft_SubDraft")
 	public String dBsubDraft(@RequestParam Map<String,Object> pMap) {
@@ -77,6 +78,7 @@ public class DraftController {
 		model.addAttribute("result_List",r_list);
 		return "general/ajax/lastbox_empName";
 	}
+	
 	//기안서 제거창에서 사원을 선택을 했을 경우
 	@GetMapping("/draft_deleteEmp")
 	public String draft_deleteEmp(@RequestParam Map<String,Object> pMap,Model model) {
@@ -95,22 +97,44 @@ public class DraftController {
 		model.addAttribute("result_List",rm_list);
 		return "general/ajax/lastbox_empName";
 	}
+	
 	@GetMapping("/draft_cancle")
 	public String draft_cancle(@RequestParam Map<String,Object> pMap) {
 		logger.info("draft_cancle 호출 성공");
 		draftLogic.draft_cancle(); 
 		return "draft/choice";
 	}
+	
 	//선택버튼은 글짜가 안바뀜 결국 아작스
 	@GetMapping("/draft_choice")
 	public String draft_choice(@RequestParam Map<String,Object> pMap,Model model) {
 		model.addAttribute("choice", pMap.get("choice").toString()); 
 		return "draft/ajax/draft_ajax";
 	}
+	
 	//선택버튼 눌러서 들어가는 페이지
 	@GetMapping("/draft_inner_choice")
 	public String draft_inner_choice() {
 		logger.info("draft_inner_choice 호출 성공");
 		return "draft/choice";
+	}
+	
+	//문서 조회 페이지 들어가는곳
+	@PostMapping("/draft_selectText")
+	public String draft_selectText(@RequestParam Map<String,Object> pMap,Model model) {
+		logger.info("draft_selectText 호출 성공");
+		Map<String,Object> imsi_Map = draftLogic.draft_selectText(pMap);
+		model.addAttribute("imsi_Map",imsi_Map);
+		return "draft/draft_selectText";
+	}
+	
+	//문서 상세 조회==> 리스트 0번방에는 문서에대한 전체적인 정보, 1번방에는 결재자들의 상세 정보가 들어있음. 
+	@GetMapping("/draft_permission_page")
+	public String draft_permission_page(@RequestParam Map<String,Object> pMap,Model model) {
+		List<Map<String,Object>> r_list = draftLogic.draft_permission_page(pMap);
+		String gubun = pMap.get("gubun").toString();
+		model.addAttribute("gubun",gubun);
+		model.addAttribute("r_list",r_list);
+		return "/draft/permission_page";
 	}
 }

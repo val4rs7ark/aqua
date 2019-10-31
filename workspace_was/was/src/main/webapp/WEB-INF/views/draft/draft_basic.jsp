@@ -198,8 +198,8 @@
 									<tr>
 										<td style="width:33%">
 											<select id="open_yubu" name="open_yubu" style="border: 1px solid darkgray; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px;">
-										  		<option value="open">공개</option>
-										  		<option value="not_open">비공개</option>
+										  		<option value="1">공개</option>
+										  		<option value="0">비공개</option>
 											</select>
 										</td>
 										<td style="width:33%;">보존<br>기간</td>

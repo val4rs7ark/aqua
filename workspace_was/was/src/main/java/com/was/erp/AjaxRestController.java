@@ -134,5 +134,11 @@ public class AjaxRestController {
 		gson = g.toJson(rm_list);
 		return gson;
 	}
+	//버튼 눌렀을때 반응하는 메소드
+	@GetMapping("/wasDraft_buttonLoot")
+	public String draft_buttonLoot(@RequestParam Map<String,Object> pMap,Model model) {
+		draftLogic.draft_buttonLoot(pMap);
+		return "버튼 이벤트";
+	}
 	
 }

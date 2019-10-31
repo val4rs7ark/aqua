@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.Calendar, java.text.DecimalFormat" %>        
     <!-- 190919 -->
@@ -62,6 +62,10 @@ function Attendance(){
 	function HRsal_select_f(){
     	$("#HRsal_select_f").submit();
 	}	
+	//기안문서 조회 입장 함수
+	function f_draft_sel(){
+    	$("#f_draft_sel").submit();
+	}	
 </script>
 <style type="text/css">
  #d_button{
@@ -106,6 +110,17 @@ function Attendance(){
 	  <%
 	  	}
 	  %>
+	  </form>
+	  <!-- 기안문서 조회시 내문서만 가져와야하기 때문에 추가생성-->
+	  <form id="f_draft_sel" action="/erp/draft_selectText" method="post">
+	  <%
+	  	if(s_emp_no!=null && s_emp_pw!=null){
+	  %>
+					<input type="hidden" value=<%= s_emp_no %> name="empno">
+	  <%
+	  	}
+	  %>
+	  </form>
 	  </form>
 	  <!-- 급여 화면 접근제한때문에 추가 생성 -->
 	  <form id="f_HRAccess" action="/erp/HRcatch_Access.was" method="post">
@@ -172,7 +187,7 @@ function Attendance(){
             <button type="button" class="btn btn-dark" data-toggle="collapse" data-target="#major4" style="width:100%;text-align: center;font-size: large;">전자결재</button>
                <div id="major4" class="collapse">
                   <a href="/erp/draftMain" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">기안서 작성</a>
-                  <a href="#" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF;text-align: center">문서보관함</a>
+                  <a href="javascript:f_draft_sel()" class="list-group-item list-group-item-action" style="background-color: #434a57; color:#FFFFFF; text-align: center">문서보관함</a>
                </div>     
             </div>
          </ul> 
