@@ -9,7 +9,7 @@
  <div class="card bg-dark text-white" style="height:50px;margin-top: 5px;">
     <div class="card-body">사원등록</div>
   </div>
-  <form id="f_empUPD">
+  <form id="f_empUPD" >
   <input type="hidden" name="gap" value="1">
   <input type="hidden" name="empno" value="<%=sList.get(0).get("EMPNO") %>">
   <table class="table table-striped">
@@ -169,7 +169,7 @@
 	</tr>
   </table>
   <div align="right">
-			<input id="btn_cancel" type="button" value="취소" onclick="javascript:cancel()"> 
-			<input id="btn_save" type="submit" value="저장">
+			<button class="btn btn-dark" style="margin-right:2px" onclick="javascript:cancel()">취소</button>
+			<button class="btn btn-dark" onclick="javascript:updateAction()">수정</button>
   </div>
   </form>
