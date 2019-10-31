@@ -59,4 +59,66 @@ public class DraftDao {
 		}
 		return result_list;
 	}
+
+	public List<Map<String, Object>> draft_selectText(Map<String, Object> pMap) {
+		List<Map<String, Object>> result_list = null;
+		try {
+			result_list = sqlSessionTemplate.selectList("draft_selectText",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result_list;
+	}
+
+	public List<Map<String, Object>> draft_permission_page(Map<String, Object> pMap) {
+		List<Map<String, Object>> result_list = null;
+		try {
+			result_list = sqlSessionTemplate.selectList("draft_permission_page",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result_list;
+	}
+
+	public List<Map<String, Object>> draft_myWrite_list(Map<String, Object> pMap) {
+		List<Map<String, Object>> result_list = null;
+		try {
+			result_list = sqlSessionTemplate.selectList("draft_myWrite_list",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result_list;
+	}
+
+	public void dismiss(Map<String, Object> pMap) {
+		try {
+			sqlSessionTemplate.update("draft_dismiss",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void permission(Map<String, Object> pMap) {
+		try {
+			sqlSessionTemplate.update("draft_permission",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void cancle(Map<String, Object> pMap) {
+		try {
+			sqlSessionTemplate.update("draft_cancle",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void permission_commit(Map<String, Object> pMap) {
+		try {
+			sqlSessionTemplate.update("draft_commit",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -234,4 +234,8 @@ public class HRController {
 
 	        return day >= beginDay && day <= endDay;
 	}
+	@GetMapping("HRsecondchange")
+	public String change_default() {
+	   return "/HR/ajax/secondchange";
+	}
 }
