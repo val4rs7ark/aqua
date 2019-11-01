@@ -58,6 +58,10 @@ public class SalesGraphDao {
 	}
 	public List<Map<String, Object>> salesTwoSelect(Map<String, Object> pMap) {
 		logger.info("Logic salesTwoSelect Dao =======");
+		Object[] keys = pMap.keySet().toArray();
+		for(Object key : keys) {
+			logger.info("key :"+key.toString()+" , value :"+pMap.get(key.toString()));
+		}
 		List<Map<String,Object>> sList = 
 				sqlSessionTemplate.selectList("salesSelectTwomonth",pMap);
 		return sList;

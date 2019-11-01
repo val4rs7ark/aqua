@@ -93,7 +93,16 @@ if(gList!=null){
 			        	}]
 			           ,yAxes: [{
 			                 ticks: {
-			                    beginAtZero:true
+			                    beginAtZero:true,
+			                    callback: function(value, index, values) {
+			                         if(parseInt(value) > 999){
+			                             return '￦' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			                         } else if (parseInt(value) < -999) {
+			                             return '-￦' + Math.abs(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			                         } else {
+			                             return '￦' + value;
+			                         }
+			                     }
 			                }
 			            }]
 			        }
