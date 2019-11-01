@@ -18,7 +18,7 @@
 	var popupY= (window.screen.height/2)-(800/1.7);
 	//만들 팝업창 상하 크기의 1/2 만큼 보정값으로 빼주었음
 	function pop_basic(){
-	window.open('draft_basic','팝업창2','width=948px,height=880px,left='+popupX+',top='+ popupY);
+	window.open('draft_basic','팝업창2','width=780px,height=870px,left='+popupX+',top='+ popupY);
 	}
 </script>
 <style type="text/css">
