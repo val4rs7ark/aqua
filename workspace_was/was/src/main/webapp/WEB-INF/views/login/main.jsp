@@ -160,9 +160,9 @@
                      </tr>
                      <tr>
 			         	<td colspan="4" style="border-top: none;">
-							    <p style="margin-bottom: 0px;">
+						    <p style="margin-bottom: 0px;">
 								<MARQUEE>10월 생일자 : <b id="emp_birth" style="font-weight: 900;"></b> 생일 축하합니다.</MARQUEE>
-							    </p>
+						    </p>
 			         	</td>
 			         </tr>
                      <tr style="height:40px; background-color:#dee2e6; 
