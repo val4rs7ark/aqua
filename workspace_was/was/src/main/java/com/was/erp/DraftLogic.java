@@ -1,4 +1,4 @@
-package com.was.erp;
+﻿package com.was.erp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,9 +116,19 @@ public class DraftLogic {
 		if("dismiss".equals(loot)) {//반려버튼
 			draftDao.dismiss(pMap);
 		}else if("permission".equals(loot)) {//결제버튼
+			logger.info("permission.equals(loot) 이거탐");
 			draftDao.permission(pMap);
 		}else if("permission_commit".equals(loot)) {//취소버튼
 			draftDao.permission_commit(pMap);
 		}
+	}
+	public void papersDelete(String draft_no) {
+		logger.info("Logic>papersDelete 호출 성공");
+		draftDao.papersDelete(draft_no);
+	}
+	public Map<String,Object> draft_catchpw(Map<String, Object> pMap) {
+		String pw = draftDao.draft_catchpw(pMap);
+		pMap.put("pw",pw);
+		return pMap;
 	}
 }

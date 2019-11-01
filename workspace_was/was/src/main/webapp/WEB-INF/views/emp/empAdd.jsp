@@ -135,7 +135,7 @@
 		//수정 버튼 누르기 전, 수정된 텍스트 항목이 있는지 감지
 		function textChange(){
 			textChang = 1;
-			//alert("체인지!");
+			alert("체인지!");
 		}
 		//수정 버튼 - empAddRight.jsp
 		function updateAction(){

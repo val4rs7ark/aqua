@@ -144,5 +144,11 @@ public class WasController {
 		model.addAttribute("team_name", l_list);
 		return "general/ajax/select_teamName";
 	}
-	
+	//공지사항 상세보기 아작스 페이지
+	@GetMapping("wasMain_detailAjax")
+	public String wasMain_detailAjax(@RequestParam Map<String,Object> pMap,Model model) {
+		List<Map<String,Object>> boardDetail = boardLogic.boardDetail(pMap);
+		model.addAttribute("boardDetail",boardDetail);
+		return "/login/ajax/detail_ajax";
+	}
 }

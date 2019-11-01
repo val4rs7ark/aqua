@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.List, java.util.Map" %> 
 <%
@@ -33,8 +33,8 @@
 	<tr>
 		<td style="width:15%; padding-top:14px; padding-bottom:9px;">이메일</td>
 		<td colspan="3" align="left" style="width:15%;padding-top:7px; padding-bottom:7px;">
-			<input type="text" class="form-control" style="height:35px;width:230px;font-size:8pt;" placeholder="xxxx@xxxx.com" 
-					id="emp_email" name="emp_email">
+			<input type="text" class="form-control" style="height:35px;width:230px;font-size:8pt;"  value="<%=sList.get(0).get("EMP_EMAIL") %>"
+			placeholder="xxxx@xxxx.com" id="emp_email" name="emp_email"onChange="javascript:textChange()">
 		</td>
 	</tr>
 	<tr>
@@ -171,5 +171,6 @@
   <div align="right">
 			<button class="btn btn-dark" style="margin-right:2px" onclick="javascript:cancel()">취소</button>
 			<button class="btn btn-dark" onclick="javascript:updateAction()">수정</button>
+
   </div>
   </form>

@@ -137,6 +137,8 @@ public class AjaxRestController {
 	//버튼 눌렀을때 반응하는 메소드
 	@GetMapping("/wasDraft_buttonLoot")
 	public String draft_buttonLoot(@RequestParam Map<String,Object> pMap,Model model) {
+		logger.info("draft_buttonLoot이거 탐");
+		pMap.put("draft_no",(Integer.parseInt((pMap.get("draft_no").toString()))));
 		draftLogic.draft_buttonLoot(pMap);
 		return "버튼 이벤트";
 	}

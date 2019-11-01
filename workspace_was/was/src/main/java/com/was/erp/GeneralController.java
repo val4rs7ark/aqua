@@ -232,6 +232,7 @@ public class GeneralController {
 		return "general/jungbokAlert";
 	}
 	
+	//구매신청건 승인처리(구매부장만 가능)
 	@PostMapping("/general_confirm")
 	public String confirm(@RequestParam int order_no,String r_order_no,Model mod) {
 		logger.info("order_no:"+order_no);
