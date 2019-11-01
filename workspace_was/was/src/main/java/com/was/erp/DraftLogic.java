@@ -121,4 +121,9 @@ public class DraftLogic {
 			draftDao.permission_commit(pMap);
 		}
 	}
+	public void papersDelete(String draft_no) {
+		logger.info("Logic>papersDelete 호출 성공");
+		draftDao.papersDelete(draft_no);
+		
+	}
 }

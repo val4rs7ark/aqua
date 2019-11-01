@@ -121,4 +121,12 @@ public class DraftDao {
 			e.printStackTrace();
 		}
 	}
+	public void papersDelete(String draft_no) {
+		logger.info("Dao>papersDelete 호출 성공");
+		try {
+			sqlSessionTemplate.delete("draft_delete",draft_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

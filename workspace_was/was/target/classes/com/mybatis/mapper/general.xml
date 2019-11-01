@@ -256,4 +256,9 @@
 		   and em.empno = #{empno}
 	</select>
 	
+	<!-- 내가 작성한 문서 삭제 -->
+	<delete id="draft_delete" parameterType="java.lang.String">
+		delete from draft
+		 where draft_no = #{draft_no} 	
+	</delete>
 </mapper>

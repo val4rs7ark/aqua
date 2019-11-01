@@ -42,7 +42,7 @@
       $(document).ready(function() {
          
          function boardList(){
-            alert('boardList 호출 성공');
+            //alert('boardList 호출 성공');
             
          }
       /* ============================================================================날씨api============================================================================ */
@@ -121,6 +121,11 @@
 	  	function HRsal_select_f(){
 	      	$("#HRsal_select_f").submit();
 	  	}	
+	    //글작성 
+		function board_writher(){
+			/* var ret = window.open(url, name, specs, replace);*/
+			var wri = window.open('boardAdd.jsp','공지사항 작성','width=800,height=500')
+		}
 </script>
 </head>
 <body onload="javascript:load_calendar()">
@@ -146,25 +151,21 @@
 <!-- =========================================================================공지사항========================================================= -->
       <form id="boardList" action="/erp/boardList" method="get">
            
-        <table style="width: 90%;">
+         <table style="width: 90%;">
            <tr>
               <td style="width: 690px;">
-                <table class="table table-hover" id="bo_List" style="width: 650px; margin-top: 30px; margin-bottom: 1px; border-bottom: 1px solid #dee2e6;">
-                     <tr>
-                     	<td style="border-top: none;" colspan="5">
-                     		<div>
-					            <h4 style="margin-top: 50px;">사내 공지사항</h4>      
-					                 
-				          	</div>
-                     	</td>
-                     </tr>
-                     <tr>
-			         	<td colspan="4" style="border-top: none;">
-							    <p style="margin-bottom: 0px;">
-								<MARQUEE>10월 생일자 : <b id="emp_birth" style="font-weight: 900;"></b> 생일 축하합니다.</MARQUEE>
-							    </p>
-			         	</td>
-			         </tr>
+                <table class="table table-hover" id="bo_List" style="width: 650px; margin-top: 57px; margin-bottom: 1px; 
+                       border-bottom: 1px solid #dee2e6;">
+	           		<div>
+			            <h4 style="margin-top: 50px;">사내 공지사항</h4>      
+		          	</div>
+				    <p style="margin-bottom: 0px;">
+						<MARQUEE>10월 생일자 : <b id="emp_birth" style="font-weight: 900;"></b> 생일 축하합니다.</MARQUEE>
+				    </p>
+				    <div>
+					    <button type="button" class="writer" style="float: right;
+					            margin-right: 40px; margin-top: 25px;" onClick="javascript:board_writher()">글쓰기</button>
+				    </div>
                      <tr style="height:40px; background-color:#dee2e6; 
                           color:black; font-size:17px; margin-top: 50px; text-align:center;">
                        <th style="width:15%;padding-top: 5px;padding-bottom: 5px;">번호</th>

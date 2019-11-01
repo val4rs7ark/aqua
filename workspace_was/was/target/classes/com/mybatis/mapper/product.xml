@@ -10,34 +10,35 @@
          from supplyandsobi s
     </select>
     
-    <select id="productList" parameterType="map" resultType="map">
-      select supso_no_r,ivgroup_name,empno,supso_startdate,supso_enddate,supso_count,supso_date
-          from( select row_number() over(order by supso_no) as supso_no_r
-                      ,i.ivgroup_name,s.empno,s.supso_startdate,s.supso_enddate,s.supso_count,s.supso_date
-                  from supplyandsobi s, invengroup i
-                where s.ivgroup_code = i.ivgroup_code
-       <if test="ivgroup_search!=null and !ivgroup_search.equals('null')">
-             and s.ivgroup_code = #{ivgroup_search}
-       </if>
-       <if test="ship_search!=null and !ship_search.equals('null')">
-             and s.ship_code = #{ship_search}
-       </if>
-        <!-- 날짜검색 -->
-       <if test="before_date_ud!=null and after_date_ud!=null">
-             and s.supso_date between #{before_date_ud} and #{after_date_ud}
-       </if>
-       <if test="before_date_ud!=null and after_date_ud==null">
-             and s.supso_date between #{before_date_ud} and (select max(s.supso_date) from supplyandsobi)
-       </if>
-       <if test="before_date_ud==null and after_date_ud!=null">
-             and s.supso_date between (select min(s.supso_date) from supplyandsobi) and #{after_date_ud}
-       </if>
-               ) a
-          where 1=1
-       <if test="start>0 and end>0">       
-          and supso_no_r between #{start} and #{end}
-       </if>
-       
+     <select id="productList" parameterType="map" resultType="map">
+      select rno, supso_no_r,ivgroup_name,empno,supso_startdate,supso_enddate,supso_count,supso_date 
+        from ( select rownum rno, supso_no_r,ivgroup_name,empno,supso_startdate,supso_enddate,supso_count,supso_date
+                 from( select row_number() over(order by supso_no) as supso_no_r,i.ivgroup_name,s.empno,s.supso_startdate,s.supso_enddate,s.supso_count,s.supso_date
+                         from supplyandsobi s, invengroup i
+                        where s.ivgroup_code = i.ivgroup_code
+                        <if test="ivgroup_search!=null and !ivgroup_search.equals('null')">
+							and s.ivgroup_code = #{ivgroup_search}
+						</if>
+						<if test="ship_search!=null and !ship_search.equals('null')">
+							and s.ship_code = #{ship_search}
+						</if>
+						<!-- 날짜검색 -->
+						<if test="before_date_ud!=null and after_date_ud!=null">
+							and s.supso_date between #{before_date_ud} and #{after_date_ud}
+						</if>
+						<if test="before_date_ud!=null and after_date_ud==null">
+							and s.supso_date between #{before_date_ud} and (select max(s.supso_date) from supplyandsobi)
+						</if>
+						<if test="before_date_ud==null and after_date_ud!=null">
+							and s.supso_date between (select min(s.supso_date) from supplyandsobi) and #{after_date_ud}
+						</if>
+                        order by supso_no_r desc
+                       ) a 
+            )         
+            where 1=1
+	       <if test="start>0 and end>0">       
+	          and rno between #{start} and #{end}
+	       </if>
     </select>
     
     <select id="supplyInsert" parameterType="map" resultType="map">
