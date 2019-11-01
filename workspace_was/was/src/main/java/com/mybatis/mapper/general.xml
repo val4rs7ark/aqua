@@ -255,10 +255,27 @@
 		 where dt.empno = em.empno
 		   and em.empno = #{empno}
 	</select>
+<<<<<<< HEAD
 	
 	<!-- 내가 작성한 문서 삭제 -->
 	<delete id="draft_delete" parameterType="java.lang.String">
 		delete from draft
 		 where draft_no = #{draft_no} 	
 	</delete>
+=======
+	<!-- 팝업창에서 결재 확인 버튼 눌렀을때 프로시저 -->
+	 <select id="draft_permission" parameterType="map" statementType="CALLABLE">
+		{ CALL proc_draft_permission(
+                 #{draft_no, mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
+                ,#{empno, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+                )
+        }
+	</select>
+	<!-- 결재 버튼 눌렀을때 쿼리문 -->
+	 <select id="draft_catchpw" parameterType="map" resultType="java.lang.String">
+		select emp_pw
+		  from emp
+		 where empno = #{empno}
+	</select>
+>>>>>>> origin/master
 </mapper>

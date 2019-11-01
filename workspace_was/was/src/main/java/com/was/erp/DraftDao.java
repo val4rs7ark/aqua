@@ -97,18 +97,10 @@ public class DraftDao {
 			e.printStackTrace();
 		}
 	}
-
+	//결재버튼 프로시저
 	public void permission(Map<String, Object> pMap) {
 		try {
-			sqlSessionTemplate.update("draft_permission",pMap);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void cancle(Map<String, Object> pMap) {
-		try {
-			sqlSessionTemplate.update("draft_cancle",pMap);
+			sqlSessionTemplate.selectOne("draft_permission",pMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -120,6 +112,16 @@ public class DraftDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public String draft_catchpw(Map<String, Object> pMap) {
+		String pw = "";
+		try {
+			pw = sqlSessionTemplate.selectOne("draft_catchpw",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return pw;
 	}
 	public void papersDelete(String draft_no) {
 		logger.info("Dao>papersDelete 호출 성공");

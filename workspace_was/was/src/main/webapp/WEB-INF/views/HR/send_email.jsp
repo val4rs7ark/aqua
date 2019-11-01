@@ -110,7 +110,6 @@
 	function closed() {
 	self.close();
 	}
-
 </script>
 </body>
 </html> 
