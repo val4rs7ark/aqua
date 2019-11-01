@@ -30,7 +30,7 @@
 	//만들 팝업창 상하 크기의 1/2 만큼 보정값으로 빼주었음
 	function dismiss(draft_no,empno){//반려버튼
 		$.ajax({
-			 url:"/erp/wasDraft_buttonLoot?loot="+dismiss+"&draft_no="+draft_no+"&empno="+empno
+			 url:"/erp/wasDraft_buttonLoot?loot=dismiss&draft_no="+draft_no+"&empno="+empno
 			,method:"get"
 			,success:function(data){
 				$("#imsi_result").html(data);
@@ -39,24 +39,23 @@
 	//내창 닫고 부모창 최신화
 	}
 	function permission(draft_no,empno){//결재버튼
-		$.ajax({
-			 url:"/erp/wasDraft_buttonLoot?loot="+permission+"&draft_no="+draft_no+"&empno="+empno
-			,method:"get"
-			,success:function(data){
-				$("#imsi_result").html(data);
-			}
-		});
-	//내창 닫고 부모창 최신화
+		alert(draft_no+","+empno);
+		window.open("/erp/draft_catchpw?draft_no="+draft_no+"&empno="+empno ,"open the window","toolbar=no, width=210, height=150, top=70, left=730");
 	}
 	function permission_commit(draft_no,empno){//최종 결재버튼
 		$.ajax({
-			 url:"/erp/wasDraft_buttonLoot?loot="+permission_commit+"&draft_no="+draft_no
+			 url:"/erp/wasDraft_buttonLoot?loot=permission_commit&draft_no="+draft_no
 			,method:"get"
 			,success:function(data){
 				$("#imsi_result").html(data);
 			}
 		});
 	//내창 닫고 부모창 최신화	
+	}
+	//닫기 버튼 클릭햇을때
+	function close_mypage(){
+		opener.parent.location.reload();
+		window.close()
 	}
 </script>
 </head>
@@ -274,7 +273,7 @@
 					</tbody>
 				</table>
 				<div style="margin-top:4px;margin-right:4px;text-align:right;width: 917px;">
-					<button>닫기</button>                 
+					<button onclick="javascript:close_mypage()">닫기</button>                 
 				</div>
 			</div>
 			<input type="hidden" id="imsi_jsonData" value="">
@@ -479,7 +478,7 @@
 					</tbody>
 				</table>
 				<div style="margin-top:4px;margin-right:4px;text-align:right;width: 917px;">
-					<button>닫기</button>                 
+					<button onclick="javascript:close_mypage()">닫기</button>                 
 				</div>
 				<div id="imsi_result"></div>
 			</div>

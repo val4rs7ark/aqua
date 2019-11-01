@@ -137,4 +137,12 @@ public class DraftController {
 		model.addAttribute("r_list",r_list);
 		return "/draft/permission_page";
 	}
+	
+	//결재 누를때 비밀번호가져오는 컨트롤러 
+	@GetMapping("/draft_catchpw")
+	public String draft_catchpw(@RequestParam Map<String,Object> pMap,Model model) {
+		Map<String, Object> rMap = draftLogic.draft_catchpw(pMap);
+		model.addAttribute("rMap",rMap);
+		return "/draft/ajax/password";
+	}
 }

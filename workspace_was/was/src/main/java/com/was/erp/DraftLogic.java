@@ -116,9 +116,15 @@ public class DraftLogic {
 		if("dismiss".equals(loot)) {//반려버튼
 			draftDao.dismiss(pMap);
 		}else if("permission".equals(loot)) {//결제버튼
+			logger.info("permission.equals(loot) 이거탐");
 			draftDao.permission(pMap);
 		}else if("permission_commit".equals(loot)) {//취소버튼
 			draftDao.permission_commit(pMap);
 		}
+	}
+	public Map<String,Object> draft_catchpw(Map<String, Object> pMap) {
+		String pw = draftDao.draft_catchpw(pMap);
+		pMap.put("pw",pw);
+		return pMap;
 	}
 }

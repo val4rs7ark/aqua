@@ -21,6 +21,18 @@
 	window.open('draft_basic','팝업창2','width=948px,height=880px,left='+popupX+',top='+ popupY);
 	}
 </script>
+<style type="text/css">
+	.draft_table tr td{
+		border: 1px solid #dee2e6;
+		height: 65px;
+	}
+	.draft_table tr th{
+		border: 1px solid #dee2e6;
+		background-color: #f2f5f787;
+		height: 31px;
+		font-size: 15px;
+	}
+</style>
 </head>
 <body>
 <div class="container-fluid">
@@ -51,12 +63,11 @@
 <!--=====================================상단바 끝==================================-->
 			<div style="height:20px"></div>
 <!--=====================================메인 테이블 시작==================================-->
-			<div class="col-sm-12" style="padding-left:0px;padding-right:0px;text-align:center">
-				<table style="width:92%;margin-right:4%;
-							  margin-left:4%;" border="1px solid" > 
+			<div  style="padding-left:0px;padding-right:0px;text-align:center">
+				<table class="draft_table" style="width:100%;margin-right:4%; border: 1px solid #dee2e6;" > 
 					<thead style="text-align:center;background:#dee2e6">
 						<tr>
-							<th style="height:55px;width:15%;">문서번호</th>
+							<th style="width:15%;">문서번호</th>
 							<th style="width:40%;">양식명</th>
 							<th style="width:20%;">구분</th>
 							<th style="width:25%;">비고</th>
@@ -64,68 +75,68 @@
 					</thead>
 					<tbody style="text-align:center;font-size:15px;">     
 						<tr>
-							<td style="height:55px">01</td>
-							<td><a href="javascript:pop_basic()">기본서식</a></td>
+							<td >01</td>
+							<td><a href="javascript:pop_basic()"  ">기본서식</a></td>
 							<td>공통</td>
 							<td>기본서식</td>
 						</tr>   	 
 						<tr>
-							<td style="height:55px">02</td>
-							<td><a href="#">휴가신청서</a></td>
+							<td >02</td>
+							<td><a href="#"  ">휴가신청서</a></td>
 							<td>공통</td>
 							<td>연차,휴가 신청</td>
 						</tr>   	 	 
 						<tr>
-							<td style="height:55px">03</td>
-							<td><a href="#">지출결의서</a></td>
+							<td >03</td>
+							<td><a href="#"  ">지출결의서</a></td>
 							<td>공통</td>
 							<td>자산구매 신청은 작성제외</td>
 						</tr>   	 	 
 						<tr>
-							<td style="height:55px">04</td>
-							<td><a href="#">주간보고</a></td>
+							<td >04</td>
+							<td><a href="#"  ">주간보고</a></td>
 							<td>공통</td>
 							<td></td>
 						</tr>   	 	 
 						<tr>
-							<td style="height:55px">05</td>
-							<td><a href="#">차량운행일지</a></td>
+							<td >05</td>
+							<td><a href="#"  ">차량운행일지</a></td>
 							<td>공통</td>
 							<td>배송부 차량외 모든 차량 작성</td>
 						</tr>   	 	 
 						<tr>
-							<td style="height:55px">06</td>
-							<td><a href="#">출장계획서</a></td>
+							<td >06</td>
+							<td><a href="#"  ">출장계획서</a></td>
 							<td>영업부</td>
 							<td>출발 D-1까지 작성</td>
 						</tr>   	 	 
 						<tr>
-							<td style="height:55px">07</td>
-							<td><a href="#">출장완료보고서</a></td>
+							<td >07</td>
+							<td><a href="#"  ">출장완료보고서</a></td>
 							<td>영업부</td>
 							<td>D+7일 내 작성</td>
 						</tr>   	 	 
 						<tr>
-							<td style="height:55px">08</td>
-							<td><a href="#">경조금 지급 신청서</a></td>
+							<td >08</td>
+							<td><a href="#"  ">경조금 지급 신청서</a></td>
 							<td>공통</td>
 							<td>D+60일 내 작성</td>
 						</tr>   	 	 
 						<tr>
-							<td style="height:55px">09</td>
-							<td><a href="#">개인 경비 지출 내역서</a></td>
+							<td >09</td>
+							<td><a href="#"  ">개인 경비 지출 내역서</a></td>
 							<td>공통</td>
 							<td>D+30일 내 작성</td>
 						</tr>   	 	 
 						<tr>
-							<td style="height:55px">10</td>
-							<td><a href="#">시말서</a></td>
+							<td >10</td>
+							<td><a href="#"  ">시말서</a></td>
 							<td>공통</td>
 							<td></td>
 						</tr>   	 	 
 						<tr>
-							<td style="height:55px">11</td>
-							<td><a href="#">사직서</a></td>
+							<td >11</td>
+							<td><a href="#"  ">사직서</a></td>
 							<td>공통</td>
 							<td>서면 제출</td>
 						</tr>   	 	 
