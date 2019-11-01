@@ -1,6 +1,5 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 3초후에...
-
 <%!
 	int x =1;
  	public String newsList(String news){
@@ -36,5 +35,4 @@
 	out.clear();
 	//새로 읽어들인 정보 출력하기
 	out.print(datas);
-
 %>

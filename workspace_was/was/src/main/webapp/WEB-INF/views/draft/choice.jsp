@@ -195,14 +195,12 @@
 			var checkLast = '';      //체크된 체크박스 중 마지막 체크박스의 인덱스를 담기위한 변수
 			var rowid = '';             //체크된 체크박스의 모든 value 값을 담는다
 			var cnt = 0;                 
-		
 			for(var i=0; i<len; i++){
 				if(chk[i].checked == true){
 					checkCnt++;        //체크된 체크박스의 개수
 					checkLast = i;     //체크된 체크박스의 인덱스
 				}
 			} 
-			
 			for(var i=0; i<len; i++){
 				if(chk[i].checked == true){  //체크가 되어있는 값 구분
 					checkRow = chk[i].value;
