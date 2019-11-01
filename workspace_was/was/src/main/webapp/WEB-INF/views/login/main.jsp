@@ -154,7 +154,6 @@
          <table style="width: 90%;">
            <tr>
               <td style="width: 690px;">
-<<<<<<< HEAD
                 <table class="table table-hover" id="bo_List" style="width: 650px; margin-top: 57px; margin-bottom: 1px; 
                        border-bottom: 1px solid #dee2e6;">
 	           		<div>

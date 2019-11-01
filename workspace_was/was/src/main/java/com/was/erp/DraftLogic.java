@@ -125,7 +125,7 @@ public class DraftLogic {
 	public void papersDelete(String draft_no) {
 		logger.info("Logic>papersDelete 호출 성공");
 		draftDao.papersDelete(draft_no);
-		
+	}
 	public Map<String,Object> draft_catchpw(Map<String, Object> pMap) {
 		String pw = draftDao.draft_catchpw(pMap);
 		pMap.put("pw",pw);

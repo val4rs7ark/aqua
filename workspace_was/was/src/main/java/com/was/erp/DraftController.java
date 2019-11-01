@@ -156,7 +156,7 @@ public class DraftController {
 		//return "redirect:draft_selectText";//viewReslover안탐. 접미어,접두어 처리 안해줌.
 		//return "forward:draft_selectText";//viewReslover안탐. 접미어,접두어 처리 안해줌.
 		return "redirect:/draft_selectText_get?empno="+empno;
-	
+	}
 	//결재 누를때 비밀번호가져오는 컨트롤러 
 	@GetMapping("/draft_catchpw")
 	public String draft_catchpw(@RequestParam Map<String,Object> pMap,Model model) {
