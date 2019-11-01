@@ -33,8 +33,8 @@
 	<tr>
 		<td style="width:15%; padding-top:14px; padding-bottom:9px;">이메일</td>
 		<td colspan="3" align="left" style="width:15%;padding-top:7px; padding-bottom:7px;">
-			<input type="text" class="form-control" style="height:35px;width:230px;font-size:8pt;" placeholder="xxxx@xxxx.com" 
-					id="emp_email" name="emp_email">
+			<input type="text" class="form-control" style="height:35px;width:230px;font-size:8pt;"  value="<%=sList.get(0).get("EMP_EMAIL") %>"
+			placeholder="xxxx@xxxx.com" id="emp_email" name="emp_email"onChange="javascript:textChange()">
 		</td>
 	</tr>
 	<tr>
@@ -169,7 +169,7 @@
 	</tr>
   </table>
   <div align="right">
-			<input id="btn_cancel" type="button" value="취소" onclick="javascript:cancel()"> 
-			<input id="btn_save" type="submit" value="저장">
+			<button class="btn btn-dark" style="margin-right:2px" onclick="javascript:cancel()">취소</button>
+        	 <button class="btn btn-dark" onclick="javascript:updateAction()">수정</button>
   </div>
   </form>
