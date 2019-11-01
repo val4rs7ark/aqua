@@ -163,7 +163,7 @@
 			      <option value="영업부장">영업부장</option>
 			      <option value="총무부장">총무부장</option>
 			      <option value="배송부장">배송부장</option>
-			      <option value="대표">대표이사</option>
+			      <option value="대표">대표이사</option> 
  			</select>
  		</td>
 	</tr>

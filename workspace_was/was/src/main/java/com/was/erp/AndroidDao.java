@@ -58,4 +58,14 @@ public class AndroidDao {
 			result = sqlSessionTemplate.insert("supplyInsert",pMap);
 		return result;
 	}
+
+	public List<Map<String, Object>> draftSelectText(Map<String, Object> pMap) {
+		List<Map<String, Object>> result_list = null;
+		try {
+			result_list = sqlSessionTemplate.selectList("draft_selectText",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result_list;
+	}
 }
