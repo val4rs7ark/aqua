@@ -310,10 +310,9 @@ public class WasLogic {
 			}
 			pMap.put("note_nos", params);
 		}
-		String[] ckeck = (String[])pMap.get("note_nos");
-		logger.info("note_nos 확인 :"+ckeck[0]);
 		String result = null;
-		int rint = wasDao.wasEmpStatusNoteDelete(pMap);
+		int rint = 0;
+		rint = wasDao.wasEmpStatusNoteDelete(pMap);
 		if(rint!=0) {
 			result = "삭제되었습니다.";
 		}else {
