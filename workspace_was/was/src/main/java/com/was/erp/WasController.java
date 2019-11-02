@@ -1,4 +1,4 @@
-package com.was.erp;
+﻿package com.was.erp;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +29,7 @@ public class WasController {
 	WasLogic wasLogic;
 	@Autowired
 	BoardLogic boardLogic;
-	
+
 //////////////SessionAttributes가 처음 실행 되었을 때 아직 request로 받기 전이라 null방지///////////	
 	@ModelAttribute("s_emp_no")
 	public String setSempNo() {
@@ -144,5 +144,11 @@ public class WasController {
 		model.addAttribute("team_name", l_list);
 		return "general/ajax/select_teamName";
 	}
-	
+	//공지사항 상세보기 아작스 페이지
+	@GetMapping("wasMain_detailAjax")
+	public String wasMain_detailAjax(@RequestParam Map<String,Object> pMap,Model model) {
+		List<Map<String,Object>> boardDetail = boardLogic.boardDetail(pMap);
+		model.addAttribute("boardDetail",boardDetail);
+		return "/login/ajax/detail_ajax";
+	}
 }

@@ -502,7 +502,7 @@
 			    	,method:"get"
 			    	,success:function(data){//해석하기
 			    		$("#select_empno_change_one").html(data);//해석하기
-			    	}+
+			    	}
 			    	,error:function(e){
 			    		alert(e.responseText);
 			    	}
@@ -794,13 +794,13 @@
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 100px; padding-right: 5px; ">
 									  						<input id="sal_etc_detail" name="sal_etc_detail" type="text" class="form-control" placeholder="항목을 입력하세요."  size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent;">
 														</td>
-									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 100px; padding-left: 5px; padding-right: 5px; color: darkgray;">
+									  					<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 100px; padding-left: 5px; padding-right: 5px; color: darkgray;">
 															<input id="sal_etc" name="sal_etc" type="text" class="form-control" placeholder="금액을 입력하세요." size="27" style="text-align:right; height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline;" onchange="getNumber(this);" onkeyup="getNumber(this);">&nbsp;원
 														</td>
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 5px;"></td>
 									  				</tr>
 									  				<tr>
-									  					<td colspan="4" style=" height: 50px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 120px; font-size: 14px;" >
+									  					<td colspan="5" style=" height: 50px; padding-top: 5px; padding-bottom: 5px; vertical-align: middle; color: darkgray; border:none; padding-left: 120px; font-size: 14px;" >
 									  						급여정보를 보려면 "<a href="javascript:info_sal('jung')" style="color:black;">여기</a>"를 눌러주세요
 									  					</td>
 									  				</tr>
@@ -910,13 +910,13 @@
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 100px; padding-right: 5px; ">
 									  						<input id="tax_etc_sudang_dt" name="tax_etc_sudang_dt" type="text" class="form-control" placeholder="항목을 입력하세요."  size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent;">
 														</td>
-									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 100px; padding-left: 5px; padding-right: 5px; color: darkgray;">
+									  					<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 100px; padding-left: 5px; padding-right: 5px; color: darkgray;">
 															<input id="tax_etc_sudang" name="tax_etc_sudang" type="text" class="form-control" placeholder="금액을 입력하세요." size="27" style="text-align:right; height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline;" onchange="getNumber(this);" onkeyup="getNumber(this);">&nbsp;원
 														</td>
 									  					<td style=" width: 90px; padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; ">
 															<button type="button" class="btn btn-secondary btn pull-left" onclick="javascript:sal_equals()" style="padding-left: 7px; padding-right: 7px; font-size: 14px; padding-top: 2px; padding-bottom: 2px;" >추가</button>
 														</td>
-									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 5px;"></td>
+									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 5px; width: 270px;"></td>
 									  				</tr>
 									  			</tbody>
 									  		</table>
@@ -1226,13 +1226,13 @@
 									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 100px; padding-right: 5px; ">
 									  						<input id="tax_etc_sudang_dt_one" name="tax_etc_sudang_dt_one" type="text" class="form-control" placeholder="항목을 입력하세요."  size="27" style="height: 28px;width:140px; font-size: 13px; background-color: transparent;">
 														</td>
-									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 100px; padding-left: 5px; padding-right: 5px; color: darkgray;">
+									  					<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; width: 100px; padding-left: 5px; padding-right: 5px; color: darkgray;">
 															<input id="tax_etc_sudang_one" name="tax_etc_sudang_one" type="text" class="form-control" name="companyname" placeholder="금액을 입력하세요." size="27" style="text-align:right; height: 28px;width:140px; font-size: 13px; background-color: transparent; display:inline;" onchange="getNumber(this);" onkeyup="getNumber(this);">&nbsp;원
 														</td>
 														<td style=" width: 90px; padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 20px; ">
 															<button type="button" class="btn btn-secondary btn pull-left" onclick="javascript:sal_equals_one()" style="padding-left: 7px; padding-right: 7px; font-size: 14px; padding-top: 2px; padding-bottom: 2px;" >추가</button>
 														</td>
-									  					<td style="padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 5px;"></td>
+									  					<td style="width: 270px;padding-top: 5px; padding-bottom: 5px; border:none; vertical-align: middle; padding-left: 5px;"></td>
 									  				</tr>
 									  			</tbody>
 									  		</table>

@@ -1,5 +1,6 @@
-package com.was.erp;
+﻿package com.was.erp;
 
+import java.sql.Clob;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,10 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.util.ClobToString;
+
 @Service
 public class DraftLogic {
 	Logger logger = LoggerFactory.getLogger(DraftLogic.class);
-	
+	ClobToString clobToString = new ClobToString();
 	@Autowired
 	DraftDao draftDao = null;
 	public void draftAdd(Map<String, Object> pMap) {
@@ -60,18 +63,48 @@ public class DraftLogic {
 	       }
 	       return nList;
 	}
-	public Map<String, Object> draft_selectText(Map<String,Object> pMap) {
+	public Map<String, Object> draft_selectText(Map<String,Object> pMap) throws Exception {
 		List<Map<String,Object>> r_list = draftDao.draft_selectText(pMap);
 		List<Map<String,Object>> myWrite_list = draftDao.draft_myWrite_list(pMap);
+		String DRAFT_CONTENTS = "";
+		
+		if(r_list.size()!=0) {
+			for(int i=0;i<r_list.size();i++){
+				Map<String,Object> rMap = r_list.get(i);
+				DRAFT_CONTENTS = clobToString.clobToString((Clob)rMap.get("DRAFT_CONTENTS"));
+				rMap.put("DRAFT_CONTENTS",DRAFT_CONTENTS);
+				r_list.set(i, rMap);
+			}
+		}
+		
+		 if(myWrite_list.size()!=0) { 
+			 for(int i=0;i<myWrite_list.size();i++){
+				 Map<String,Object> rMap = myWrite_list.get(i); 
+				 DRAFT_CONTENTS = clobToString.clobToString((Clob)rMap.get("DRAFT_CONTENTS"));
+				 rMap.put("DRAFT_CONTENTS",DRAFT_CONTENTS);
+				 myWrite_list.set(i, rMap);
+		 	}
+		 }
+		 
 		Map<String, Object> imsi_Map = new HashMap<>();
 		imsi_Map.put("one", r_list);
 		imsi_Map.put("two", myWrite_list);
 		return imsi_Map;
 	}
 	//기안서
-	public List<Map<String, Object>> draft_permission_page(Map<String, Object> pMap) {
+	public List<Map<String, Object>> draft_permission_page(Map<String, Object> pMap) throws Exception {
 		//결재해야하는 기안서 정보를 가져오는 1개로우의 List
 		List<Map<String,Object>> r_list = draftDao.draft_permission_page(pMap);
+		String DRAFT_CONTENTS = "";
+		 if(r_list.size()!=0) { 
+			 for(int i=0;i<r_list.size();i++){
+				 Map<String,Object> rMap = r_list.get(i); 
+				 DRAFT_CONTENTS = clobToString.clobToString((Clob)rMap.get("DRAFT_CONTENTS"));
+				 logger.info(DRAFT_CONTENTS); 
+				 rMap.put("DRAFT_CONTENTS",DRAFT_CONTENTS);
+				 r_list.set(i, rMap);
+		 	}
+		 }
 		//결재해야하는 기안서에도 결재자 개인 정보가 필요한데 각각 정보가 필요해서 다시 select태움
 		List<String> st_list = new ArrayList<>();
 		st_list.add(r_list.get(0).get("FIRST_PERMISSION").toString());
@@ -116,10 +149,7 @@ public class DraftLogic {
 		if("dismiss".equals(loot)) {//반려버튼
 			draftDao.dismiss(pMap);
 		}else if("permission".equals(loot)) {//결제버튼
-			logger.info("permission.equals(loot) 이거탐");
 			draftDao.permission(pMap);
-		}else if("permission_commit".equals(loot)) {//취소버튼
-			draftDao.permission_commit(pMap);
 		}
 	}
 	public Map<String,Object> draft_catchpw(Map<String, Object> pMap) {

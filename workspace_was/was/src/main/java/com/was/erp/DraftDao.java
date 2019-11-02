@@ -98,7 +98,7 @@ public class DraftDao {
 
 	public void dismiss(Map<String, Object> pMap) {
 		try {
-			sqlSessionTemplate.update("draft_dismiss",pMap);
+			sqlSessionTemplate.selectOne("draft_dismiss",pMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -107,14 +107,6 @@ public class DraftDao {
 	public void permission(Map<String, Object> pMap) {
 		try {
 			sqlSessionTemplate.selectOne("draft_permission",pMap);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void permission_commit(Map<String, Object> pMap) {
-		try {
-			sqlSessionTemplate.update("draft_commit",pMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

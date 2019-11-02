@@ -219,14 +219,14 @@
         <!-- spring일 때는 없어도 됨. pojo에서:get방식인지 post방식인지 구분하기 위해서 -->
         <input type="hidden" name="gap" value="0">
         <!-- <input id="table_gubun" type="hidden" value="1"> -->
-        <div id="product_UPD" style="margin-top: -10px;">
           <button type="button" class="btn btn-dark" style="background: #efefef;padding: 3px 3px 3px 3px;color:black;
                 border-color: #efefef;font-size:15px;font-weight:900;margin-left: 13px;height: 33px;width: 100px;" 
                 onclick="location.href='javascript:prod_delete()'">삭제</button>
           <button type="button" class="btn btn-dark" style="background: #efefef;padding: 3px 3px 3px 3px;color:black;
                 border-color: #efefef;font-size:15px;font-weight:900;margin-left: 13px;height: 33px;width: 100px;" 
                 onclick="location.href='javascript:prod_Insert()'">등록</button>
-          <table class="table table-hover" style="width: 345px; margin-top: 10px; margin-left: 15px;" data-options="multiSelect:'true',toolbar: '#productUPD'">
+        <div id="product_UPD" style="margin-top: -10px;">
+          <table class="table table-hover" style="width: 345px; margin-top: 15px; margin-left: 15px;" data-options="multiSelect:'true',toolbar: '#productUPD'">
           <thead">
             <tr>
               <h5><td colspan="4" style="height:50px; background-color: #F1F1F1; 
@@ -249,6 +249,7 @@
               <td style="width:25%;">
                  <select class="form-control" id="shipcode" name="shipcode" onChange="getSelectValue(this.form);" 
                          style="background-color:#FFFFFF; width:180px;">
+                 <option value="">&nbsp;선택</option>
                  <option value="S00001">&nbsp;태양호</option>
                  <option value="S00002">&nbsp;참수리</option>
                  <option value="S00003">&nbsp;태극호</option>
@@ -266,6 +267,7 @@
               <td style="width:25%;">
                <select class="form-control" id=ivgroup_name" name="ivgroup_name" onChange="getSelectValue(this.form);" 
                        style="background-color:#FFFFFF;width:180px;">
+                 <option value="">&nbsp;선택</option>
                  <option value="Z00011">&nbsp;광어</option>
                  <option value="Z00012">&nbsp;오징어</option>
                  <option value="Z00013">&nbsp;돔</option>
@@ -299,7 +301,7 @@
       </form>
    </div>
   <!-- ===================================================================================================================================
-                                                  생산품 상세보기 영역 끝
+                                               			   생산품 상세보기 영역 끝
         ==================================================================================================================================== -->
   <div style="width: 30px;">
   </div>   
@@ -307,11 +309,13 @@
    <div style="width: 600px;">
 
   <!-- ====================================================================================================================================
-                                                    생산품 목록 영역 시작
+                                                  			  생산품 목록 영역 시작
        ==================================================================================================================================== -->
+		<button type="button" class="btn btn-dark" style="background: #efefef;padding: 3px 3px 3px 3px;color:black;
+	            border-color: #efefef;font-size:15px;font-weight:900;margin-left: 13px;height: 33px;width: 100px;" 
+	            onclick="location.href='/erp/productList'">뒤로</button>
 
-
-      <table class="table table-hover" id="prod_List" style="margin: 33px; margin-left: 0px; width:1000px;
+      <table class="table table-hover" id="prod_List" style="margin: 33px; margin-top:6px;margin-left: 0px; width:1000px;
              color:black; font-size:17px;text-align:center;">   
          <thead>
          <tr style="width:1000px; height:50px; background-color: #F1F1F1; color:black; font-size:17px;text-align:center;">
@@ -402,11 +406,9 @@
                String pagination = null;
                pagination = pb.getPageBar();
                out.print(pagination);
+               
          %>
         </ul>
-    </div> 
-       <tr>
-   </tr>
        </table>
        </div>
   <!-- ========================================================================================================================================

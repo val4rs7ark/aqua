@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.List, java.util.Map" %> 
 <%
@@ -9,7 +9,7 @@
  <div class="card bg-dark text-white" style="height:50px;margin-top: 5px;">
     <div class="card-body">사원등록</div>
   </div>
-  <form id="f_empUPD">
+  <form id="f_empUPD" >
   <input type="hidden" name="gap" value="1">
   <input type="hidden" name="empno" value="<%=sList.get(0).get("EMPNO") %>">
   <table class="table table-striped">
@@ -33,8 +33,8 @@
 	<tr>
 		<td style="width:15%; padding-top:14px; padding-bottom:9px;">이메일</td>
 		<td colspan="3" align="left" style="width:15%;padding-top:7px; padding-bottom:7px;">
-			<input type="text" class="form-control" style="height:35px;width:230px;font-size:8pt;" placeholder="xxxx@xxxx.com" 
-					id="emp_email" name="emp_email">
+			<input type="text" class="form-control" style="height:35px;width:230px;font-size:8pt;"  value="<%=sList.get(0).get("EMP_EMAIL") %>"
+			placeholder="xxxx@xxxx.com" id="emp_email" name="emp_email"onChange="javascript:textChange()">
 		</td>
 	</tr>
 	<tr>
@@ -163,13 +163,14 @@
 			      <option value="영업부장">영업부장</option>
 			      <option value="총무부장">총무부장</option>
 			      <option value="배송부장">배송부장</option>
-			      <option value="대표">대표이사</option>
+			      <option value="대표">대표이사</option> 
  			</select>
  		</td>
 	</tr>
   </table>
   <div align="right">
-			<input id="btn_cancel" type="button" value="취소" onclick="javascript:cancel()"> 
-			<input id="btn_save" type="submit" value="저장">
+			<button class="btn btn-dark" style="margin-right:2px" onclick="javascript:cancel()">취소</button>
+			<button class="btn btn-dark" onclick="javascript:updateAction()">수정</button>
+
   </div>
   </form>

@@ -1,4 +1,4 @@
-package com.was.erp;
+﻿package com.was.erp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,7 +121,7 @@ public class DraftController {
 	
 	//문서 조회 페이지 들어가는곳
 	@PostMapping("/draft_selectText")
-	public String draft_selectText(@RequestParam Map<String,Object> pMap,Model model) {
+	public String draft_selectText(@RequestParam Map<String,Object> pMap,Model model) throws Exception {
 		logger.info("draft_selectText 호출 성공");
 		Map<String,Object> imsi_Map = draftLogic.draft_selectText(pMap);
 		model.addAttribute("imsi_Map",imsi_Map);
@@ -130,7 +130,7 @@ public class DraftController {
 	
 	//문서 상세 조회==> 리스트 0번방에는 문서에대한 전체적인 정보, 1번방에는 결재자들의 상세 정보가 들어있음. 
 	@GetMapping("/draft_permission_page")
-	public String draft_permission_page(@RequestParam Map<String,Object> pMap,Model model) {
+	public String draft_permission_page(@RequestParam Map<String,Object> pMap,Model model) throws Exception {
 		List<Map<String,Object>> r_list = draftLogic.draft_permission_page(pMap);
 		String gubun = pMap.get("gubun").toString();
 		model.addAttribute("gubun",gubun);
@@ -142,6 +142,7 @@ public class DraftController {
 	@GetMapping("/draft_catchpw")
 	public String draft_catchpw(@RequestParam Map<String,Object> pMap,Model model) {
 		Map<String, Object> rMap = draftLogic.draft_catchpw(pMap);
+		rMap.put("gubun",pMap.get("gubun").toString());
 		model.addAttribute("rMap",rMap);
 		return "/draft/ajax/password";
 	}

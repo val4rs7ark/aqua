@@ -16,9 +16,8 @@
 <title>WAS,AQUA - 매출현황</title>
 <%@ include file="/common/bootStrap4.jsp" %>
 <%@ include file="/common/styles.jsp" %>
-<script type="text/JavaScript" src="http://code.jquery.com/jquery-1.7.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
-<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js">
+<script src="https://www.chartjs.org/samples/latest/utils.js"></script> 
 <script type="text/javascript">
 ///////.......매출현황 그래프 보는 페이지. 현재 진행중....
 //현재 년도 가져와서 담는 변수
@@ -110,7 +109,16 @@ var graphChart = new Chart(ctx, {
 	        	}]
 	           ,yAxes: [{
 	                 ticks: {
-	                    beginAtZero:true
+	                    beginAtZero:true,
+	                    callback: function(value, index, values) {
+	                         if(parseInt(value) > 999){
+	                             return '￦' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	                         } else if (parseInt(value) < -999) {
+	                             return '-￦' + Math.abs(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	                         } else {
+	                             return '￦' + value;
+	                         }
+	                     }
 	                }
 	            }]
 	        }
@@ -271,41 +279,39 @@ var graphChart = new Chart(ctx, {
   <table>
      <thead>
       <th>
-        	<td>
+        	<td style="width:30px;">
         		<i class='fas fa-calendar-check' style='font-size:30px'></i>
         	</td>
         </th>
         <th>
-           <td>
              <td style="width:15%"> 
 				<div class="btn-group">
 				    <button type="button" class="btn btn-dark" onClick="javascript:preYear()"><</button>
-				    <button type="button" class="btn btn-dark" onClick="javascript:todayYear()">금년</button>
+				    <button type="button" class="btn btn-dark" onClick="javascript:todayYear()">이번년도</button>
 				    <button type="button" class="btn btn-dark" onClick="javascript:nextYear()">></button>
 				</div>
  			</td>
-           </td>
-           <td>
-              <td style="width:15%;margin-right:4px;"> 
+
+              <td style="width:14%;margin-right:4px;"> 
 				<div class="btn-group">
 				    <button type="button" class="btn btn-dark" onClick="javascript:preMonth()"><</button>
-				    <button type="button" class="btn btn-dark" onClick="javascript:todayMonth()">금월</button>
+				    <button type="button" class="btn btn-dark" onClick="javascript:todayMonth()">이번달</button>
 				    <button type="button" class="btn btn-dark" onClick="javascript:nextMonth()">></button>
 				</div>
  			</td>
-           </td>
+
         </th>
-        <th style="padding-right: 5px;">
-        	<td>
+        <th>
+        	<td style="width:35px;padding-right: 5px;">
         		<i class='fas fa-calendar-check' style='font-size:30px'></i>
         	</td>
         </th>
         <th>
-           <td>
+           <td style="width:230px;">
               <input type="month" id="sales_date_1" class="form-control">
            </td>
-           <td style="padding-left:5px;padding-right:5px;"><i class="fas fa-minus-square" style="font-size:36px" valign="center"></i></td>
-           <td>
+           <td style="width:45px;padding-left:5px;"><i class="fas fa-minus-square" style="font-size:36px" valign="center"></i></td>
+           <td style="width:220px;">
               <input type="month" id="sales_date_2" class="form-control">
            </td>
            <td style="padding-left:5px;"><input id="btn_search" type="submit" value="조회" onClick="javascript:selectDate()"></td>

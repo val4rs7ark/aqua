@@ -145,11 +145,11 @@
 																						<%
 																							}else if("2".equals(rMap.get("DRAFT_STATUS").toString())){
 																						%>
-																							<td style="width:10%;">결재 완료</td>
+																							<td style="width:10%;color:blue;">결재 완료</td>
 																						<%
 																							}else if("44".equals(rMap.get("DRAFT_STATUS").toString())){
 																						%>
-																							<td style="width:10%;">반려</td>
+																							<td style="width:10%;color:red;">반려</td>
 																						<%
 																							}
 																						%>
@@ -159,6 +159,8 @@
 																		}else{//내꺼아니야
 																			pass ="break";
 																		}
+																	}else if("44".equals(rMap.get("FIRST_PERM_DATE").toString())){ //반려함
+																		pass ="break";
 																	}else{//결재했음.
 																		if(s_emp_no.equals(rMap.get("FIRST_PERMISSION").toString())){//내꺼임.
 																			pass ="break";
@@ -183,11 +185,15 @@
 																					<%
 																						if("1".equals(rMap.get("DRAFT_STATUS").toString())){
 																					%>
-																						<td style="width:10%;">결재중</td>
+																						<td style="width:10%;">결재 진행중</td>
 																					<%
-																							}else if("44".equals(rMap.get("DRAFT_STATUS").toString())){
+																						}else if("2".equals(rMap.get("DRAFT_STATUS").toString())){
 																					%>
-																						<td style="width:10%;">반려</td>
+																						<td style="width:10%;color:blue;">결재 완료</td>
+																					<%
+																						}else if("44".equals(rMap.get("DRAFT_STATUS").toString())){
+																					%>
+																						<td style="width:10%;color:red;">반려</td>
 																					<%
 																						}
 																					%>
@@ -197,6 +203,8 @@
 																			}else{//내꺼아니야
 																				pass ="break";
 																			}
+																		}else if("44".equals(rMap.get("SECCOND_PERM_DATE").toString())){ //반려함
+																			pass ="break";
 																		}else{//결재했음.
 																			if(s_emp_no.equals(rMap.get("SECCOND_PERMISSION").toString())){//내꺼임.
 																				pass ="break";
@@ -225,11 +233,15 @@
 																						<%
 																							if("1".equals(rMap.get("DRAFT_STATUS").toString())){
 																						%>
-																							<td style="width:10%;">결재중</td>
+																							<td style="width:10%;">결재 진행중</td>
+																						<%
+																							}else if("2".equals(rMap.get("DRAFT_STATUS").toString())){
+																						%>
+																							<td style="width:10%;color:blue;">결재 완료</td>
 																						<%
 																							}else if("44".equals(rMap.get("DRAFT_STATUS").toString())){
 																						%>
-																							<td style="width:10%;">반려</td>
+																							<td style="width:10%;color:red;">반려</td>
 																						<%
 																							}
 																						%>
@@ -239,6 +251,8 @@
 																				}else{//내꺼아니야
 																					pass ="break";
 																				}
+																			}else if("44".equals(rMap.get("THIRD_PERM_DATE").toString())){ //반려함
+																				pass ="break";
 																			}else{//결재했음.
 																				if(s_emp_no.equals(rMap.get("THIRD_PERMISSION").toString())){//내꺼임.
 																					pass ="break";
@@ -266,11 +280,15 @@
 																						<%
 																							if("1".equals(rMap.get("DRAFT_STATUS").toString())){
 																						%>
-																							<td style="width:10%;">결재중</td>
+																							<td style="width:10%;">결재 진행중</td>
 																						<%
-																							}else{
+																							}else if("2".equals(rMap.get("DRAFT_STATUS").toString())){
 																						%>
-																							<td style="width:10%;">결재 완료</td>
+																							<td style="width:10%;color:blue;">결재 완료</td>
+																						<%
+																							}else if("44".equals(rMap.get("DRAFT_STATUS").toString())){
+																						%>
+																							<td style="width:10%;color:red;">반려</td>
 																						<%
 																							}
 																						%>
@@ -280,8 +298,10 @@
 																				}else{//내꺼아니야
 																					pass ="break";
 																				}
+																			}else if("44".equals(rMap.get("FORTH_PERM_DATE").toString())){ //반려함
+																				pass ="break";
 																			}else{//결재했음.
-																				if(s_emp_no.equals(rMap.get("THIRD_PERMISSION").toString())){//내꺼임.
+																				if(s_emp_no.equals(rMap.get("FORTH_PERMISSION").toString())){//내꺼임.
 																					pass ="break";
 																				}else{//내꺼아니야
 																					  //변수 안담기고 통과
@@ -355,11 +375,15 @@
 																				<%
 																					if("1".equals(rMap.get("DRAFT_STATUS").toString())){
 																				%>
-																					<td style="width:10%;">결재중</td>
+																					<td style="width:10%;">결재 진행중</td>
 																				<%
-																					}else{
+																					}else if("2".equals(rMap.get("DRAFT_STATUS").toString())){
 																				%>
-																					<td style="width:10%;">결재 완료</td>
+																					<td style="width:10%;color:blue;">결재 완료</td>
+																				<%
+																					}else if("44".equals(rMap.get("DRAFT_STATUS").toString())){
+																				%>
+																					<td style="width:10%;color:red;">반려</td>
 																				<%
 																					}
 																				%>
@@ -393,11 +417,15 @@
 																					<%
 																						if("1".equals(rMap.get("DRAFT_STATUS").toString())){
 																					%>
-																						<td style="width:10%;">결재중</td>
+																						<td style="width:10%;">결재 진행중</td>
 																					<%
-																						}else{
+																						}else if("2".equals(rMap.get("DRAFT_STATUS").toString())){
 																					%>
-																						<td style="width:10%;">결재 완료</td>
+																						<td style="width:10%;color:blue;">결재 완료</td>
+																					<%
+																						}else if("44".equals(rMap.get("DRAFT_STATUS").toString())){
+																					%>
+																						<td style="width:10%;color:red;">반려</td>
 																					<%
 																						}
 																					%>
@@ -435,11 +463,15 @@
 																						<%
 																							if("1".equals(rMap.get("DRAFT_STATUS").toString())){
 																						%>
-																							<td style="width:10%;">결재중</td>
+																							<td style="width:10%;">결재 진행중</td>
 																						<%
-																							}else{
+																							}else if("2".equals(rMap.get("DRAFT_STATUS").toString())){
 																						%>
-																							<td style="width:10%;">결재 완료</td>
+																							<td style="width:10%;color:blue;">결재 완료</td>
+																						<%
+																							}else if("44".equals(rMap.get("DRAFT_STATUS").toString())){
+																						%>
+																							<td style="width:10%;color:red;">반려</td>
 																						<%
 																							}
 																						%>
@@ -463,7 +495,7 @@
 																					pass ="break";
 																				}
 																			}else{//결재했음.
-																				if(s_emp_no.equals(rMap.get("THIRD_PERMISSION").toString())){//내꺼임.
+																				if(s_emp_no.equals(rMap.get("FORTH_PERMISSION").toString())){//내꺼임.
 													%> 
 																					<tr class="gubun_bar" style="border-top:1px solid #dee2e6;border-bottom:1px solid #dee2e6; height: 25px;text-align: center; font-size: 13px;">
 																						<td style="width:10%;"><%=rMap.get("DRAFT_NO")%></td>
@@ -476,11 +508,15 @@
 																						<%
 																							if("1".equals(rMap.get("DRAFT_STATUS").toString())){
 																						%>
-																							<td style="width:10%;">결재중</td>
+																							<td style="width:10%;">결재 진행중</td>
 																						<%
-																							}else{
+																							}else if("2".equals(rMap.get("DRAFT_STATUS").toString())){
 																						%>
-																							<td style="width:10%;">결재 완료</td>
+																							<td style="width:10%;color:blue;">결재 완료</td>
+																						<%
+																							}else if("44".equals(rMap.get("DRAFT_STATUS").toString())){
+																						%>
+																							<td style="width:10%;color:red;">반려</td>
 																						<%
 																							}
 																						%>
@@ -547,15 +583,28 @@
 														<%
 															if("1".equals(rMap.get("DRAFT_STATUS").toString())){
 														%>
-															<td>결재중</td>
+															<td style="width:10%;">결재 진행중</td>
 														<%
-															}else{
+															}else if("2".equals(rMap.get("DRAFT_STATUS").toString())){
 														%>
-															<td>결재 완료</td>
+															<td style="width:10%;color:blue;">결재 완료</td>
+														<%
+															}else if("44".equals(rMap.get("DRAFT_STATUS").toString())){
+														%>
+															<td style="width:10%;color:red;">반려</td>
+															<!-- ================================================================================================== -->
 														<%
 															}
+															if("2".equals(rMap.get("DRAFT_STATUS").toString())){
 														%>
-														<td><a href="javascript:delete_draft('<%=rMap.get("DRAFT_NO")%>')" style="text-decoration: underline;" >삭제</a></td>
+															<td><b style="color:red" >불가</b></td>
+														<%		
+															}else{
+														%>
+															<td><a href="javascript:delete_draft('<%=rMap.get("DRAFT_NO")%>')" style="text-decoration: underline;" >삭제</a></td>
+														<%		
+															}
+														%>
 													</tr>
 													<%
 															}
@@ -569,7 +618,7 @@
 													%>
 												</table>
 										</div>
-									<!-- =================결제완료 문서============================ -->
+									<!-- =================내가 작성한 문서============================ -->
 									</div>  
 								</div>
 							</div>

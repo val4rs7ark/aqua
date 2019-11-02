@@ -141,21 +141,38 @@ public class SalesGraphLogic {
 	
 	///////////////////////////////////   월별 그래프 기간 선택 조회       ////////////////////////////////
 	public List<Map<String, Object>> salesTwoSelect(Map<String, Object> pMap) {
-		logger.info("salesTwoSelect ============  월별 기간 선택 그래프 Logic");
+		logger.info("salesTwoSelect ============  월별 기간 선택 그래프 Logic== 연속적이지 않은 달");
 		String today_1 = pMap.get("today_1").toString();
 		String today_2 = pMap.get("today_2").toString();
 		String today1[] = today_1.split("-");
 		String today2[] = today_2.split("-");
 		int todays1 = Integer.parseInt(today1[1]);
 		int todays2 = Integer.parseInt(today2[1]);
+		int todayYear1 = Integer.parseInt(today1[0]);
+		int todayYear2 = Integer.parseInt(today2[0]);
 		String sMonth[] = null;
 		Map<String,Object> countMap = new HashMap<>();
-	
-		if(today1[0]==today2[0]) {// 가져온 두 기간의 년도가 같으면
-			for(int i=todays1+1;i<todays2;i++) {
-				sMonth[i] = Integer.toString(i);
+		logger.info("salesTwoSelect ============ "+today1[0].toString()+" "+today2[0].toString());
+		List<String> monthList1 = new ArrayList<>();
+		if(todayYear1==todayYear2) {// 가져온 두 기간의 년도가 같으면
+			logger.info("salesTwoSelect ============  월별 기간 선택 그래프 Logic====if가져온 두 기간의 년도가 같으면 ");
+			sMonth = new String[todays2-(todays1+1)];
+			for(int j=0;j<sMonth.length;j++)	{
+				for(int i=todays1+1;i<todays2;i++) {
+					sMonth[j] = Integer.toString(i);
+				}
+				monthList1.add(sMonth[j].toString());
 			}
-		}else {// 가져온 기간의 년도가 다르면
+			logger.info("List ---->"+monthList1);
+			pMap.put("monthList",monthList1);
+			pMap.put("syear_first", todayYear1);
+			pMap.put("syear_end", todayYear2);
+			pMap.put("smonth_first",todays1);
+			pMap.put("smonth_end", todays2);
+			
+		}// end of if 가져온 두 기간의 년도가 같으면
+		else {// 가져온 기간의 년도가 다르면
+			logger.info("salesTwoSelect ============  월별 기간 선택 그래프 Logic====if가져온 두 기간의 년도가 같지 않다면 ");
 			int first_count = 0;
 			int second_count = 0;
 			for(int i=todays1+1;i<13;i++) {
@@ -201,7 +218,9 @@ public class SalesGraphLogic {
 			pMap.put("yearList", yearList);
 			pMap.put("monthList", monthList);
 			
-		}
+		}// end of else 가져온 기간의 년도가 다르면
+		
+		
 		List<Map<String,Object>> sList = salesDao.salesTwoSelect(pMap);
 		return sList;
 	}

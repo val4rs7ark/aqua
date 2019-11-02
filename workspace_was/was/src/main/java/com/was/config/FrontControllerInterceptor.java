@@ -31,6 +31,7 @@ public class FrontControllerInterceptor extends HandlerInterceptorAdapter {
 			throws Exception { 
 		super.postHandle(request, response, handler, modelAndView);
 		logger.info("----------------------Interceptor: postHandle---------------------");
+		if(modelAndView!=null) {
 		Map<String,Object> model = modelAndView.getModel();
 		String check = null;
 		if(model.get("emp_name")!=null)check = model.get("emp_name").toString();
@@ -92,6 +93,7 @@ public class FrontControllerInterceptor extends HandlerInterceptorAdapter {
 		}else {
 			modelAndView.setViewName("forward:index.jsp");
 		}
+	}
 	}
 	
 }

@@ -93,28 +93,6 @@ public class HRController {
 		model.addAttribute("r_list", r_list);
 		return "HR/ajax/search_name_after";
 	}
-	//급여 화면에 접근이 가능한 인원인지 분별하는 메소드
-	@RequestMapping(value="/HRcatch_Access", method=RequestMethod.POST)
-	public String HRcatch_Access(@RequestParam Map<String,Object> pMap, Model model) {
-		logger.info("HRcatch_Access//////////////////controller");
-		pMap.put("empno",pMap.get("empno"));
-		String empno = pMap.get("empno").toString();
-		String dept_name = hrLogic.HRcatch_Access(empno);
-		String path = "";
-		if("총무부".equals(dept_name)){ //총무부일경우
-			path="redirect:HRSalery_insert";
-		}else { //총무부가 아닐경우
-			path="redirect:HRnoAccess";	
-		}
-		return path;
-	}
-	
-	//접근 권한이 없을경우 페이지
-	@RequestMapping(value="/HRnoAccess", method=RequestMethod.GET)
-	public String HRnoAccess(@RequestParam Map<String,Object> pMap, Model model) {
-		logger.info("HRnoAccess//////////////////controller");
-		return "HR/noAccess";
-	}
 	//메인 페이지로 이동하는 메소드
 	@RequestMapping(value="/HRmain", method=RequestMethod.GET)
 	public String HRmain() {

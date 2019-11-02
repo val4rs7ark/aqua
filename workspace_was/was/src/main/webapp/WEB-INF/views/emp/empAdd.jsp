@@ -135,19 +135,19 @@
 		//수정 버튼 누르기 전, 수정된 텍스트 항목이 있는지 감지
 		function textChange(){
 			textChang = 1;
-			//alert("체인지!");
+			alert("체인지!");
 		}
 		//수정 버튼 - empAddRight.jsp
 		function updateAction(){
-			if(textChang==1){
+			/* if(textChang==1){ */
 				$("#f_empUPD").attr("method","post");
 				$("#f_empUPD").attr("action","/erp/empUPD.was");
 				$("#f_empUPD").submit();
-			}
-			else if(textChang==0){
+			/* } */
+			/* else if(textChang==0){
 				confirm("수정할 내용이 없습니다.");
 				location.href="empListSignUp.was";
-			}
+			} */
 		}
 		//체크박스 클릭시 선택한 로우 EMPNO값 가져오기
 		function targetDel(data){
