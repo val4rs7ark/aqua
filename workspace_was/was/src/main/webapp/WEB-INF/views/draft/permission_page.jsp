@@ -84,44 +84,40 @@
 			<input type="hidden" id="s_emp_no" name="s_emp_no" value="<%=s_emp_no%>">
 			<div style="width:850px;height:780px;padding-left:0px;padding-right:0px;text-align:center;margin-left:10px;">
 				<h1 style="width: 948px;">기 안 서<span style="font-size:30px">(기본)</span></h1>
-			<table style="width:850px;height:780px;" border="1px solid" > 
+			<table style="table-layout:fixed;width:850px;height:780px;" border="1px solid" > 
 					<tbody style="text-align:center;font-size:15px;">        	 
 						<tr>
 							<td style="width:15%;height:40px;background:#dee2e6">문서종류</td>
 							<td style="width:30%;"><input name="draft_kind" type="text" value="공통-기안서(기본)" style="border:none;outline:none;text-align:center" onfocus="this.blur()"></td>
-							<td style="width:55%;" rowspan="4">
-								<table style="width:100%;height:100%;" frame="void" border="1px solid red">
+							<td style="width:55%;" rowspan="3">
+								<table style="table-layout:fixed;width:100%;height:100%;" frame="void" border="1px solid red">
 									<tr style="height:25%">
-										<td rowspan="3" style="width:10%;background:#dee2e6">결<br><br>재</td>
-										<td style="width:18%">
-											<input type="text" id="team_name_1" name="team_name_1" style="border: none;text-align: center;" value="<%=list_Map.get(0).get("TEAM_NAME").toString()%>">
+										<td rowspan="3" style="background:#dee2e6">결<br><br>재</td>
+										<td style="">
+											<input type="text" id="team_name_1" name="team_name_1" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(0).get("TEAM_NAME").toString()%>">
 										</td>
-										<td style="width:18%">
-											<input type="text" id="team_name_2" name="team_name_2" style="border: none;text-align: center;" value="<%=list_Map.get(1).get("TEAM_NAME").toString()%>">
+										<td style="">
+											<input type="text" id="team_name_2" name="team_name_2" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(1).get("TEAM_NAME").toString()%>">
 										</td>
-										<td style="width:18%">
-											<input type="text" id="team_name_3" name="team_name_3" style="border: none;text-align: center;" value="<%=list_Map.get(2).get("TEAM_NAME").toString()%>">
+										<td style="">
+											<input type="text" id="team_name_3" name="team_name_3" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(2).get("TEAM_NAME").toString()%>">
 										</td>
-										<td style="width:18%">
-											<input type="text" id="team_name_4" name="team_name_4" style="border: none;text-align: center;" value="<%=list_Map.get(3).get("TEAM_NAME").toString()%>">
+										<td style="">
+											<input type="text" id="team_name_4" name="team_name_4" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(3).get("TEAM_NAME").toString()%>">
 										</td>
-										<td style="width:18%"></td>
 									</tr>
 									<tr style="height:50%">
 										<td id="choice_td">
-											<input type="text" id="emp_name_1" name="emp_name_1" style="border: none;text-align: center;" value="<%=list_Map.get(0).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(0).get("EMP_LEVEL").toString()%>">
+											<input type="text" id="emp_name_1" name="emp_name_1" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(0).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(0).get("EMP_LEVEL").toString()%>">
 										</td>
 										<td>
-											<input type="text" id="emp_name_2" name="emp_name_2" style="border: none;text-align: center;" value="<%=list_Map.get(1).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(1).get("EMP_LEVEL").toString()%>">
+											<input type="text" id="emp_name_2" name="emp_name_2" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(1).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(1).get("EMP_LEVEL").toString()%>">
 										</td>
 										<td>
-											<input type="text" id="emp_name_3" name="emp_name_3" style="border: none;text-align: center;" value="<%=list_Map.get(2).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(2).get("EMP_LEVEL").toString()%>">
+											<input type="text" id="emp_name_3" name="emp_name_3" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(2).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(2).get("EMP_LEVEL").toString()%>">
 										</td>
 										<td>
-											<input type="text" id="emp_name_4" name="emp_name_4" style="border: none;text-align: center;" value="<%=list_Map.get(3).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(3).get("EMP_LEVEL").toString()%>">
-										</td>
-								
-										<td>
+											<input type="text" id="emp_name_4" name="emp_name_4" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(3).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(3).get("EMP_LEVEL").toString()%>">
 										</td>
 									</tr>
 									<tr style="height:25%">
@@ -227,7 +223,6 @@
 											}
 										%>
 										</td>
-										<td></td>
 									</tr>
 								</table>
 							</td>
@@ -241,24 +236,7 @@
 							<td style="text-align:center">
 								<input type="text" name="writer" value="<%=rMap.get("EMP_NAME")%>" style="border:none;outline:none;text-align:center" onfocus="this.blur()">
 							</td>
-						</tr>   	 	    	 	  	 	  	 	 
-						<tr>
-							<td style="height:40px;background:#dee2e6">공개여부</td>
-							<td style="">
-								<table style="width:100%;height:100%" frame="void" border="1px solid red">
-									<tr>
-										<td style="width:33%">
-											<select id="open_yubu" name="open_yubu" style="border: 1px solid darkgray; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px;">
-										  		<option value="open">공개</option>
-										  		<option value="not_open">비공개</option>
-											</select>
-										</td>
-										<td style="width:33%;">보존<br>기간</td>
-										<td style="width:33%;">5년</td>
-									</tr>
-								</table>
-							</td>
-						</tr>   	 	    	 	  	 	  	 	 
+						</tr>   	 	    	 	  	 	  	 	    	 	    	 	  	 	  	 	 
 						<tr>
 							<td style="height:40px;background:#dee2e6">제목</td>
 							<td colspan="2"><%=rMap.get("DRAFT_TITLE") %></td>
@@ -286,44 +264,40 @@
 			<input type="hidden" id="s_emp_no" name="s_emp_no" value="<%=s_emp_no%>">
 			<div style="width:850px;height:780px;padding-left:0px;padding-right:0px;text-align:center;margin-left:10px;">
 				<h1 style="width: 948px;">기 안 서<span style="font-size:30px">(기본)</span></h1>
-			<table style="width:850px;height:780px;" border="1px solid" > 
+			<table style="table-layout:fixed;width:850px;height:780px;" border="1px solid" > 
 					<tbody style="text-align:center;font-size:15px;">        	 
 						<tr>
-							<td style="width:15%;height:40px;background:#dee2e6">문서종류</td>
-							<td style="width:30%;"><input name="draft_kind" type="text" value="공통-기안서(기본)" style="border:none;outline:none;text-align:center" onfocus="this.blur()"></td>
-							<td style="width:55%;" rowspan="4">
-								<table style="width:100%;height:100%;" frame="void" border="1px solid red">
+							<td style="width:15%;height:40px;background:#dee2e6">문서종류2</td>
+							<td style="width:30%"><input name="draft_kind" type="text" value="공통-기안서(기본)" style="border:none;outline:none;text-align:center" onfocus="this.blur()"></td>
+							<td style="width:55%" rowspan="3">
+								<table style="table-layout:fixed;width:100%;height:100%;" frame="void" border="1px solid red">
 									<tr style="height:25%">
-										<td rowspan="3" style="width:10%;background:#dee2e6">결<br><br>재</td>
-										<td style="width:18%">
-											<input type="text" id="team_name_1" name="team_name_1" style="border: none;text-align: center;" value="<%=list_Map.get(0).get("TEAM_NAME").toString()%>">
+										<td rowspan="3" style="background:#dee2e6">결<br><br>재</td>
+										<td style="">
+											<input type="text" id="team_name_1" name="team_name_1" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(0).get("TEAM_NAME").toString()%>">
 										</td>
-										<td style="width:18%">
-											<input type="text" id="team_name_2" name="team_name_2" style="border: none;text-align: center;" value="<%=list_Map.get(1).get("TEAM_NAME").toString()%>">
+										<td style="">
+											<input type="text" id="team_name_2" name="team_name_2" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(1).get("TEAM_NAME").toString()%>">
 										</td>
-										<td style="width:18%">
-											<input type="text" id="team_name_3" name="team_name_3" style="border: none;text-align: center;" value="<%=list_Map.get(2).get("TEAM_NAME").toString()%>">
+										<td style="">
+											<input type="text" id="team_name_3" name="team_name_3" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(2).get("TEAM_NAME").toString()%>">
 										</td>
-										<td style="width:18%">
-											<input type="text" id="team_name_4" name="team_name_4" style="border: none;text-align: center;" value="<%=list_Map.get(3).get("TEAM_NAME").toString()%>">
+										<td style="">
+											<input type="text" id="team_name_4" name="team_name_4" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(3).get("TEAM_NAME").toString()%>">
 										</td>
-										<td style="width:18%"></td>
 									</tr>
 									<tr style="height:50%">
 										<td id="choice_td">
-											<input type="text" id="emp_name_1" name="emp_name_1" style="border: none;text-align: center;" value="<%=list_Map.get(0).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(0).get("EMP_LEVEL").toString()%>">
+											<input type="text" id="emp_name_1" name="emp_name_1" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(0).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(0).get("EMP_LEVEL").toString()%>">
 										</td>
 										<td>
-											<input type="text" id="emp_name_2" name="emp_name_2" style="border: none;text-align: center;" value="<%=list_Map.get(1).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(1).get("EMP_LEVEL").toString()%>">
+											<input type="text" id="emp_name_2" name="emp_name_2" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(1).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(1).get("EMP_LEVEL").toString()%>">
 										</td>
 										<td>
-											<input type="text" id="emp_name_3" name="emp_name_3" style="border: none;text-align: center;" value="<%=list_Map.get(2).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(2).get("EMP_LEVEL").toString()%>">
+											<input type="text" id="emp_name_3" name="emp_name_3" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(2).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(2).get("EMP_LEVEL").toString()%>">
 										</td>
 										<td>
-											<input type="text" id="emp_name_4" name="emp_name_4" style="border: none;text-align: center;" value="<%=list_Map.get(3).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(3).get("EMP_LEVEL").toString()%>">
-										</td>
-								
-										<td>
+											<input type="text" id="emp_name_4" name="emp_name_4" style="width:100%;border: none;text-align: center;" value="<%=list_Map.get(3).get("EMP_NAME").toString()%>&nbsp;<%=list_Map.get(3).get("EMP_LEVEL").toString()%>">
 										</td>
 									</tr>
 									<tr style="height:25%">
@@ -432,7 +406,6 @@
 											}
 										%>
 										</td>
-										<td></td>
 									</tr>
 								</table>
 							</td>
@@ -446,24 +419,7 @@
 							<td style="text-align:center">
 								<input type="text" name="writer" value="<%=rMap.get("EMP_NAME")%>" style="border:none;outline:none;text-align:center" onfocus="this.blur()">
 							</td>
-						</tr>   	 	    	 	  	 	  	 	 
-						<tr>
-							<td style="height:40px;background:#dee2e6">공개여부</td>
-							<td style="">
-								<table style="width:100%;height:100%" frame="void" border="1px solid red">
-									<tr>
-										<td style="width:33%">
-											<select id="open_yubu" name="open_yubu" style="border: 1px solid darkgray; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px;">
-										  		<option value="open">공개</option>
-										  		<option value="not_open">비공개</option>
-											</select>
-										</td>
-										<td style="width:33%;">보존<br>기간</td>
-										<td style="width:33%;">5년</td>
-									</tr>
-								</table>
-							</td>
-						</tr>   	 	    	 	  	 	  	 	 
+						</tr>   	 	    	 	  	 	  	 	   	 	    	 	  	 	  	 	 
 						<tr>
 							<td style="height:40px;background:#dee2e6">제목</td>
 							<td colspan="2"><%=rMap.get("DRAFT_TITLE") %></td>

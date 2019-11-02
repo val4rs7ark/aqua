@@ -1,6 +1,8 @@
 package com.was.erp;
 
+import java.sql.Clob;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +66,10 @@ public class DraftDao {
 		List<Map<String, Object>> result_list = null;
 		try {
 			result_list = sqlSessionTemplate.selectList("draft_selectText",pMap);
+			Map<String,Object> cMap = new HashMap<>();
+			cMap = result_list.get(0);
+			String clob = cMap.get("draft_contents").toString();
+			logger.info("===========================clobclobclob:"+clob);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -63,8 +63,7 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark">적용</button>
-        <button type="button" class="btn btn-dark" data-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-dark" data-dismiss="modal">닫기</button>
       </div>
 
     </div>
