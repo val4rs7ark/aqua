@@ -58,6 +58,8 @@ public class AndroidLogic {
 
 	public List<Map<String,Object>> draftSelectText(Map<String, Object> pMap) {
 		List<Map<String,Object>> r_list = androidDao.draftSelectText(pMap);
+		logger.info("----------------------------------------------------------------");
+		logger.info("보낼애를 정하자 기안서 이름과 기안서 넘버");
 		return r_list;
 	}
 

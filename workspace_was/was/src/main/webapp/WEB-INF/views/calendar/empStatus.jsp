@@ -31,7 +31,7 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
 				   	$("#insertResultModal").modal();
 					 setTimeout(function() {
 				 		location.reload();
-					}, 2500);
+					}, 1500);
 			}else{
 				  var selectNO = "";
 				   $(":checkbox[id='noteNO']:checked").each(function(i,e){
@@ -51,7 +51,7 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
 		  					   $("#insertResultModal").modal();
 			  					 setTimeout(function() {
 			 				 		location.reload();
-			 					}, 2500);
+			 					}, 1500);
 	  			   }
 	  			});
 			}
@@ -64,6 +64,7 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
   			    $("#myModal").modal();
   		}
   		function moAdd(){
+  			alert("너가 추가버튼?");
   			var encoding = $("#noteContent").val();
   			var note_content = encodeURIComponent(encoding);
   			var note_write_date = v_yyyy+"-"+v_mm+"-"+v_dd;
@@ -81,7 +82,7 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
 	  				//이 메소드를 타면 2.5초 뒤 location.reload();를 실행한다.
 				 	setTimeout(function() {
 				 		location.reload();
-					}, 2500);
+					}, 1500);
   			   }
   			});
   		}

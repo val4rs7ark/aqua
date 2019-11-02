@@ -66,6 +66,7 @@ public class AndroidDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		logger.info(":::::::::::::"+result_list.size());
 		return result_list;
 	}
 }

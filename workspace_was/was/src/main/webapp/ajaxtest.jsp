@@ -16,7 +16,7 @@
 		    doc.addImage(imgData, 'PNG', 0, 0); //이미지를 기반으로 pdf생성
 		    doc.save('sample-file.pdf'); //pdf저장
 		}) */
-		$.ajax({
+		/* $.ajax({
 		 	async: false
 		   ,type : "POST"
 		   ,url : "/erp/wasAndroidFile.was"
@@ -24,8 +24,8 @@
 		   ,success:function(data){
 			   alert(data);
 					   }
-				   })
-		   }
+				   })*/
+		   } 
 </script>
 </head>
 <body>
