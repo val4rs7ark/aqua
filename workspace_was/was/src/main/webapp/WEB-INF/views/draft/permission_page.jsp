@@ -29,28 +29,10 @@
 	var popupY= (window.screen.height/2)-(800/1.7);
 	//만들 팝업창 상하 크기의 1/2 만큼 보정값으로 빼주었음
 	function dismiss(draft_no,empno){//반려버튼
-		$.ajax({
-			 url:"/erp/wasDraft_buttonLoot?loot=dismiss&draft_no="+draft_no+"&empno="+empno
-			,method:"get"
-			,success:function(data){
-				$("#imsi_result").html(data);
-			}
-		});
-	//내창 닫고 부모창 최신화
+		window.open("/erp/draft_catchpw?draft_no="+draft_no+"&empno="+empno+"&gubun=dismiss" ,"open the window","toolbar=no, width=210, height=150, top=70, left=730");
 	}
 	function permission(draft_no,empno){//결재버튼
-		alert(draft_no+","+empno);
-		window.open("/erp/draft_catchpw?draft_no="+draft_no+"&empno="+empno ,"open the window","toolbar=no, width=210, height=150, top=70, left=730");
-	}
-	function permission_commit(draft_no,empno){//최종 결재버튼
-		$.ajax({
-			 url:"/erp/wasDraft_buttonLoot?loot=permission_commit&draft_no="+draft_no
-			,method:"get"
-			,success:function(data){
-				$("#imsi_result").html(data);
-			}
-		});
-	//내창 닫고 부모창 최신화	
+		window.open("/erp/draft_catchpw?draft_no="+draft_no+"&empno="+empno+"&gubun=permission" ,"open the window","toolbar=no, width=210, height=150, top=70, left=730");
 	}
 	//닫기 버튼 클릭햇을때
 	function close_mypage(){
@@ -132,22 +114,30 @@
 											if(s_emp_no.equals(list_Map.get(0).get("EMPNO").toString())){ // 내결재임
 												if("0".equals(rMap.get("FIRST_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												<div style="color:red">미결재</div>
+												<div>미결재</div>
 										<%			
-												}else{ // 결재했음
+												}else if("44".equals(rMap.get("FIRST_PERM_DATE").toString())){// 반려인거
 										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%			
+												}else{// 결재했음
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
 										<%		
 												}
 											}else{ // 내 결재아님
 												if("0".equals(rMap.get("FIRST_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												미결재
-										<%
-												}else{ // 결재했음
-										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
+												<div>미결재</div>
 										<%			
+												}else if("44".equals(rMap.get("FIRST_PERM_DATE").toString())){// 반려인거
+										%>
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%			
+												}else{// 결재했음
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
+										<%				
 												}
 											}
 										%>
@@ -157,22 +147,30 @@
 											if(s_emp_no.equals(list_Map.get(1).get("EMPNO").toString())){ // 내결재임
 												if("0".equals(rMap.get("SECCOND_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												<div style="color:red">미결재</div>
+												<div>미결재</div>
 										<%			
-												}else{ // 결재했음
+												}else if("44".equals(rMap.get("SECCOND_PERM_DATE").toString())){// 반려인거
 										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%			
+												}else{// 결재했음
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
 										<%		
 												}
 											}else{ // 내 결재아님
 												if("0".equals(rMap.get("SECCOND_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												미결재
-										<%
-												}else{ // 결재했음
-										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
+												<div>미결재</div>
 										<%			
+												}else if("44".equals(rMap.get("SECCOND_PERM_DATE").toString())){// 반려인거
+										%>
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%			
+												}else{// 결재했음
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
+										<%		
 												}
 											}
 										%>
@@ -182,22 +180,30 @@
 											if(s_emp_no.equals(list_Map.get(2).get("EMPNO").toString())){ // 내결재임
 												if("0".equals(rMap.get("THIRD_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												<div style="color:red">미결재</div>
+												<div>미결재</div>
 										<%			
-												}else{ // 결재했음
+												}else if("44".equals(rMap.get("THIRD_PERM_DATE").toString())){// 반려인거
 										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%			
+												}else{// 결재했음
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
 										<%		
 												}
 											}else{ // 내 결재아님
 												if("0".equals(rMap.get("THIRD_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												미결재
-										<%
-												}else{ // 결재했음
-										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
+												<div>미결재</div>
 										<%			
+												}else if("44".equals(rMap.get("THIRD_PERM_DATE").toString())){// 반려인거
+										%>
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%			
+												}else{// 결재했음
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
+										<%		
 												}
 											}
 										%>
@@ -207,22 +213,30 @@
 											if(s_emp_no.equals(list_Map.get(3).get("EMPNO").toString())){ // 내결재임
 												if("0".equals(rMap.get("FORTH_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												<div style="color:red">미결재</div>
+												<div>미결재</div>
 										<%			
-												}else{ // 결재했음
+												}else if("44".equals(rMap.get("FORTH_PERM_DATE").toString())){// 반려인거
 										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%			
+												}else{// 결재했음
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
 										<%		
 												}
 											}else{ // 내 결재아님
 												if("0".equals(rMap.get("FORTH_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												미결재
-										<%
-												}else{ // 결재했음
-										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
+												<div>미결재</div>
 										<%			
+												}else if("44".equals(rMap.get("FORTH_PERM_DATE").toString())){// 반려인거
+										%>
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%			
+												}else{// 결재했음
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
+										<%		
 												}
 											}
 										%>
@@ -336,19 +350,27 @@
 										%>
 												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >결재</button>
 										<%			
-												}else{ // 결재했음
+												}else if("44".equals(rMap.get("FIRST_PERM_DATE").toString())){ // 결재했음
 										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%		
+												}else{
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
 										<%		
 												}
 											}else{ // 내 결재아님
 												if("0".equals(rMap.get("FIRST_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
 												미결재
-										<%
-												}else{ // 결재했음
+										<%			
+												}else if("44".equals(rMap.get("FIRST_PERM_DATE").toString())){ // 결재했음
 										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%		
+												}else{
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
 										<%			
 												}
 											}
@@ -362,20 +384,28 @@
 												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >반려</button>
 												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >결재</button>
 										<%			
-												}else{ // 결재했음
+												}else if("44".equals(rMap.get("SECCOND_PERM_DATE").toString())){ // 결재했음
 										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%		
+												}else{
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
 										<%		
 												}
 											}else{ // 내 결재아님
 												if("0".equals(rMap.get("SECCOND_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
 												미결재
-										<%
-												}else{ // 결재했음
-										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
 										<%			
+												}else if("44".equals(rMap.get("SECCOND_PERM_DATE").toString())){ // 결재했음
+										%>
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%		
+												}else{
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
+										<%		
 												}
 											}
 										%>
@@ -388,20 +418,28 @@
 												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >반려</button>
 												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >결재</button>
 										<%			
-												}else{ // 결재했음
+												}else if("44".equals(rMap.get("THIRD_PERM_DATE").toString())){ // 결재했음
 										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%		
+												}else{
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
 										<%		
 												}
 											}else{ // 내 결재아님
 												if("0".equals(rMap.get("THIRD_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
 												미결재
-										<%
-												}else{ // 결재했음
-										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
 										<%			
+												}else if("44".equals(rMap.get("THIRD_PERM_DATE").toString())){ // 결재했음
+										%>
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%		
+												}else{
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
+										<%		
 												}
 											}
 										%>
@@ -412,22 +450,30 @@
 												if("0".equals(rMap.get("FORTH_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
 												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >반려</button>
-												<button onclick="javascript:permission_commit('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >결재</button>
+												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >결재</button>
 										<%			
-												}else{ // 결재했음
+												}else if("44".equals(rMap.get("FORTH_PERM_DATE").toString())){ // 결재했음
 										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%		
+												}else{
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
 										<%		
 												}
 											}else{ // 내 결재아님
 												if("0".equals(rMap.get("FORTH_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
 												미결재
-										<%
-												}else{ // 결재했음
-										%>
-												<img alt="결재완료" src="/erp/images/confirm.png">
 										<%			
+												}else if("44".equals(rMap.get("FORTH_PERM_DATE").toString())){ // 결재했음
+										%>
+												<img alt="반려" src="/erp/images/reject.jpg" style="width: 70%;">
+										<%		
+												}else{
+										%>
+												<img alt="결재완료" src="/erp/images/confirm.jpg" style="width: 70%;">
+										<%		
 												}
 											}
 										%>

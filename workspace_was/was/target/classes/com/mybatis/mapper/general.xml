@@ -235,6 +235,7 @@
 			        or forth_permission = #{empno}
 			    ) a, emp em
 		  where a.empno = em.empno
+		  order by draft_no asc
 	</select>
 	<!-- 결제 문서 상세 조회 -->
 	<select id="draft_permission_page" parameterType="map" resultType="map">
@@ -245,7 +246,7 @@
          where dt.draft_no = #{draft_no}
            and em.empno = dt.empno
 	</select>
-	
+
 	<!-- 내가 작성한 문서 조회 -->
 	<select id="draft_myWrite_list" parameterType="map" resultType="map">
 		select draft_no,draft_title,draft_contents,draft_status,draft_kind,em.empno empno,em.emp_name emp_name,
@@ -254,15 +255,19 @@
 		  from draft dt, emp em
 		 where dt.empno = em.empno
 		   and em.empno = #{empno}
+		  order by draft_no asc
 	</select>
-	<!-- 내가 작성한 문서 삭제 -->
-	<delete id="draft_delete" parameterType="java.lang.String">
-		delete from draft
-		 where draft_no = #{draft_no} 	
-	</delete>
-	<!-- 팝업창에서 결재 확인 버튼 눌렀을때 프로시저 -->
+	<!-- 팝업창에서 결재 확인 비밀번호 입력후 버튼 프로시저 -->
 	 <select id="draft_permission" parameterType="map" statementType="CALLABLE">
 		{ CALL proc_draft_permission(
+                 #{draft_no, mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
+                ,#{empno, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
+                )
+        }
+	</select>
+	<!-- 반려버튼을 눌렀을때 쿼리문 -->
+	 <select id="draft_dismiss" parameterType="map" statementType="CALLABLE">
+		{ CALL proc_draft_dismiss(
                  #{draft_no, mode=IN, jdbcType=NUMERIC, javaType=java.lang.Integer}
                 ,#{empno, mode=IN, jdbcType=VARCHAR, javaType=java.lang.String}
                 )

@@ -30,7 +30,8 @@
    } */
    //등록하기 눌렀을때
    function save(){
-       $("#f_draft_basic").attr("method","post");
+	  alert("정상적으로 등록 되었습니다."); 
+      $("#f_draft_basic").attr("method","post");
       $("#f_draft_basic").attr("action","/erp/draftAdd");
       oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []); 
       $("#f_draft_basic").submit();

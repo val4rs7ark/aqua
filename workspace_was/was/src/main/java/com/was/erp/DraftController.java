@@ -121,16 +121,7 @@ public class DraftController {
 	
 	//문서 조회 페이지 들어가는곳
 	@PostMapping("/draft_selectText")
-	public String draft_selectText(@RequestParam Map<String,Object> pMap,Model model) {
-		logger.info("draft_selectText 호출 성공");
-		Map<String,Object> imsi_Map = draftLogic.draft_selectText(pMap);
-		model.addAttribute("imsi_Map",imsi_Map);
-		return "draft/draft_selectText";
-	}
-	
-	//삭제 이후에 메소드를 타야하는데 위메소드는 포스트 방식이라 참조가 되지 않아 Get방식으로 새로 만들게됨.
-	@GetMapping("/draft_selectText_get")
-	public String draft_selectText_get(@RequestParam Map<String,Object> pMap,Model model) {
+	public String draft_selectText(@RequestParam Map<String,Object> pMap,Model model) throws Exception {
 		logger.info("draft_selectText 호출 성공");
 		Map<String,Object> imsi_Map = draftLogic.draft_selectText(pMap);
 		model.addAttribute("imsi_Map",imsi_Map);
@@ -139,28 +130,19 @@ public class DraftController {
 	
 	//문서 상세 조회==> 리스트 0번방에는 문서에대한 전체적인 정보, 1번방에는 결재자들의 상세 정보가 들어있음. 
 	@GetMapping("/draft_permission_page")
-	public String draft_permission_page(@RequestParam Map<String,Object> pMap,Model model) {
+	public String draft_permission_page(@RequestParam Map<String,Object> pMap,Model model) throws Exception {
 		List<Map<String,Object>> r_list = draftLogic.draft_permission_page(pMap);
 		String gubun = pMap.get("gubun").toString();
 		model.addAttribute("gubun",gubun);
 		model.addAttribute("r_list",r_list);
 		return "/draft/permission_page";
 	}
-	//문서 삭제
-	@GetMapping("/draft_papersDelete")
-	public String papersDelete(@RequestParam Map<String,Object> pMap) {
-		logger.info("Controller>papersDelete 호출 성공");
-		String draft_no = pMap.get("draft_no").toString();
-		String empno = pMap.get("empno").toString();
-		draftLogic.papersDelete(draft_no); 
-		//return "redirect:draft_selectText";//viewReslover안탐. 접미어,접두어 처리 안해줌.
-		//return "forward:draft_selectText";//viewReslover안탐. 접미어,접두어 처리 안해줌.
-		return "redirect:/draft_selectText_get?empno="+empno;
-	}
+	
 	//결재 누를때 비밀번호가져오는 컨트롤러 
 	@GetMapping("/draft_catchpw")
 	public String draft_catchpw(@RequestParam Map<String,Object> pMap,Model model) {
 		Map<String, Object> rMap = draftLogic.draft_catchpw(pMap);
+		rMap.put("gubun",pMap.get("gubun").toString());
 		model.addAttribute("rMap",rMap);
 		return "/draft/ajax/password";
 	}

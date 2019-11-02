@@ -6,6 +6,7 @@
 		String pw = rMap.get("pw").toString();
 		String empno = rMap.get("empno").toString();
 		String draft_no = rMap.get("draft_no").toString();
+		String gubun = rMap.get("gubun").toString();
 %>     
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
@@ -36,20 +37,38 @@ body,td {font-size:12px}
 <SCRIPT LANGUAGE="JavaScript">
 
 function pass(){
-	//비밀번호 비교후 맞으면 db로 가서 값 바꾸고 창꺼지기
-	var password = f_pw.password.value;
-	if(password==<%=pw%>){		
-		$.ajax({
-			 url:"/erp/wasDraft_buttonLoot?loot=permission&draft_no=<%=draft_no%>&empno=<%=empno%>"
-			,method:"get"
-			,success:function(data){
-				opener.parent.location.reload();
-				window.close()
-			}
-		});
-	}
-	else{
-		alert("비밀번호가 틀렸습니다.");
+	if('<%=gubun%>'=="permission"){//결재일경우
+		//비밀번호 비교후 맞으면 db로 가서 값 바꾸고 창꺼지기
+		var password = f_pw.password.value;
+		if(password==<%=pw%>){		
+			$.ajax({
+				 url:"/erp/wasDraft_buttonLoot?loot=permission&draft_no=<%=draft_no%>&empno=<%=empno%>"
+				,method:"get"
+				,success:function(data){
+					opener.parent.location.reload();
+					window.close()
+				}
+			});
+		}
+		else{
+			alert("비밀번호가 틀렸습니다.");
+		}
+	}else if('<%=gubun%>'=="dismiss"){//반려일경우
+		//비밀번호 비교후 맞으면 db로 가서 값 바꾸고 창꺼지기
+		var password = f_pw.password.value;
+		if(password==<%=pw%>){
+			$.ajax({
+				 url:"/erp/wasDraft_buttonLoot?loot=dismiss&draft_no=<%=draft_no%>&empno=<%=empno%>"
+				,method:"get"
+				,success:function(data){
+					opener.parent.location.reload();
+					window.close()
+				}
+			});
+		}
+		else{
+			alert("비밀번호가 틀렸습니다.");
+		}	
 	}
 }
 function cancle(){

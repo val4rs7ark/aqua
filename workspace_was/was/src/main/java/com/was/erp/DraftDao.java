@@ -92,7 +92,7 @@ public class DraftDao {
 
 	public void dismiss(Map<String, Object> pMap) {
 		try {
-			sqlSessionTemplate.update("draft_dismiss",pMap);
+			sqlSessionTemplate.selectOne("draft_dismiss",pMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -106,14 +106,6 @@ public class DraftDao {
 		}
 	}
 
-	public void permission_commit(Map<String, Object> pMap) {
-		try {
-			sqlSessionTemplate.update("draft_commit",pMap);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public String draft_catchpw(Map<String, Object> pMap) {
 		String pw = "";
 		try {
@@ -122,13 +114,5 @@ public class DraftDao {
 			e.printStackTrace();
 		}
 		return pw;
-	}
-	public void papersDelete(String draft_no) {
-		logger.info("Dao>papersDelete 호출 성공");
-		try {
-			sqlSessionTemplate.delete("draft_delete",draft_no);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }
