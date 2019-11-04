@@ -68,7 +68,7 @@ public class DraftDao {
 			result_list = sqlSessionTemplate.selectList("draft_selectText",pMap);
 			Map<String,Object> cMap = new HashMap<>();
 			cMap = result_list.get(0);
-			String clob = cMap.get("draft_contents").toString();
+			String clob = cMap.get("DRAFT_CONTENTS").toString();
 			logger.info("===========================clobclobclob:"+clob);
 		} catch (Exception e) {
 			e.printStackTrace();

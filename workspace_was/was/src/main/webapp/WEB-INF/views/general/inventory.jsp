@@ -150,7 +150,7 @@
 		});	
 	} 
  	function pummoksearch2(i){
-			alert(i);
+			//alert(i);
 		$.ajax({
 			url:"/erp/general_pummokSearch2?i="+i
 			,method:"get"
@@ -233,13 +233,13 @@
 		$(this).removeData();
 	});
 	function selectBtn(gubun){
-		alert("gubun="+gubun);
+		//alert("gubun="+gubun);
 		var gubun2 = new Array(); 
 			gubun2 = gubun.split(",");
 		var gubun3 = gubun2[0];//update or register
 		var gubun4 = gubun2[1];//수정할 글 for문의 i for(i=0;<inventory.size();i++)
-		alert("gubun3="+gubun3);
-		alert("gubun4="+gubun4);
+		//alert("gubun3="+gubun3);
+		//alert("gubun4="+gubun4);
 		var rowData = new Array();
 		var tdArr = new Array();
 		var checkbox = $("input[name=user_CheckBox]:checked");

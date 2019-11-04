@@ -64,9 +64,9 @@
 %>
 <!-- 			<input type="hidden" id="hd_title" name="hd_title"> -->
 			<input type="hidden" id="s_emp_no" name="s_emp_no" value="<%=s_emp_no%>">
-			<div style="width:850px;height:780px;padding-left:0px;padding-right:0px;text-align:center;margin-left:10px;">
-				<h1 style="width: 948px;">기 안 서<span style="font-size:30px">(기본)</span></h1>
-			<table style="table-layout:fixed;width:850px;height:780px;" border="1px solid" > 
+			<div style="table-layout:fixed;width:780px;height:810px;padding-left:0px;padding-right:0px;text-align:center;margin-left:10px;">
+				<h1 style="width: 780px;">기 안 서<span style="font-size:30px">(기본)</span></h1>
+			<table style="table-layout:fixed;width:100%px;height:100%;" border="1px solid" > 
 					<tbody style="text-align:center;font-size:15px;">        	 
 						<tr>
 							<td style="width:15%;height:40px;background:#dee2e6">문서종류</td>
@@ -264,7 +264,7 @@
 						</tr>   	 	 
 					</tbody>
 				</table>
-				<div style="margin-top:4px;margin-right:4px;text-align:right;width: 917px;">
+				<div style="margin-top:4px;margin-right:4px;text-align:right;width:100%;">
 					<button onclick="javascript:close_mypage()">닫기</button>                 
 				</div>
 			</div>
@@ -276,9 +276,9 @@
 <!--=====================================메인 테이블 시작==================================-->
 <!-- 			<input type="hidden" id="hd_title" name="hd_title"> -->
 			<input type="hidden" id="s_emp_no" name="s_emp_no" value="<%=s_emp_no%>">
-			<div style="width:850px;height:780px;padding-left:0px;padding-right:0px;text-align:center;margin-left:10px;">
-				<h1 style="width: 948px;">기 안 서<span style="font-size:30px">(기본)</span></h1>
-			<table style="table-layout:fixed;width:850px;height:780px;" border="1px solid" > 
+			<div style="width:780px;height:810px;padding-left:0px;padding-right:0px;text-align:center;margin-left:10px;">
+				<h1 style="width: 100%;">기 안 서<span style="font-size:30px">(기본)</span></h1>
+			<table style="table-layout:fixed;width:100%;height:100%;" border="1px solid" > 
 					<tbody style="text-align:center;font-size:15px;">        	 
 						<tr>
 							<td style="width:15%;height:40px;background:#dee2e6">문서종류2</td>
@@ -479,7 +479,7 @@
 						</tr>   	 	 
 					</tbody>
 				</table>
-				<div style="margin-top:4px;margin-right:4px;text-align:right;width: 917px;">
+				<div style="margin-top:4px;margin-right:4px;text-align:right;width:100%;">
 					<button onclick="javascript:close_mypage()">닫기</button>                 
 				</div>
 				<div id="imsi_result"></div>
