@@ -1,4 +1,4 @@
-﻿package com.was.erp;
+package com.was.erp;
 
 import java.sql.Clob;
 import java.util.ArrayList;
@@ -150,6 +150,8 @@ public class DraftLogic {
 			draftDao.dismiss(pMap);
 		}else if("permission".equals(loot)) {//결제버튼
 			draftDao.permission(pMap);
+		}else if("draft_delete".equals(loot)) {//결제버튼
+			draftDao.draft_delete(pMap);
 		}
 	}
 	public Map<String,Object> draft_catchpw(Map<String, Object> pMap) {
@@ -157,4 +159,10 @@ public class DraftLogic {
 		pMap.put("pw",pw);
 		return pMap;
 	}
+	
+	//잠시대기
+	//public List<Map<String,Object>> draft_select(Map<String, Object> pMap) {
+	//	List<Map<String,Object>> r_list = draftDao.draft_selectText(pMap);
+	//	return r_list;
+	//}
 }

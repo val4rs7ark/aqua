@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/draft*")
 public class DraftController {
 	Logger logger = LoggerFactory.getLogger(DraftController.class);
-	@Autowired(required=false)
+	@Autowired
 	DraftLogic draftLogic = null;
 	
 	@GetMapping("/draftMain")
@@ -145,5 +145,26 @@ public class DraftController {
 		rMap.put("gubun",pMap.get("gubun").toString());
 		model.addAttribute("rMap",rMap);
 		return "/draft/ajax/password";
+	}
+	
+	//검색 조건을 선택했을때 아작스
+	@GetMapping("/draft_gubun_select")
+	public String draft_gubun_select(@RequestParam Map<String,Object> pMap,Model model) {
+		model.addAttribute("gubun", pMap.get("gubun").toString());
+		return "/draft/ajax/gubun_select";
+	}
+	
+	//조건 검색(미결제 문서)
+	@GetMapping("/draft_select")
+	public String draft_selectTextNo(@RequestParam Map<String,Object> pMap,Model model) throws Exception {
+		logger.info("===============================??????");
+		logger.info(""+pMap);
+		String gubun = pMap.get("p_gubun").toString();
+		logger.info("===============================gubun:============================================================"+gubun);
+		Map<String,Object> imsi_list = draftLogic.draft_selectText(pMap);
+		model.addAttribute("p_empno", pMap.get("empno").toString());
+		model.addAttribute("gubun", gubun);
+		model.addAttribute("imsi_list",imsi_list);
+		return "draft/ajax/table_ajax";
 	}
 }

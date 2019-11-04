@@ -29,10 +29,10 @@
 	var popupY= (window.screen.height/2)-(800/1.7);
 	//만들 팝업창 상하 크기의 1/2 만큼 보정값으로 빼주었음
 	function dismiss(draft_no,empno){//반려버튼
-		window.open("/erp/draft_catchpw?draft_no="+draft_no+"&empno="+empno+"&gubun=dismiss" ,"open the window","toolbar=no, width=210, height=150, top=70, left=730");
+		window.open("/erp/draft_catchpw?draft_no="+draft_no+"&empno="+empno+"&gubun=dismiss" ,"open the window","toolbar=no, width=464, height=135, top=70, left=730");
 	}
 	function permission(draft_no,empno){//결재버튼
-		window.open("/erp/draft_catchpw?draft_no="+draft_no+"&empno="+empno+"&gubun=permission" ,"open the window","toolbar=no, width=210, height=150, top=70, left=730");
+		window.open("/erp/draft_catchpw?draft_no="+draft_no+"&empno="+empno+"&gubun=permission" ,"open the window","toolbar=no,width=464, height=135, top=70, left=730");
 	}
 	//닫기 버튼 클릭햇을때
 	function close_mypage(){
@@ -64,9 +64,9 @@
 %>
 <!-- 			<input type="hidden" id="hd_title" name="hd_title"> -->
 			<input type="hidden" id="s_emp_no" name="s_emp_no" value="<%=s_emp_no%>">
-			<div style="width:850px;height:780px;padding-left:0px;padding-right:0px;text-align:center;margin-left:10px;">
-				<h1 style="width: 948px;">기 안 서<span style="font-size:30px">(기본)</span></h1>
-			<table style="table-layout:fixed;width:850px;height:780px;" border="1px solid" > 
+			<div style="table-layout:fixed;width:780px;height:810px;padding-left:0px;padding-right:0px;text-align:center;margin-left:10px;">
+				<h1 style="width: 780px;">기 안 서<span style="font-size:30px">(기본)</span></h1>
+			<table style="table-layout:fixed;width:100%px;height:100%;" border="1px solid" > 
 					<tbody style="text-align:center;font-size:15px;">        	 
 						<tr>
 							<td style="width:15%;height:40px;background:#dee2e6">문서종류</td>
@@ -264,7 +264,7 @@
 						</tr>   	 	 
 					</tbody>
 				</table>
-				<div style="margin-top:4px;margin-right:4px;text-align:right;width: 917px;">
+				<div style="margin-top:4px;margin-right:4px;text-align:right;width:100%;">
 					<button onclick="javascript:close_mypage()">닫기</button>                 
 				</div>
 			</div>
@@ -276,9 +276,9 @@
 <!--=====================================메인 테이블 시작==================================-->
 <!-- 			<input type="hidden" id="hd_title" name="hd_title"> -->
 			<input type="hidden" id="s_emp_no" name="s_emp_no" value="<%=s_emp_no%>">
-			<div style="width:850px;height:780px;padding-left:0px;padding-right:0px;text-align:center;margin-left:10px;">
-				<h1 style="width: 948px;">기 안 서<span style="font-size:30px">(기본)</span></h1>
-			<table style="table-layout:fixed;width:850px;height:780px;" border="1px solid" > 
+			<div style="width:780px;height:810px;padding-left:0px;padding-right:0px;text-align:center;margin-left:10px;">
+				<h1 style="width: 100%;">기 안 서<span style="font-size:30px">(기본)</span></h1>
+			<table style="table-layout:fixed;width:100%;height:100%;" border="1px solid" > 
 					<tbody style="text-align:center;font-size:15px;">        	 
 						<tr>
 							<td style="width:15%;height:40px;background:#dee2e6">문서종류2</td>
@@ -322,7 +322,8 @@
 											if(s_emp_no.equals(list_Map.get(0).get("EMPNO").toString())){ // 내결재임
 												if("0".equals(rMap.get("FIRST_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >결재</button>
+												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >반려</button>
+												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >결재</button>
 										<%			
 												}else if("44".equals(rMap.get("FIRST_PERM_DATE").toString())){ // 결재했음
 										%>
@@ -355,8 +356,8 @@
 											if(s_emp_no.equals(list_Map.get(1).get("EMPNO").toString())){ // 내결재임
 												if("0".equals(rMap.get("SECCOND_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >반려</button>
-												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >결재</button>
+												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >반려</button>
+												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >결재</button>
 										<%			
 												}else if("44".equals(rMap.get("SECCOND_PERM_DATE").toString())){ // 결재했음
 										%>
@@ -389,8 +390,8 @@
 											if(s_emp_no.equals(list_Map.get(2).get("EMPNO").toString())){ // 내결재임
 												if("0".equals(rMap.get("THIRD_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >반려</button>
-												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >결재</button>
+												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >반려</button>
+												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >결재</button>
 										<%			
 												}else if("44".equals(rMap.get("THIRD_PERM_DATE").toString())){ // 결재했음
 										%>
@@ -423,8 +424,8 @@
 											if(s_emp_no.equals(list_Map.get(3).get("EMPNO").toString())){ // 내결재임
 												if("0".equals(rMap.get("FORTH_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >반려</button>
-												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >결재</button>
+												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >반려</button>
+												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >결재</button>
 										<%			
 												}else if("44".equals(rMap.get("FORTH_PERM_DATE").toString())){ // 결재했음
 										%>
@@ -479,7 +480,7 @@
 						</tr>   	 	 
 					</tbody>
 				</table>
-				<div style="margin-top:4px;margin-right:4px;text-align:right;width: 917px;">
+				<div style="margin-top:4px;margin-right:4px;text-align:right;width:100%;">
 					<button onclick="javascript:close_mypage()">닫기</button>                 
 				</div>
 				<div id="imsi_result"></div>

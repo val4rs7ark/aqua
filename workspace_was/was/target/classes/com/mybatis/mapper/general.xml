@@ -235,6 +235,14 @@
 			        or forth_permission = #{empno}
 			    ) a, emp em
 		  where a.empno = em.empno
+			 <!-- 제목검색 -->
+			 <if test="search_no_chogun!=null and search_no_chogun.equals('문서명')">
+			 		and draft_title like '%'||#{search_keyword}||'%'
+			 </if>
+			 <!-- 작성자검색 -->
+			 <if test="search_no_chogun!=null and search_no_chogun.equals('기안자')">
+			 		and emp_name like '%'||#{search_keyword}||'%'
+			 </if>
 		  order by draft_no asc
 	</select>
 	<!-- 결제 문서 상세 조회 -->
@@ -279,4 +287,9 @@
 		  from emp
 		 where empno = #{empno}
 	</select>
+	<!-- 기안서 삭제 버튼 눌렀을때 쿼리문 -->
+	 <delete id="draft_delete" parameterType="map">
+		delete from draft
+		 where draft_no = #{draft_no}
+	</delete>
 </mapper>

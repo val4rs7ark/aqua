@@ -57,25 +57,25 @@
 	<tr>
 		<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">담당자 이름</td>
 		<td colspan="5" style="padding-top: 5px; padding-bottom: 5px;">
-			<input type="text" class="form-control" name="cus_man"  size="27" style="height: 28px;width:100px; font-size: 13px;">
+			<input type="text" class="form-control" name="cus_man"  value="이건우" size="27" style="height: 28px;width:100px; font-size: 13px;">
 		</td>
 	</tr>
 	<tr>
 		<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">담당자 번호</td>
 		<td style="padding-top: 5px; padding-bottom: 5px; width:80px">
-			<input type="text" class="form-control" name="cus_manhp_a"  size="27" style="height: 28px;width:60px; font-size: 13px;">
+			<input type="text" class="form-control" name="cus_manhp_a" value="010"  size="27" style="height: 28px;width:60px; font-size: 13px;">
 		</td>
 		<td style="padding-top: 5px; padding-bottom: 5px; width: 5px; padding-left: 0px; padding-right: 0px; ">
 			-
 		</td>
 		<td style="padding-top: 5px; padding-bottom: 5px; width: 99.5px;">
-			<input type="text" class="form-control" name="cus_manhp_b"  size="27" style="height: 28px;width:80px; font-size: 13px;">
+			<input type="text" class="form-control" name="cus_manhp_b" value="8812" size="27" style="height: 28px;width:80px; font-size: 13px;">
 		</td>
 		<td style="padding-top: 5px; padding-bottom: 5px; width: 5px; padding-left: 0px; padding-right: 0px; ">
 			-
 		</td>
 		<td style="padding-top: 5px; padding-bottom: 5px;">
-			<input type="text" class="form-control" name="cus_manhp_c"  size="27" style="height: 28px;width:80px; font-size: 13px;">
+			<input type="text" class="form-control" name="cus_manhp_c" value="1256"  size="27" style="height: 28px;width:80px; font-size: 13px;">
 		</td>
 	</tr>
 	<tr>
@@ -101,7 +101,7 @@
 	<tr>
 		<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">무게</td>
 		<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; padding-right: 5px;">
-			<input type="text" class="form-control" name="deli_weight"  size="27" style="height: 28px;width:80px; font-size: 13px;">
+			<input type="text" class="form-control" name="deli_weight" value="3" size="27" style="height: 28px;width:80px; font-size: 13px;">
 		</td>
 		<td colspan="1" class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px; padding-left: 5px;">t</td>
 		<td colspan="2"></td>
@@ -109,7 +109,7 @@
 	<tr>
 		<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">단가</td>
 		<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; padding-right: 5px;">
-			<input type="text" class="form-control" name="order_unitprice"  size="27" style="height: 28px;width:80px; font-size: 13px;">
+			<input type="text" class="form-control" name="order_unitprice" value="30" size="27" style="height: 28px;width:80px; font-size: 13px;">
 		</td>
 		<td colspan="1" class="bi_table_insert" style="font-size:13px; padding-top: 11px; padding-bottom: 3px; padding-left: 5px;">(만원)</td>
 		<td colspan="2"></td>
@@ -126,7 +126,7 @@
 	<tr>
 		<td class="bi_table_insert" style="padding-top: 7px; padding-bottom: 7px;">비고</td>
 		<td colspan="5" style="height:123px;pxpadding-top: 7px; padding-bottom: 7px;">
-			<textarea name="deli_memo" style="height:95%; width:95%;"placeholder="&nbsp;&nbsp;내용을 입력하세요." ></textarea>
+			<textarea name="deli_memo" style="height:95%; width:95%;"placeholder="&nbsp;&nbsp;내용을 입력하세요." > 빠른배송 부탁드리고 배송후 담당자와 연락부탁드립니다.</textarea>
 		</td>
 	</tr>
 </tbody>

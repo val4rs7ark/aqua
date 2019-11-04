@@ -142,5 +142,4 @@ public class AjaxRestController {
 		draftLogic.draft_buttonLoot(pMap);
 		return "버튼 이벤트";
 	}
-	
 }

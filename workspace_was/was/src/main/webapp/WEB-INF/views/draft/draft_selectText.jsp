@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.List, java.util.Map, java.util.HashMap" %>
 <%@ page import="com.util.PageBar" %>
@@ -46,15 +46,91 @@
   </style>
   <script type="text/javascript">
 
-    var popupX = ((window.screen.width)/2)-(900/2);
+    var popupX = ((window.screen.width)/2)-(790/2);
 	//만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
-	var popupY= (window.screen.height/2)-(800/1.7);
+	var popupY= (window.screen.height/2)-(870/1.8);
 	//만들 팝업창 상하 크기의 1/2 만큼 보정값으로 빼주었음
 	function openText(draft_no,gubun){
-		window.open('draft_permission_page?draft_no='+draft_no+"&gubun="+gubun,'팝업창2','width=948px,height=880px,left='+popupX+',top='+ popupY);
+		window.open('draft_permission_page?draft_no='+draft_no+"&gubun="+gubun,'팝업창2','width=800px,height=900px,left='+popupX+',top='+ popupY);
 	}
-	function delete_draft(draft_no){
-		alert("삭제");
+	function delete_draft(draft_no,empno){
+		// 비밀번호 입력
+		alert(draft_no+","+empno);
+		window.open("/erp/draft_catchpw?draft_no="+draft_no+"&empno="+empno+"&gubun=draft_delete" ,"open the window","toolbar=no, width=464, height=135, top=70, left=730");
+	}
+	function gubun_select(gubun){
+		//alert(gubun);
+		if(gubun=="yes"){
+			//alert("ifgubun");
+			$.ajax({
+				 url:"/erp/draft_gubun_select?gubun=yes"
+				,method : "get"
+				,success : function(data){
+					$("#gubun_selectyes").html(data);
+				}
+				,error : function(e){
+					alert(e.responseText);
+				}
+			});
+		}else if(gubun=="no"){
+			//alert("ifgubun");
+			$.ajax({
+				 url:"/erp/draft_gubun_select?gubun=no"
+				,method : "get"
+				,success : function(data){
+					$("#gubun_selectno").html(data);
+				}
+				,error : function(e){
+					alert(e.responseText);
+				}
+			});			
+		}else if(gubun=="my"){
+			//alert("ifgubun");
+			$.ajax({
+				 url:"/erp/draft_gubun_select?gubun=my"
+				,method : "get"
+				,success : function(data){
+					$("#gubun_selectmy").html(data);
+				}
+				,error : function(e){
+					alert(e.responseText);
+				}
+			});				
+		}
+	}
+	function draft_search(gubun){
+		var search_no_chogun = $("#search_no_chogun").val();
+		var search_keyword = $("#search_keyword").val();
+		var empno = $("#s_emp_no").val();
+		alert(search_no_chogun);
+		alert(search_keyword);
+		alert(s_emp_no);
+		alert(gubun);
+		if(gubun=="no"){
+			$.ajax({
+				 url:"/erp/draft_select?p_gubun="+gubun+"&search_no_chogun="+search_no_chogun+"&search_keyword="+search_keyword+"&empno="+empno
+				,method : "get"
+				,success : function(data){
+						$("#table_no").html(data);
+					}
+			});
+		}else if(gubun=="yes"){
+			$.ajax({
+				 url:"/erp/draft_select?p_gubun="+gubun+"&search_no_chogun="+search_no_chogun+"&search_keyword="+search_keyword+"&empno="+empno
+				,method : "get"
+				,success : function(data){
+						$("#table_yes").html(data);
+					}
+			});
+		}else if(gubun=="my"){
+			$.ajax({
+				 url:"/erp/draft_select?p_gubun="+gubun+"&search_no_chogun="+search_no_chogun+"&search_keyword="+search_keyword+"&empno="+empno
+				,method : "get"
+				,success : function(data){
+						$("#table_my").html(data);
+					}
+			});
+		}	
 	}
   </script>
   </head>
@@ -64,6 +140,8 @@
 		<div class="row">
 		   	<div style="width:20%">
 		      <%@ include file="/common/MenuCommon.jsp"%>
+		      <!-- 조건검색시 내가 작성한 문서들을 찾기 위해. -->
+		      <input id="s_emp_no" type="hidden" value=<%=s_emp_no%>>
 			 <!-- ======================================================================================================================================================================= -->
 			 <!-- 															여기부터 내영역																					 -->
 			 <!-- ======================================================================================================================================================================= -->
@@ -77,7 +155,7 @@
 				<!--================================공통코드로 추가할 추가 상단바===========================================-->
 					<!--================================상단바===========================================-->
 						<div class="card bg-dark text-white" style="height:50px; margin-top:7px">
-					    	<div class="card-body" style="font-size: 17px; font-weight: 900;">전자결제 > 문서보관함</div>
+					    	<div class="card-body" style="font-size: 17px; font-weight: 900;">전자결재 > 문서보관함</div>
 					  	</div>
 					  	<div class="row"></div>
 					<!--================================상단바===========================================-->
@@ -97,19 +175,33 @@
 											<a class="nav-link " data-toggle="tab" href="#pdf" style="padding-top: 2px;padding-bottom: 2px;font-size: 13px; font-weight: 700;">내가 작성한 문서</a>
 										</li> 
 									</ul>
+									<!-- =======================================삭제후 새로고침================================== -->
+									<!-- <form id="f_draft_sel" action="/erp/draft_selectText" method="post"> -->
+									<%
+										//if(s_emp_no!=null && s_emp_pw!=null){
+									%>
+										<%-- <input type="hidden" value=<%= s_emp_no %> name="empno"> --%>
+									<%
+										//}
+									%>
+									<!-- </form> -->
+									<!-- =======================================삭제후 새로고침================================== -->
 									<div class="tab-content" >
 									<!-- =================미결제 문서============================== -->
 										<div class="tab-pane fade show active" id="qwe" style="border:1px solid #dee2e6;height: 790px;border-top: none;">
-												<table style="width: 100%;">
+												<table id="table_no" style="width: 100%;">
 													<tr>
 														<td colspan="6" style="height: 30px;"></td>
 													</tr>
 													<tr class="gubun_bar">
 														<td colspan="6" style="background-color:#dee2e6ad;border-top:1px solid #dee2e6;border-bottom:none;height: 31px;">
-															<select id="sal_drive" name="sal_drive" style=" font-size: 11px; color: black; width: 103px; height: 21px; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px; margin-left: 5px; border: solid; border-color: lightgray; border-width: 1px;">
-																	<option value="">검색조건</option>
-																	<option value=""></option>
+															<select id="search_no_chogun" name="" onchange="javascript:gubun_select('no')" style=" font-size: 11px; color: black; width: 103px; height: 21px; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px; margin-left: 5px; border: solid; border-color: lightgray; border-width: 1px;">
+																	<option value="검색조건">검색조건</option>
+																	<option value="문서명">문서명</option>
+																	<option value="기안자">기안자</option>
 															</select>
+															<div id="gubun_selectno" style="width:300px;display:inline-block">
+															</div>
 														</td>
 													</tr>
 													<tr class="gubun_bar" style="border-top:1px solid #dee2e6;border-bottom:1px solid #dee2e6; background-color: #F1F1F1;height: 31px;text-align: center; font-size: 13px;">
@@ -328,16 +420,19 @@
 									<!-- =================미결제 문서============================== -->
 									<!-- =================결제완료 문서============================ -->
 										<div class="tab-pane fade" id="asd" style="border:1px solid #dee2e6; height: 790px; border-top: none;">
-											<table style="width: 100%;">
+											<table id="table_yes" style="width: 100%;">
 													<tr>
 														<td colspan="6" style="height: 30px;"></td>
 													</tr>
 													<tr class="gubun_bar">
 														<td colspan="6" style="background-color:#dee2e6ad;border-top:1px solid #dee2e6;border-bottom:none;height: 31px;">
-															<select id="sal_drive" name="sal_drive" style=" font-size: 11px; color: black; width: 103px; height: 21px; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px; margin-left: 5px; border: solid; border-color: lightgray; border-width: 1px;">
+															<select id="sal_drive" name="sal_drive" onchange="javascript:gubun_select('yes')" style=" font-size: 11px; color: black; width: 103px; height: 21px; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px; margin-left: 5px; border: solid; border-color: lightgray; border-width: 1px;">
 																	<option value="">검색조건</option>
-																	<option value=""></option>
+																	<option value="">문서명</option>
+																	<option value="">기안자</option>
 															</select>
+															<div id="gubun_selectyes" style="width:300px;display:inline-block">
+															</div>															
 														</td>
 													</tr>
 													<tr class="gubun_bar" style="border-top:1px solid #dee2e6;border-bottom:1px solid #dee2e6; background-color: #F1F1F1;height: 31px;text-align: center; font-size: 13px;">
@@ -548,16 +643,19 @@
 									<!-- =================결제완료 문서============================ -->
 									<!-- =================내가작성한 문서============================ -->
 										<div class="tab-pane fade" id="pdf" style="border:1px solid #dee2e6; height: 790px; border-top: none;">
-											<table style="width: 100%;">
+											<table id="table_my" style="width: 100%;">
 													<tr>
 														<td colspan="7" style="height: 30px;"></td>
 													</tr>
 													<tr class="gubun_bar">
-														<td colspan="7" style="background-color:#dee2e6ad;border-top:1px solid #dee2e6;border-bottom:none;height: 31px;">
-															<select id="sal_drive" name="sal_drive" style=" font-size: 11px; color: black; width: 103px; height: 21px; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px; margin-left: 5px; border: solid; border-color: lightgray; border-width: 1px;">
+														<td colspan="6" style="background-color:#dee2e6ad;border-top:1px solid #dee2e6;border-bottom:none;height: 31px;">
+															<select id="sal_drive" name="sal_drive" onchange="javascript:gubun_select('my')" style=" font-size: 11px; color: black; width: 103px; height: 21px; padding-top: 1px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px; margin-left: 5px; border: solid; border-color: lightgray; border-width: 1px;">
 																	<option value="">검색조건</option>
-																	<option value=""></option>
+																	<option value="">문서명</option>
+																	<option value="">기안자</option>
 															</select>
+															<div id="gubun_selectmy" style="width:300px;display:inline-block">
+															</div>
 														</td>
 													</tr>
 													<tr class="gubun_bar" style="border-top:1px solid #dee2e6;border-bottom:1px solid #dee2e6; background-color: #F1F1F1;height: 31px;text-align: center; font-size: 13px;">
@@ -601,7 +699,7 @@
 														<%		
 															}else{
 														%>
-															<td><a href="javascript:delete_draft('<%=rMap.get("DRAFT_NO")%>')" style="text-decoration: underline;" >삭제</a></td>
+															<td><a href="javascript:delete_draft('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no %>')" style="text-decoration: underline;" >삭제</a></td>
 														<%		
 															}
 														%>
