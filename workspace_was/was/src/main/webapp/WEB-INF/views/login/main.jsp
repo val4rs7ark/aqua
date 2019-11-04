@@ -10,7 +10,6 @@
 <head>
 <meta charset="UTF-8" />
 <meta http-equiv="Content-Type" content="text/html;">
-<<<<<<< Updated upstream
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
@@ -37,10 +36,6 @@
 <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"/></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <script src='//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/d3.min.js'></script>
-=======
-<%@ include file="/common/bootStrap4.jsp" %>
-<%@ include file="/common/styles.jsp" %>
->>>>>>> Stashed changes
 
 <title>WAS·AQUA</title>
 <script type="text/javascript">
