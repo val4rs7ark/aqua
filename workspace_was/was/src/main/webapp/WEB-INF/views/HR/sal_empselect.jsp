@@ -138,6 +138,7 @@
 		$("#"+modal_name+"").hide();
 	}
 	//급여조회한거 워드로 다운
+	//급여조회한거 워드로 다운
 	function down_word(){
 		var sal_total = "<%=sal_total%>"; //조회했는지 확인하는 변수
 		if(sal_total!="0"){
@@ -147,7 +148,7 @@
 		}else if (sal_total=="0"){
 			alert("급여 조회후 실행이 가능합니다.");
 		}
-	}
+	} 
 	
 	//재직일자 및 예상 퇴직금 구하는 함수 => 레스트 컨트롤사용
 	function date_guhaki(){

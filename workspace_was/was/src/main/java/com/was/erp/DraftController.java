@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/draft*")
 public class DraftController {
 	Logger logger = LoggerFactory.getLogger(DraftController.class);
-	@Autowired(required=false)
+	@Autowired
 	DraftLogic draftLogic = null;
 	
 	@GetMapping("/draftMain")
@@ -121,16 +121,7 @@ public class DraftController {
 	
 	//문서 조회 페이지 들어가는곳
 	@PostMapping("/draft_selectText")
-	public String draft_selectText(@RequestParam Map<String,Object> pMap,Model model) {
-		logger.info("draft_selectText 호출 성공");
-		Map<String,Object> imsi_Map = draftLogic.draft_selectText(pMap);
-		model.addAttribute("imsi_Map",imsi_Map);
-		return "draft/draft_selectText";
-	}
-	
-	//삭제 이후에 메소드를 타야하는데 위메소드는 포스트 방식이라 참조가 되지 않아 Get방식으로 새로 만들게됨.
-	@GetMapping("/draft_selectText_get")
-	public String draft_selectText_get(@RequestParam Map<String,Object> pMap,Model model) {
+	public String draft_selectText(@RequestParam Map<String,Object> pMap,Model model) throws Exception {
 		logger.info("draft_selectText 호출 성공");
 		Map<String,Object> imsi_Map = draftLogic.draft_selectText(pMap);
 		model.addAttribute("imsi_Map",imsi_Map);
@@ -139,29 +130,41 @@ public class DraftController {
 	
 	//문서 상세 조회==> 리스트 0번방에는 문서에대한 전체적인 정보, 1번방에는 결재자들의 상세 정보가 들어있음. 
 	@GetMapping("/draft_permission_page")
-	public String draft_permission_page(@RequestParam Map<String,Object> pMap,Model model) {
+	public String draft_permission_page(@RequestParam Map<String,Object> pMap,Model model) throws Exception {
 		List<Map<String,Object>> r_list = draftLogic.draft_permission_page(pMap);
 		String gubun = pMap.get("gubun").toString();
 		model.addAttribute("gubun",gubun);
 		model.addAttribute("r_list",r_list);
 		return "/draft/permission_page";
 	}
-	//문서 삭제
-	@GetMapping("/draft_papersDelete")
-	public String papersDelete(@RequestParam Map<String,Object> pMap) {
-		logger.info("Controller>papersDelete 호출 성공");
-		String draft_no = pMap.get("draft_no").toString();
-		String empno = pMap.get("empno").toString();
-		draftLogic.papersDelete(draft_no); 
-		//return "redirect:draft_selectText";//viewReslover안탐. 접미어,접두어 처리 안해줌.
-		//return "forward:draft_selectText";//viewReslover안탐. 접미어,접두어 처리 안해줌.
-		return "redirect:/draft_selectText_get?empno="+empno;
-	}
+	
 	//결재 누를때 비밀번호가져오는 컨트롤러 
 	@GetMapping("/draft_catchpw")
 	public String draft_catchpw(@RequestParam Map<String,Object> pMap,Model model) {
 		Map<String, Object> rMap = draftLogic.draft_catchpw(pMap);
+		rMap.put("gubun",pMap.get("gubun").toString());
 		model.addAttribute("rMap",rMap);
 		return "/draft/ajax/password";
+	}
+	
+	//검색 조건을 선택했을때 아작스
+	@GetMapping("/draft_gubun_select")
+	public String draft_gubun_select(@RequestParam Map<String,Object> pMap,Model model) {
+		model.addAttribute("gubun", pMap.get("gubun").toString());
+		return "/draft/ajax/gubun_select";
+	}
+	
+	//조건 검색(미결제 문서)
+	@GetMapping("/draft_select")
+	public String draft_selectTextNo(@RequestParam Map<String,Object> pMap,Model model) throws Exception {
+		logger.info("===============================??????");
+		logger.info(""+pMap);
+		String gubun = pMap.get("p_gubun").toString();
+		logger.info("===============================gubun:============================================================"+gubun);
+		Map<String,Object> imsi_list = draftLogic.draft_selectText(pMap);
+		model.addAttribute("p_empno", pMap.get("empno").toString());
+		model.addAttribute("gubun", gubun);
+		model.addAttribute("imsi_list",imsi_list);
+		return "draft/ajax/table_ajax";
 	}
 }

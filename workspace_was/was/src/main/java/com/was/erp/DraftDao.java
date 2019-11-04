@@ -1,6 +1,8 @@
 package com.was.erp;
 
+import java.sql.Clob;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +66,10 @@ public class DraftDao {
 		List<Map<String, Object>> result_list = null;
 		try {
 			result_list = sqlSessionTemplate.selectList("draft_selectText",pMap);
+			Map<String,Object> cMap = new HashMap<>();
+			cMap = result_list.get(0);
+			String clob = cMap.get("DRAFT_CONTENTS").toString();
+			logger.info("===========================clobclobclob:"+clob);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -92,7 +98,7 @@ public class DraftDao {
 
 	public void dismiss(Map<String, Object> pMap) {
 		try {
-			sqlSessionTemplate.update("draft_dismiss",pMap);
+			sqlSessionTemplate.selectOne("draft_dismiss",pMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -101,14 +107,6 @@ public class DraftDao {
 	public void permission(Map<String, Object> pMap) {
 		try {
 			sqlSessionTemplate.selectOne("draft_permission",pMap);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void permission_commit(Map<String, Object> pMap) {
-		try {
-			sqlSessionTemplate.update("draft_commit",pMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -123,10 +121,10 @@ public class DraftDao {
 		}
 		return pw;
 	}
-	public void papersDelete(String draft_no) {
-		logger.info("Dao>papersDelete 호출 성공");
+
+	public void draft_delete(Map<String, Object> pMap) {
 		try {
-			sqlSessionTemplate.delete("draft_delete",draft_no);
+			sqlSessionTemplate.delete("draft_delete",pMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

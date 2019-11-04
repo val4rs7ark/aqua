@@ -149,10 +149,10 @@
 			}
 		});	
 	} 
- 	function pummoksearch2(){
-			//alert("수정- 품목검색 메소드 호출 성공");
+ 	function pummoksearch2(i){
+			//alert(i);
 		$.ajax({
-			url:"/erp/general_pummokSearch2"
+			url:"/erp/general_pummokSearch2?i="+i
 			,method:"get"
 			,success:function(data){
 				$("#pummoksearch_register").html(data);
@@ -167,7 +167,7 @@
 		//alert("confirm 호출");
 		var order_no = $("#d_order_no"+i).val();
 		//$("#f_order_no").val(order_no);
-		alert(order_no);
+		//alert(order_no);
 		//document.getElementById('r_order_no').innerHTML="order_no";//원시
 		//$("#r_order_no").val(order_no);//jquery
 		//var order_writer = document.getElementById('order_writer'+i).value;
@@ -175,15 +175,15 @@
 		//document.getElementById(id).value;
 		var s_emp_name = $("#s_emp_name").val();//jquery
 		//var s_emp_name = document.getElementById('s_emp_name').value;//원시적
-		if(s_emp_name=="유종남"){
+/* 		if(s_emp_name=="유종남"){
 			//alert(s_emp_name);
-			//alert("if탐");
+			//alert("if탐"); */
 		$("#f_invenDetail").attr("method","post");
 		$("#f_invenDetail").attr("action","general_confirm?order_no="+order_no);
 		$("#f_invenDetail").submit();
-		}else{
+/* 		}else{
 			alert("승인 권한이 없습니다. 구매부에 문의하세요.");
-		}
+		} */
 	}
 	//구매/사용신청 저장 그룹코드,수량,단가중 미선택 사항이 있으면 모달창을 띄워줌. 정상일 경우만 invendAdd2 실행,저장됨.	
 	function addAction(){
@@ -234,6 +234,12 @@
 	});
 	function selectBtn(gubun){
 		//alert("gubun="+gubun);
+		var gubun2 = new Array(); 
+			gubun2 = gubun.split(",");
+		var gubun3 = gubun2[0];//update or register
+		var gubun4 = gubun2[1];//수정할 글 for문의 i for(i=0;<inventory.size();i++)
+		//alert("gubun3="+gubun3);
+		//alert("gubun4="+gubun4);
 		var rowData = new Array();
 		var tdArr = new Array();
 		var checkbox = $("input[name=user_CheckBox]:checked");
@@ -264,13 +270,13 @@
 		}else{
 			//alert("모달이 꺼집니다.");
 			$("#pummoksearch_register").modal('hide');
-		if(gubun=='update'){
+		if(gubun3=='update'){
 			/* alert("성공"); */
 			$.ajax({
-				url:"/erp/general_newresister?tdArr="+tdArr+"&gubun2="+gubun
+				url:"/erp/general_newresister?tdArr="+tdArr+"&gubun2="+gubun3
 				,method:"get"
 				,success:function(data){
-					$("#resister_update").html(data);
+					$("#resister_update"+gubun4).html(data);
 				}
 				,error:function(e){
 					alert(e.responseText);
@@ -279,7 +285,7 @@
 			}else{
 				/* alert("else"); */
 				$.ajax({
-					url:"/erp/general_newresister?tdArr="+tdArr+"&gubun2="+gubun
+					url:"/erp/general_newresister?tdArr="+tdArr+"&gubun2="+gubun3
 					,method:"get"
 					,success:function(data){
 						$("#register").html(data);
@@ -349,12 +355,12 @@
 	function btn_update(imsi){
 		$("#inven_update_"+imsi).modal();	
 	}
-	//수정화면에서 적용시 update 이벤트
-	function update(){
+	//수정화면에서 저장시 update 이벤트
+	function update(i){
 		//alert("update호출");
-		$("#f_invenUpdate").attr('action','/erp/general_invenUpdate');
-		$("#f_invenUpdate").attr('method','post');
-		$("#f_invenUpdate").submit();
+		$("#f_invenUpdate"+i).attr('action','/erp/general_invenUpdate');
+		$("#f_invenUpdate"+i).attr('method','post');
+		$("#f_invenUpdate"+i).submit();
 	}
 	function invenSearch(){
 		//alert("invenSearch 호출");
@@ -969,7 +975,7 @@
       </div>
       <!-- Modal body -->
       <div class="modal-body" style="padding-bottom: 0px;">
-      	<form id = "f_invenUpdate">
+      	<form id = "f_invenUpdate<%=i%>">
       	<input id="order_no" name="order_no" type="hidden" value="<%=pMap.get("ORDER_NO")%>">
         <table class="table" style="border-top-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 0px;margin-bottom: 0px;"> 
       		<tbody style="text-align: left;">
@@ -992,7 +998,7 @@
 		          </tr>
 	          </tbody>
           </table>
-          <table id="resister_update" class="table" style="margin-bottom: 0px;border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 0px;"> 
+          <table id="resister_update<%=i%>" class="table" style="margin-bottom: 0px;border-bottom-style: solid; width: 100%; border-top-width: 0px; border-bottom-width: 0px;"> 
       		<tbody style="text-align: left;">
 		          <tr>
 		             <td class="bi_table_insert" style="width:20%;padding-top:9px; padding-bottom: 0px;">품목코드</td>
@@ -1003,7 +1009,7 @@
 		           	 </td>
 		        	 <td style="padding-top:7px; padding-bottom:7px;width:auto" colspan="3">
 		           		<input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" 
-		           			   style="height:26px;margin-right:0px" onClick="javascript:pummoksearch2()" data-toggle="modal" data-target="#pummoksearch_register" value="검색" >
+		           			   style="height:26px;margin-right:0px" onClick="javascript:pummoksearch2(<%=i%>)" data-toggle="modal" data-target="#pummoksearch_register" value="검색" >
 		           		<!-- <input class="btn btn-secondary btn_firstrow btn_tableRow" type="button" style="height:26px;width:auto" data-toggle="modal" data-target="#itemadd" value="품목추가"> -->
 		           	 </td>
 		          </tr>
@@ -1077,7 +1083,7 @@
       <!-- Modal footer -->
       <div style="display:table;text-align:center;margin:15px">
 	      <div style="display:table-cell;float:right;vertical-align:middle">
-	       	   <input id="b_update" class="btn btn-dark" type="button" value="저장" onClick='javascript:update()'>
+	       	   <input id="b_update" class="btn btn-dark" type="button" value="저장" onClick='javascript:update(<%=i%>)'>
 	           <button type="button" class="btn btn-dark" data-dismiss="modal" onclick="cancel()">닫기</button>
 	      </div>	
       </div>
@@ -1165,67 +1171,39 @@
 <!-- ===================================모달뷰 (메인 - 현재재고조회) 끝===================================== -->
 <!-- ===================================모달뷰 (메인 - 신규 등록 -품목검색) 시작===================================== -->
 <div class="modal" id="pummoksearch_register" style="border:1px solid black">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-<!--       Modal Header
-      <div class="modal-header">
-        <h5 class="modal-title">품목검색</h5>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-      Modal body
-      <div class="modal-body">
-        <table class="table" style="border-top-style: solid; border-bottom-style: solid; width: 100%; border-top-width: 2px; border-bottom-width: 2px;"> 
-      		<tbody style="text-align: left;">
-		          <tr>
-		             <td class="bi_table_insert" style="padding-top:7px; padding-bottom: 7px;width:25%">
-           	   			<select class="btn btn-dark" style="height:38px;">
-			    			<option>품목명
-			    			<option>품목코드
-			   			</select>
-		             </td>
-		             <td style="padding-top: 5px; padding-bottom: 5px;width:45%">
-		             	<input type="text" class="form-control">
-		           	 </td>
-		        	 <td style="padding-top:7px; padding-bottom: 7px;width:25%">
-		        	 	<button class="btn btn-dark" style="height:38px;">조회</button>
-		           	 </td>
-		          </tr>
-       		</tbody>
-    	</table>
-    	<table class="table table-striped" style="border-top-style:solid; border-bottom-style:solid;width:100%;border-top-width:2px;border-bottom-width:2px;" > 
-              <thead style="text-align:center;">
-                 <tr style="width:10%">
-                    <th style="width">
-                       
-                    </th>
-                    <th style="width:">구분</th>
-                    <th style="width:">코드</th>
-                    <th style="width:">품목명</th>
-                    <th style="width:">규격</th>
-                 </tr>
-              <tbody style="text-align:center;font-size:13px;">
-              	 <tr>
-              		<td><input type="checkbox"></td>
-              		<td>사무</td>
-              		<td>a001</td>
-              		<td>사무용 모니터</td>
-              		<td>32"</td>
-              	 </tr>
-             	             	             	             	 
-              </tbody>
-         </table> 
-      </div> -->
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-dark">적용</button>
-        <button type="button" class="btn btn-dark" data-dismiss="modal">취소</button>
-      </div>
-
-    </div>
-  </div>
+	<div>
+		아
+		무
+		것
+		도
+		없
+		음
+		1
+		2
+		3
+		4
+		5
+		6
+		7
+		8
+		9
+		10
+		11
+		12
+		13
+		14
+		15
+		16
+		11
+		11
+		11
+		11
+		11
+		11
+		11
+		11
+		
+	</div>
 </div>
 <!-- ===================================모달뷰 (메인 - 신규 등록 -품목검색) 끝===================================== -->
 <!-- ===================================모달뷰 (메인 - 신규 등록 -품목추가_뷰) 시작===================================== -->

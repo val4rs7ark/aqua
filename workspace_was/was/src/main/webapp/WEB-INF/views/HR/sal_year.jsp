@@ -330,11 +330,11 @@
 										  	 	}else{
 										 %>
 										 	<tr>
-										 		<td rowspan="5" colspan="12"/>
+										 		<td colspan="12" style="border:none; height: 300px;"/>
 										 	</tr>
 										 	<tr>
-										 		<td colspan="4"/>
-											 	<td colspan="4">
+										 		<td colspan="4" style="border:none;"/>
+											 	<td colspan="4" style="border:none;">
 												 	<div style="height:120px;width:90%;margin-left:5%;margin-right:5%;">
 												      <div style="background-color:rgba(0,0,0,0);height:25%;width:100%;text-align:center;" >
 												      </div>
@@ -348,7 +348,7 @@
 												      </div>
 												    </div>
 											    </td>
-											    <td colspan="4"/>
+											    <td colspan="4" style="border:none;"/>
 										    </tr>
 										 <%	
 										  	 	}

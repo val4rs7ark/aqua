@@ -53,7 +53,7 @@ public class EmpController {
 				logger.info(pageNumber+", "+pageSize);
 		eList = empLogic.empListSignUp(pMap,tot);
 		model.addAttribute("eList",eList);
-		return "/emp/empAdd";
+		return "emp/empAdd";
 	}
 	///////////////////////////////////   상세조회        ////////////////////////////////
 	@GetMapping("empSelect.was")
@@ -65,7 +65,7 @@ public class EmpController {
 		logger.info(" ==================로직 다오 xml쿼리 다 다녀옴!!!");
 		model.addAttribute("sList",sList);
 		logger.info(" ==================여기까지 다 끝이고 이제 리턴만 잘 넘어가면됨!");
-		return "/emp/empAddRight";
+		return "emp/empAddRight";
 		
 	}
 	///////////////////////////////////   등록       ////////////////////////////////
@@ -81,7 +81,7 @@ public class EmpController {
 		List<Map<String,Object>> eList = new ArrayList<>();
 		eList.add(pMap);
 		mod.addAttribute("eList", eList);
-		return "/emp/empAddAfter";
+		return "emp/empAddAfter";
 	}
 	
 	///////////////////////////////////   삭제        ////////////////////////////////
@@ -94,7 +94,7 @@ public class EmpController {
 	///////////////////////////////////   수정       ////////////////////////////////
 	@PostMapping("empUPD.was")
 	public String empUPD(@RequestParam Map<String,Object> pMap) {
-		logger.info("empUPD 호출 성공");
+		logger.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@empUPD 호출 성공");
 		logger.info("값은 잘 성장하고 있습니까?"+pMap.get("empno"));
 		empLogic.empUPD(pMap);
 		return "redirect:empListSignUp.was";
@@ -109,7 +109,7 @@ public class EmpController {
 		logger.info("empSearch 호출 성공!");
 		List<Map<String,Object>> scList =empLogic.empSearch(pMap);
 		mod.addAttribute("eList", scList);
-		return "/emp/empAddAjax"; 
+		return "emp/empAddAjax"; 
 	}
 	
 	

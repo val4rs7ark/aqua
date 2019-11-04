@@ -77,17 +77,15 @@
 	</select>
 	<update id="wasEmpStatusNoteDelete" parameterType="map">
 		delete from notepad
-        where note_no IN
-         <choose>
-         	<when test="note_no!=null">
-         			#{note_no}
-         	</when>
-         	<otherwise>
+         	<if test="note_no!=null">
+         		where note_no =#{note_no}
+         	</if>
+         	<if test="note_no==null">
+         		where note_no IN
          		<foreach collection="note_nos" item="nums" index="index"  open="(" close=")" separator=",">
             				#{nums}
         		</foreach>
-         	</otherwise>
-        </choose>
+         	</if>
 	</update>
 	<update id="wasEmpStatusNoteInsert" parameterType="map">
 		insert into notepad(note_no,empno,note_content,note_write_date)

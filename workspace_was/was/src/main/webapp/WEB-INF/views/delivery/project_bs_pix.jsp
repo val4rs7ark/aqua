@@ -180,9 +180,6 @@
 	     <tr style="background:white;border-top:2px solid #dee2e6;">
       
 	<!--<th style="width:10%">-->
-	        <th style="width: 250px;">
-	        		<button type="button" class="btn btn-dark" onclick="javascript:bs_trance()" style=" width:60px;padding:6px 5px 6px 5px;background: #efefef;padding: 3px 3px 3px 3px;color:black; border-color: #6c757d;font-size:15px;font-weight:900;margin-right: 10px;height: 33px;">삭제</button>
-			</th>
 	        <th style=" padding-right:2px;">
 		        <div class="dropdown" style="width: 130px;">
 					<select id="cb_situation" name="cb_situation" class="btn btn-dark dropdown_bs" style="background: #efefef;padding: 3px 3px 3px 7px;color:black;border-color: #6c757d;font-size:15px;font-weight:900;margin-right: 10px;height: 33px;">
@@ -205,7 +202,7 @@
 					</select>
 				</div>
 	        </th>
-	        <th>
+	        <th style="width: 415px;">
 				<input id="keyword" name="keyword" type="text" class="form-control" placeholder=" 내용을 입력하세요."  size="27" style="height: 35.75px;width:100%;min-width:140px; font-size: 13px;">
 	        </th>
 	        <th>
@@ -222,6 +219,8 @@
 				<button class="btn btn-dark" type="button" onclick="javascript:bs_search()" style="float:right; width:60px;padding:6px 5px 6px 5px;background: #efefef;padding: 3px 3px 3px 3px;color:black;
      border-color: #6c757d;font-size:15px;font-weight:900;margin-right: 10px;height: 33px;">조회</button>
 			</th>
+			<th> 
+			</th>
 	      </tr>
 	    </thead>
 	  </table>
@@ -231,7 +230,7 @@
 	    <thead>
 	      <tr style="background-color: #efefef">
 	        <th style="width:5%; text-align:center; vertical-align: middle;">
-	        	<div><input type="checkbox" class="bs_checkbox" id="checkall"></div> 
+				NO
 	        </th>
 	        <th class="bs_table_header" style="width:25%;min-width:120px;">
 	        	품목 및 무게
@@ -262,7 +261,7 @@
 	  <!-- ====================================여기서 for문======================================= -->
 	      <tr>
 	        <td rowspan="2" style="width:5%; text-align:center; vertical-align:middle;"  >
-	        	<div><input type="checkbox" class="bs_checkbox" name="chk" value="<%=pMap.get("ORDER_NO")%>"></div>
+	        	<%=pMap.get("ORDER_NO")%>
 	        </td>
 	        <td rowspan="2" style="padding-top: 22px; padding-left: 30px; padding-bottom: 5px; padding-right: 70px; font-size: 20px; font-family: -webkit-pictograph; width: 25%; min-width: 120px; color: black;" data-toggle="modal" data-target="#bs_info_<%=i%>" data-backdrop="static">
 	        	<%=pMap.get("IVGROUP_NAME")%>&nbsp;/&nbsp;<%=pMap.get("ORDER_COUNT")%> t
@@ -302,7 +301,7 @@
 	%>	   
 		  <tr>
 	        <td rowspan="2" style="width:5%; text-align:center; vertical-align:middle;"  >
-	        	<div><input type="checkbox" class="bs_checkbox" name="chk" value="<%=pMap.get("ORDER_NO")%>"></div>
+	        	<%=pMap.get("ORDER_NO")%>
 	        </td>
 	        <td rowspan="2" style="padding-top: 22px; padding-left: 30px; padding-bottom: 5px; padding-right: 70px; font-size: 20px; font-family: -webkit-pictograph; width: 25%; min-width: 120px; color: black;" data-toggle="modal" data-target="#bs_info_<%=i%>" data-backdrop="static">
 	        	<%=pMap.get("IVGROUP_NAME")%>&nbsp;/&nbsp;<%=pMap.get("ORDER_COUNT")%> t
@@ -334,7 +333,7 @@
 	%>
 		  <tr>
 	        <td rowspan="2" style="width:5%; text-align:center; vertical-align:middle;"  >
-	        	<div><input type="checkbox" class="bs_checkbox" name="chk" value="<%=pMap.get("ORDER_NO")%>"></div>
+	        	<%=pMap.get("ORDER_NO")%>
 	        </td>
 	        <td rowspan="2" style="padding-top: 22px; padding-left: 30px; padding-bottom: 5px; padding-right: 70px; font-size: 20px; font-family: -webkit-pictograph; width: 25%; min-width: 120px; color: black;  " data-toggle="modal" data-target="#bs_info_<%=i%>" data-backdrop="static">
 	        	<%=pMap.get("IVGROUP_NAME")%>&nbsp;/&nbsp;<%=pMap.get("ORDER_COUNT")%> t
@@ -364,7 +363,7 @@
 	%>
 		  <tr>
 	        <td rowspan="2" style="width:5%; text-align:center; vertical-align:middle; background-color: mistyrose;"  >
-	        	<div><input type="checkbox" class="bs_checkbox" name="chk" value="<%=pMap.get("ORDER_NO")%>"></div>
+	        	<%=pMap.get("ORDER_NO")%>
 	        </td>
 	        <td rowspan="2" style="height: 77px; padding-top: 22px; padding-left: 30px; padding-bottom: 5px; padding-right: 70px; font-size: 20px; font-family: -webkit-pictograph; width: 25%; min-width: 120px; color: black; background-color: mistyrose;" data-toggle="modal" data-target="#bs_info_<%=i%>" data-backdrop="static">
 	        	<%=pMap.get("IVGROUP_NAME")%>&nbsp;/&nbsp;<%=pMap.get("ORDER_COUNT")%> t 
