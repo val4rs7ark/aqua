@@ -10,22 +10,24 @@
 <script type = "text/javascript" src = "https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script type="text/javascript">
 	window.onload = function () {
+		
 		html2canvas($('#pdf_wrap')[0]).then(function(canvas) {
 		    var doc = new jsPDF('p', 'mm', 'a4'); //jspdf객체 생성
 		    var imgData = canvas.toDataURL('image/png'); //캔버스를 이미지로 변환
 		    doc.addImage(imgData, 'PNG', 0, 0); //이미지를 기반으로 pdf생성
-		    doc.save('sample-file.pdf'); //pdf저장
+		    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+		    {
+		    	doc.output('save', 'filename.pdf'); //Try to save PDF as a file (not works on ie before 10, and some mobile devices)
+		    	
+		    }
+		    else
+		    {
+		    	//doc.output('save', 'filename.pdf'); //Try to save PDF as a file (not works on ie before 10, and some mobile devices)
+		    	doc.output('dataurlnewwindow');
+		    }
+		    
 		})
-		/* $.ajax({
-		 	async: false
-		   ,type : "POST"
-		   ,url : "/erp/wasAndroidFile.was"
-		   ,data : "gap=1"
-		   ,success:function(data){
-			   alert(data);
-					   }
-				   })*/
-		   } 
+	}
 </script>
 </head>
 <body>
