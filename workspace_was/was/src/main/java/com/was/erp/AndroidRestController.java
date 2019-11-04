@@ -32,7 +32,7 @@ public class AndroidRestController {
 	
 	@GetMapping(value="wasAndroidFile.was")
 	public ResponseEntity wasAndroidFile(@RequestParam Map<String,Object> pMap) {
-		logger.info("테스트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
+		logger.info("테스트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ>"+pMap.get("draftNo").toString());
 		Map<String,Object> rMap = null;
 		rMap = androidLogic.wasAndroidFile(pMap);
 		String fileName = rMap.get("fileName").toString();
@@ -102,7 +102,14 @@ public class AndroidRestController {
 				returnMap.put("DRAFT_NO", draft_no);
 				String emp_name = rMap.get("EMP_NAME").toString();
 				returnMap.put("EMP_NAME", emp_name);
-				draftList.add(returnMap);
+				String draft_title = null;
+				if("".equals(rMap.get("DRAFT_TITLE")) || rMap.get("DRAFT_TITLE")==null) {
+					draft_title = "제목없음";
+				}else {
+					draft_title = rMap.get("DRAFT_TITLE").toString();
+				}
+				returnMap.put("DRAFT_TITLE", draft_title);
+				returnList.add(returnMap);
 				returnMap = null;
 			}
 		}
