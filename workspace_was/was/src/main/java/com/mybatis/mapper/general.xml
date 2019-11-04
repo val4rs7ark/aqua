@@ -279,4 +279,9 @@
 		  from emp
 		 where empno = #{empno}
 	</select>
+	<!-- 기안서 삭제 버튼 눌렀을때 쿼리문 -->
+	 <delete id="draft_delete" parameterType="map">
+		delete from draft
+		 where draft_no = #{draft_no}
+	</delete>
 </mapper>

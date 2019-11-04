@@ -160,7 +160,7 @@
 			            <h4 style="margin-top: 50px;">사내 공지사항</h4>      
 		          	</div>
 				    <p style="margin-bottom: 0px;">
-						<MARQUEE>10월 생일자 : <b id="emp_birth" style="font-weight: 900;"></b> 생일 축하합니다.</MARQUEE>
+						<MARQUEE>11월 생일자 : <b id="emp_birth" style="font-weight: 900;"></b> 생일 축하합니다.</MARQUEE>
 				    </p>
 				    <div>
 					    <button type="button" class="writer" style="float: right;

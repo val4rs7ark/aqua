@@ -53,9 +53,15 @@
 	function openText(draft_no,gubun){
 		window.open('draft_permission_page?draft_no='+draft_no+"&gubun="+gubun,'팝업창2','width=948px,height=880px,left='+popupX+',top='+ popupY);
 	}
-	function delete_draft(draft_no){
-		alert("삭제");
+	function delete_draft(draft_no,empno){
+		// 비밀번호 입력
+		alert(draft_no+","+empno);
+		window.open("/erp/draft_catchpw?draft_no="+draft_no+"&empno="+empno+"&gubun=draft_delete" ,"open the window","toolbar=no, width=464, height=135, top=70, left=730");
 	}
+	//삭제후 새로고침 잠시 대기
+	/* function reflash_delete(){
+		$("#f_draft_sel").submit();
+	} */
   </script>
   </head>
   <body style="color: #212529ba;">
@@ -97,6 +103,17 @@
 											<a class="nav-link " data-toggle="tab" href="#pdf" style="padding-top: 2px;padding-bottom: 2px;font-size: 13px; font-weight: 700;">내가 작성한 문서</a>
 										</li> 
 									</ul>
+									<!-- =======================================삭제후 새로고침================================== -->
+									<!-- <form id="f_draft_sel" action="/erp/draft_selectText" method="post"> -->
+									<%
+										//if(s_emp_no!=null && s_emp_pw!=null){
+									%>
+										<%-- <input type="hidden" value=<%= s_emp_no %> name="empno"> --%>
+									<%
+										//}
+									%>
+									<!-- </form> -->
+									<!-- =======================================삭제후 새로고침================================== -->
 									<div class="tab-content" >
 									<!-- =================미결제 문서============================== -->
 										<div class="tab-pane fade show active" id="qwe" style="border:1px solid #dee2e6;height: 790px;border-top: none;">
@@ -601,7 +618,7 @@
 														<%		
 															}else{
 														%>
-															<td><a href="javascript:delete_draft('<%=rMap.get("DRAFT_NO")%>')" style="text-decoration: underline;" >삭제</a></td>
+															<td><a href="javascript:delete_draft('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no %>')" style="text-decoration: underline;" >삭제</a></td>
 														<%		
 															}
 														%>

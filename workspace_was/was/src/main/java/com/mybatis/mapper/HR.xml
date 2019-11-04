@@ -84,7 +84,7 @@
                   	 	 tax_nocheck,tax_kukmin,tax_long, tax_health,tax_pain,tax_work,tax_etc_sudang, 
                   	 	 tax_imsihap,sal_when,sal_etc_detail,tax_etc_sudang_dt,sal_gubun,sal_total, 
                   	 	 dt.dept_name||'-'||em.team_name emp_sosoc, emp_position,emp_indate, em.empno, 
-                  	 	 emp_name, emp_bank||'은행 '||sal_account emp_bank_up
+                  	 	 emp_name, emp_bank||'은행 '||sal_account emp_bank_up, sal_imsihap imsi_sal_total, tax_imsihap imsi_minus_total
 				    from emp em, salary sal, dept dt 
 				   where em.empno=sal.empno 
 					 and em.empno=#{p_empno} and sal_gubun=1 and em.dept_code=dt.dept_code 

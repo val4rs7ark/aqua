@@ -146,4 +146,5 @@ public class DraftController {
 		model.addAttribute("rMap",rMap);
 		return "/draft/ajax/password";
 	}
+	
 }

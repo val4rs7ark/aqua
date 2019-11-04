@@ -29,10 +29,10 @@
 	var popupY= (window.screen.height/2)-(800/1.7);
 	//만들 팝업창 상하 크기의 1/2 만큼 보정값으로 빼주었음
 	function dismiss(draft_no,empno){//반려버튼
-		window.open("/erp/draft_catchpw?draft_no="+draft_no+"&empno="+empno+"&gubun=dismiss" ,"open the window","toolbar=no, width=210, height=150, top=70, left=730");
+		window.open("/erp/draft_catchpw?draft_no="+draft_no+"&empno="+empno+"&gubun=dismiss" ,"open the window","toolbar=no, width=464, height=135, top=70, left=730");
 	}
 	function permission(draft_no,empno){//결재버튼
-		window.open("/erp/draft_catchpw?draft_no="+draft_no+"&empno="+empno+"&gubun=permission" ,"open the window","toolbar=no, width=210, height=150, top=70, left=730");
+		window.open("/erp/draft_catchpw?draft_no="+draft_no+"&empno="+empno+"&gubun=permission" ,"open the window","toolbar=no,width=464, height=135, top=70, left=730");
 	}
 	//닫기 버튼 클릭햇을때
 	function close_mypage(){

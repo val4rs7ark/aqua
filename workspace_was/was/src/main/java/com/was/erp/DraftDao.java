@@ -115,4 +115,12 @@ public class DraftDao {
 		}
 		return pw;
 	}
+
+	public void draft_delete(Map<String, Object> pMap) {
+		try {
+			sqlSessionTemplate.delete("draft_delete",pMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

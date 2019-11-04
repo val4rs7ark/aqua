@@ -150,6 +150,8 @@ public class DraftLogic {
 			draftDao.dismiss(pMap);
 		}else if("permission".equals(loot)) {//결제버튼
 			draftDao.permission(pMap);
+		}else if("draft_delete".equals(loot)) {//결제버튼
+			draftDao.draft_delete(pMap);
 		}
 	}
 	public Map<String,Object> draft_catchpw(Map<String, Object> pMap) {
