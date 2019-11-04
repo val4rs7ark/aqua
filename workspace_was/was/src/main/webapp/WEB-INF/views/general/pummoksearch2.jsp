@@ -85,8 +85,8 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-  
-        <button type="button" class="btn btn-dark" onClick="javascript:selectBtn('update')">적용</button>
+ 
+        <button type="button" class="btn btn-dark" onClick="javascript:selectBtn('update,'+<%=Integer.parseInt(request.getAttribute("i").toString())%>)">적용</button>
         <button type="button" class="btn btn-dark" data-dismiss="modal">취소</button>
 <%
 }

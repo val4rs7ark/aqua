@@ -134,8 +134,8 @@ public class GeneralController {
 		return "general/pummoksearch";
 	}
 	@GetMapping("/general_pummokSearch2")
-	public String pummoksearch2(/* @RequestParam String gubun, */Model mod) {
-		logger.info("pummoksearch2 호출 성공");
+	public String pummoksearch2(@RequestParam int i,Model mod) {
+		logger.info("pummoksearch2 호출 성공,i=============>"+i);
 		//logger.info("gubun="+gubun);
 		List<Map<String,Object>> invengroupList = null;
 		invengroupList = generalLogic.invengroupList();
@@ -143,6 +143,7 @@ public class GeneralController {
 		mod.addAttribute("invengroupList",invengroupList);
 		int getInvenGroupTotal = generalLogic.getInvenGroupTotal();
 		mod.addAttribute("getInvenGroupTotal",getInvenGroupTotal);
+		mod.addAttribute("i",i);
 		return "general/pummoksearch2";
 	}
 	
@@ -210,9 +211,10 @@ public class GeneralController {
 	@PostMapping("/general_invenUpdate")
 	public String invenUpdate(@RequestParam Map<String,Object> pMap) {
 		logger.info("general_invenUpdate 호출 성공");
-		logger.info("1"+pMap.get("order_gubun").toString());
-		logger.info("2"+pMap.get("ivgroup_code").toString());
-		logger.info("3"+pMap.get("ivgroup_name").toString());
+		logger.info("1.구분:"+pMap.get("order_gubun").toString());
+		logger.info("2.코드:"+pMap.get("ivgroup_code").toString());
+		logger.info("3:품목명"+pMap.get("ivgroup_name").toString());
+		logger.info("4_order_no========================="+pMap.get("order_no").toString());
 		generalLogic.invenUpdate(pMap);
 		return "redirect:general_invenList";
 	}

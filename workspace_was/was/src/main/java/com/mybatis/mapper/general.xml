@@ -235,6 +235,14 @@
 			        or forth_permission = #{empno}
 			    ) a, emp em
 		  where a.empno = em.empno
+			 <!-- 제목검색 -->
+			 <if test="search_no_chogun!=null and search_no_chogun.equals('문서명')">
+			 		and draft_title like '%'||#{search_keyword}||'%'
+			 </if>
+			 <!-- 작성자검색 -->
+			 <if test="search_no_chogun!=null and search_no_chogun.equals('기안자')">
+			 		and emp_name like '%'||#{search_keyword}||'%'
+			 </if>
 		  order by draft_no asc
 	</select>
 	<!-- 결제 문서 상세 조회 -->
