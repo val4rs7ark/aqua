@@ -322,7 +322,8 @@
 											if(s_emp_no.equals(list_Map.get(0).get("EMPNO").toString())){ // 내결재임
 												if("0".equals(rMap.get("FIRST_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >결재</button>
+												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >반려</button>
+												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >결재</button>
 										<%			
 												}else if("44".equals(rMap.get("FIRST_PERM_DATE").toString())){ // 결재했음
 										%>
@@ -355,8 +356,8 @@
 											if(s_emp_no.equals(list_Map.get(1).get("EMPNO").toString())){ // 내결재임
 												if("0".equals(rMap.get("SECCOND_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >반려</button>
-												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >결재</button>
+												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >반려</button>
+												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >결재</button>
 										<%			
 												}else if("44".equals(rMap.get("SECCOND_PERM_DATE").toString())){ // 결재했음
 										%>
@@ -389,8 +390,8 @@
 											if(s_emp_no.equals(list_Map.get(2).get("EMPNO").toString())){ // 내결재임
 												if("0".equals(rMap.get("THIRD_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >반려</button>
-												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >결재</button>
+												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >반려</button>
+												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >결재</button>
 										<%			
 												}else if("44".equals(rMap.get("THIRD_PERM_DATE").toString())){ // 결재했음
 										%>
@@ -423,8 +424,8 @@
 											if(s_emp_no.equals(list_Map.get(3).get("EMPNO").toString())){ // 내결재임
 												if("0".equals(rMap.get("FORTH_PERM_DATE").toString())){ // 아직 결재하지 않음
 										%>
-												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >반려</button>
-												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" >결재</button>
+												<button onclick="javascript:dismiss('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >반려</button>
+												<button onclick="javascript:permission('<%=rMap.get("DRAFT_NO")%>','<%=s_emp_no%>')" style="width: 35px;padding-left: 2px; padding-right: 3px; font-size: 13px;" >결재</button>
 										<%			
 												}else if("44".equals(rMap.get("FORTH_PERM_DATE").toString())){ // 결재했음
 										%>
