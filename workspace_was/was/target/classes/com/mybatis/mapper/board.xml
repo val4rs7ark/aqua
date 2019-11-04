@@ -13,20 +13,20 @@
          ORDER BY bo_no desc
     </select>
     
-    <select id="boardList" parameterType="map" resultType="map">
-      SELECT bo_no,bo_title,bo_content,emp.emp_name,bo_date,bo_hit
-          FROM board_notice bn,emp emp
-         WHERE bn.empno = emp.empno
-       <if test="start>0 and end>0">       
-          and bo_no between #{start} and #{end}
-       </if>
-    </select>
-    
    <select id="boardDetail" parameterType="map" resultType="map">
         SELECT bo_no,bo_title,bo_content,emp.emp_name,bo_date
           FROM board_notice bn,emp emp
          WHERE bn.empno = emp.empno
            AND bo_no = #{bo_no}
     </select>
+    
+    <insert id="boardInsert" parameterType="map">
+      INSERT INTO BOARD_NOTICE(bo_no,bo_title,bo_content,empno,bo_date)
+                        VALUES(nvl((select (max (bo_no) + 1) bo_no from board_notice),1)
+                              ,#{bo_title,jdbcType=VARCHAR, javaType=java.lang.String}
+                              ,#{bo_content,jdbcType=VARCHAR, javaType=java.lang.String}
+                              ,#{empno,jdbcType=VARCHAR, javaType=java.lang.String}
+                              ,to_char(sysdate,'YYYY-MM-DD'))
+    </insert>
   
 </mapper>

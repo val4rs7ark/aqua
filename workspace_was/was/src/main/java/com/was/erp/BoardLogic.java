@@ -7,6 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,11 +16,6 @@ public class BoardLogic {
    @Autowired
    BoardDao boardDao;
 
-   public int boardTotal(Map<String, Object> pMap) {
-      logger.info("boardTotal 호출 성공");
-      int tot = boardDao.boardTotal(pMap);
-      return tot;
-   }
    //==================================================================main 공지사항==========================================================================//
 
    public List<Map<String, Object>> boardList(Map<String, Object> bMap) {
@@ -28,34 +24,6 @@ public class BoardLogic {
    }
 
    //==================================================================main 공지사항==========================================================================//
-  
-   public List<Map<String, Object>> boardList(Map<String, Object> pMap, int tot) {
-      logger.info("Logic-productList 호출 성공");
-      int nowPage = 1;// 현재 페이지
-      if (pMap.get("nowPage") != null) {
-         nowPage = Integer.parseInt(pMap.get("nowPage").toString()) + 1;
-      }
-      int pagePer_Num = 5;// 한페이지에 뿌려질 로우수
-      int start = 0;
-      int end = 0;
-      if (nowPage > 0) {
-         start = ((nowPage - 1) * pagePer_Num) + 1;
-         end = nowPage * pagePer_Num;
-         pMap.put("start", start);
-         if (end > tot) {
-            pMap.put("end", tot);
-         } else {
-            pMap.put("end", end);
-         }
-      }
-      logger.info("tot :" + tot);
-      logger.info("nowPage :" + nowPage);
-      logger.info("start :" + start);
-      logger.info("end :" + end);
-      List<Map<String, Object>> boardList = boardDao.boardList(pMap);
-      return boardList;
-   }
-   //============================================================================================================================================//
 
 	public List<Map<String, Object>> boardDetail(Map<String, Object> bMap) {
 		logger.info("Logic>boardDetail 호출 성공");
@@ -69,6 +37,19 @@ public class BoardLogic {
 		}
 		r_list = boardDao.boardDetail(boardDetail);
 		return r_list;
+	}
+
+	public int boardInsert(Map<String, Object> pMap) {
+		logger.info("boardInsert 호출 성공");
+        int result = 0;
+        try { 
+          result = boardDao.boardInsert(pMap);
+        }
+        catch (DataAccessException e) { 
+           throw e; 
+        } 
+        return result;      
+		
 	}
 
 

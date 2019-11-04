@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -58,7 +59,7 @@ public class WasController {
 	      String path = "";
 	      String result = pMap.get("emp_name").toString();
 	      Map<String,Object> bMap = new HashMap<>();
-	      List<Map<String,Object>> boardList = boardLogic.boardList(bMap);
+		  List<Map<String,Object>> boardList = boardLogic.boardList(bMap);
 	      if("존재하지 않는 사원코드입니다..".equals(result) || "비밀번호를 다시 확인하세요".equals(result) 
 	             || "기존 아이디로 새로운 접속이 감지되었습니다.".equals(result)) {
 	         path ="forward:index.jsp";
@@ -76,6 +77,7 @@ public class WasController {
 	      }
 	      return path;//191026 수정 완료   
 	   }
+
 	@PostMapping("wasEmpStatus.was")
 	public String wasEmpStatus(@RequestParam Map<String,Object> pMap,Model model) {
 		String path = null;
@@ -150,5 +152,22 @@ public class WasController {
 		List<Map<String,Object>> boardDetail = boardLogic.boardDetail(pMap);
 		model.addAttribute("boardDetail",boardDetail);
 		return "/login/ajax/detail_ajax";
+	}
+	//공지사항 글 작성
+	@RequestMapping(value="wasMain_boardInsert",method=RequestMethod.GET)
+	public String boardInsert(@RequestParam Map<String,Object> pMap,Model model){
+		logger.info("Cont===========================================================================>boardInsert 호출 성공");
+		logger.info("test------>"+pMap.get("bo_title").toString());
+		logger.info("test------->"+pMap.get("bo_content").toString());
+		int result = boardLogic.boardInsert(pMap);
+		String pass = null;
+		if(result == 1) {
+			pass = "성공적으로 등록하였습니다.";
+		}else {
+			pass = "등록 실패하였습니다. 다시시도";
+		}
+		model.addAttribute("getResult", pass);
+		return "forward:boardSUCC.jsp";
+		
 	}
 }

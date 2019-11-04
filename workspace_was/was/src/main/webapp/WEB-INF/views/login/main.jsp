@@ -41,10 +41,34 @@
 <script type="text/javascript">
       $(document).ready(function() {
          
-         function boardList(){
-            //alert('boardList 호출 성공');
-            
-         }
+    	  /* ============================================================================공지사항============================================================================ */
+    	  $("#bo_List tr").click(function(){    
+	    		  var str = ""
+			      var tdArr = new Array();   // 배열 선언
+			      // 현재 클릭된 Row(<tr>)
+			      var tr = $(this);
+			      var td = tr.children();
+			      // tr.text()는 클릭된 Row 즉 tr에 있는 모든 값을 가져온다.
+			      // 반복문을 이용해서 배열에 값을 담아 사용할 수 도 있다.
+			      td.each(function(i){
+			         tdArr.push(td.eq(i).text());
+			      });
+				   // td.eq(index)를 통해 값을 가져올 수도 있다.
+		           var bo_no = td.eq(0).text();//번호
+		           var bo_title = td.eq(1).text();//제목
+		           var emp_name = td.eq(2).text();//작성자
+		           var bo_date = td.eq(3).text();//작성일
+	         	   //alert("상세보기");
+		           $.ajax({
+		        	  	 url:"/erp/wasMain_detailAjax?bo_no="+bo_no
+		        		,method:"get"
+		        		,success:function(data){
+		        			$("#boardDet").html(data);
+		        		}
+		           });
+	         	   $("#boardDet").modal();
+          });
+      /* ============================================================================공지사항============================================================================ */
       /* ============================================================================날씨api============================================================================ */
          var apiURI = "https://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=adc26b64b293df9d37b85f4970fd1fee";
          $.ajax({
@@ -124,8 +148,15 @@
 	    //글작성 
 		function board_writher(){
 			/* var ret = window.open(url, name, specs, replace);*/
-			var wri = window.open('boardAdd.jsp','공지사항 작성','width=800,height=500')
+			var wri = window.open('boardAdd.jsp','공지사항 작성','width=610,height=450')
+				
+			
 		}
+	    //자식창에서 부를 함수 선언
+	    function parentMethod(){
+	    	setTimeout(function(){location.reload()},5000)
+	    }
+	    
 </script>
 </head>
 <body onload="javascript:load_calendar()">
@@ -290,7 +321,58 @@
             
            </td>
         </tr>
-     </table>   
+     </table> 
+      <!-- =========================================================================================모달================================================================================================= -->
+		<div class="container">
+		  <!-- The Modal -->
+		  <div class="modal" id="boardDet">
+		    <div class="modal-dialog">
+		      <div class="modal-content" style="width: fit-content;">
+		      
+		        <!-- Modal Header -->
+		        <div class="modal-header">
+		          <h1 class="modal-title">사내 공지사항</h1>
+		          <button type="button" class="close" data-dismiss="modal">×</button>
+		        </div>
+		        
+		        <!-- Modal body -->
+		        <div class="modal-body">
+		          <table id="board_detail" class="table-board" title="상세보기" 
+					     style="width:700px;height:380px;padding:10px;background:#fafafa;">
+						<tr>
+							<td>번호</td>
+							<td><input class="form-control" value=""></td>
+						</tr>
+						<tr>
+							<td>제목</td>
+							<td><input class="form-control" value="" 
+							           data-options="width:15%"></td>
+						</tr>
+						<tr>
+							<td>작성자</td>
+							<td><input class="form-control" value=""></td>
+						</tr>
+						<tr>
+							<td>내용</td>
+							<td><input class="form-control" value=""></td>
+						</tr>
+						<tr>
+							<td>작성일</td>
+							<td><input class="form-control" value=""></td>
+						</tr>
+					</table>
+		        </div>
+		        
+		        <!-- Modal footer -->
+		        <div class="modal-footer">
+		          <button type="button" class="btn" data-dismiss="modal">Close</button>
+		        </div>
+		        
+		      </div>
+		    </div>
+		  </div>
+		</div>
+      <!-- =========================================================================================모달================================================================================================= -->
    </form>
 <!-- ===========================================================공지사항==========================================================  --> 
 <!-- ===========================================================table=========================================================== -->

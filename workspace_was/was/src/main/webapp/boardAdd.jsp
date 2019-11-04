@@ -183,18 +183,26 @@
 /* ===========================================================================첨부파일 등록 다운===============================================*/
 /* ===========================================================================등록========================================================*/
 	function sendWriter(){
-	    alert("등록");
+	    //alert("등록");
 		$("#board_add").submit();
+		setTimeout(function() {
+	    	self.close()
+		}, 3000);
+		
+		
 	}
 /* ===========================================================================등록========================================================*/
 </script>
 </head>
 <body>
+<div id="d_form">
 <form id="board_add" action="/erp/wasMain_boardInsert" style="margin-top: 15px;margin-left: 10px;">
   <table id="sendBoard" class="table-board" title="공지사항" style="padding:70px; padding-top:20px; border-top: 2px solid #444444;background:#fafafa;">
 	<tr>
 		<td width="100px;">제목</td>
-		<td width="500px;"><input type="text" style="width: 450px; height:30px;" required></td>
+		<td width="500px;"><input type="text" name="bo_title" style="width: 450px; height:30px;" required></td>
+		
+		<input type="hidden" name="empno" value="A20078" style="width: 450px; height:30px;"/>
 	</tr>
 	<!-- <tr>
 		<td width="250px;">첨부파일</td>
@@ -218,10 +226,12 @@
 	<tr>
 		<td width="100px;">내용</td>
 		<!-- <td width="700px;"><input class="form-control" style="width: inherit; height:300px; display: block;"></td> -->
-		<td width="500px;"><textarea type="text" style="width: 450px; height:300px; display: block;"></textarea></td>
+		<td width="500px;"><textarea type="text" name="bo_content" style="width: 450px; height:300px; display: block;"></textarea></td>
 	</tr>
 </table>
-     <button type="button" onClick="sendWriter()" style="float: right; margin-right: 238PX;margin-top: 5px;">등록</button>
+     <button type="button" onClick="sendWriter()" style="float: right; margin-right: 50PX;margin-top: 5px;">등록</button>
 </form>
+</div>
+<div id="d_result"></div>
 </body>
 </html>
