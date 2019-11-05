@@ -128,7 +128,6 @@ var graphChart = new Chart(ctx, {
 
 	///////////////////////// 매출현황 종류 - 년도별 매출현황  //////////////////////
 	function selectYear(){
-		alert(change_year);
 		location.href="/erp/salesYear.was?today_year="+change_year
 		    
 	}
@@ -188,7 +187,6 @@ var graphChart = new Chart(ctx, {
 	function preMonth(){
 		if(change_month<2){
 			change_year = change_year-1;
-			alert(change_month);
 			change_month = 12;
 		}
 		else{
@@ -197,7 +195,6 @@ var graphChart = new Chart(ctx, {
 			}
 			change_month = change_month-1;
 		}
-		alert(change_year+"-"+change_month);
 		$.ajax({
 			method:"get"
 			,url:"/erp/salesSelectMonth.was?today_year="+change_year+"&today_month="+change_month
@@ -219,7 +216,6 @@ var graphChart = new Chart(ctx, {
 		}
 		else{change_month = change_month+1;}
 		
-		alert(change_year+"-"+change_month);
 		$.ajax({
 			method:"get"
 			,url:"/erp/salesSelectMonth.was?today_year="+change_year+"&today_month="+change_month
@@ -234,7 +230,6 @@ var graphChart = new Chart(ctx, {
 	function selectDate(){
 		selectDate_1 = $("#sales_date_1").val();
 		selectDate_2 = $("#sales_date_2").val();
-		alert(selectDate_1+" - "+selectDate_2);
 		$.ajax({
 			method:"get"
 			,url:"/erp/salesTwoSelect.was?today_1="+selectDate_1+"&today_2="+selectDate_2

@@ -125,7 +125,6 @@
 		//var after_date = $("#after_date").val();
 		//var cb_situation = $("#cb_situation").val();
 		//location.href="/erp/delivery_List?keyword="+keyword+"&cb_situation="+cb_situation+"&cb_search="+cb_search+"&before_date="+before_date+"&after_date="+after_date
-		alert("양호");
 		$("#f_condition").attr("method","post");
 		$("#f_condition").attr("action","/erp/delivery_excel");
 		$("#f_condition").submit();

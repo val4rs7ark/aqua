@@ -64,7 +64,6 @@ String calendar_empno = empStatusList.get(empStatusList.size()-1).get("empno").t
   			    $("#myModal").modal();
   		}
   		function moAdd(){
-  			alert("너가 추가버튼?");
   			var encoding = $("#noteContent").val();
   			var note_content = encodeURIComponent(encoding);
   			var note_write_date = v_yyyy+"-"+v_mm+"-"+v_dd;

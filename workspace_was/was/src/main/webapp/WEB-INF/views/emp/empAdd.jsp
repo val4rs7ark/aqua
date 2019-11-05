@@ -110,7 +110,6 @@
 		//사원목록 로우 클릭시 empno 값 가져다가  사원등록에 뿌리는 ajax처리
 		function C_selectEmp(data){
 			var empno = $("#s_empname"+data).val();
-			alert(empno);
 			 $.ajax({
 				method:"get"
 				,url:"empSelect.was?empno="+empno
@@ -135,7 +134,6 @@
 		//수정 버튼 누르기 전, 수정된 텍스트 항목이 있는지 감지
 		function textChange(){
 			textChang = 1;
-			alert("체인지!");
 		}
 		//수정 버튼 - empAddRight.jsp
 		function updateAction(){
@@ -155,12 +153,10 @@
 		}
 		//체크박스 선택 후 삭제버튼
 		function empDel(){
-			alert(tg_del);
 	    	location.href="empDel.was?tg_del="+tg_del;
 		}
 		//저장 옆 취소버튼
 		function cancel(){
-			 alert("cancel호출");
 			 location.href="empListSignUp.was";
 		}
 		function btn_search(){
@@ -169,7 +165,6 @@
 			var v_search_date_key = $("#search_date_key").val();
 			var v_emp_date_1 = $("#emp_date_1").val();
 			var v_emp_date_2 = $("#emp_date_2").val();
-			alert("서치버튼");
 			$.ajax({
 				method:"get"
 				,url:"empSearch.was"
@@ -177,7 +172,6 @@
 					   "&search_date_key="+v_search_date_key+"&emp_date_1="+v_emp_date_1+
 					   "&emp_date_2="+v_emp_date_2
 				,success:function(data){
-					alert("아작스 석세스");
 				    $("#t_empList").html(data);
 				 }	
 			}); 

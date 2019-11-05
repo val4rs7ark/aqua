@@ -132,7 +132,6 @@ var graphChart = new Chart(ctx, {
 	// (금년) < 버튼 클릭시 
 	function preYear(){
 		change_year = change_year-1;
-		alert(change_year);
 		$.ajax({
 			method:"get"
 			,url:"/erp/salesSelectYear.was?today_year="+change_year
@@ -146,7 +145,6 @@ var graphChart = new Chart(ctx, {
 	// (금년) > 버튼 클릭시 
 	function nextYear(){
 		change_year = change_year+1;
-		alert(change_year);
 		$.ajax({
 			method:"get"
 			,url:"/erp/salesSelectYear.was?today_year="+change_year
@@ -160,7 +158,6 @@ var graphChart = new Chart(ctx, {
 	// 금년 버튼 클릭시 
 	function todayYear() {
 		change_year = thisYear;
-		alert(change_year);
 		$.ajax({
 			method:"get"
 			,url:"/erp/salesSelectYear.was?today_year="+change_year
